@@ -1,0 +1,136 @@
+/* Reset default margin and padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+/* Header styling */
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 2rem 1rem;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+header p {
+    font-size: 1.2rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Navigation styling */
+nav {
+    margin: 1rem;
+    text-align: center;
+}
+
+nav a {
+    margin: 0 15px;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+nav a:hover {
+    color: #007bff;
+}
+
+/* Main content styling */
+main {
+    margin: 20px auto;
+    max-width: 800px;
+    padding: 2rem;
+    background-color: #fff;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+main h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+main h3 {
+    font-size: 1.5rem;
+    margin-top: 2rem;
+}
+
+main p {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+/* Post links styling */
+.post-links {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.post-links li {
+    margin-bottom: 15px;
+}
+
+.post-links a {
+    font-size: 1.3rem;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.post-links a:hover {
+    text-decoration: underline;
+}
+
+/* Image styling */
+img {
+    max-width: 100%; /* Ensure image does not overflow its container */
+    height: auto; /* Maintain aspect ratio */
+    display: block;
+    margin: 20px auto; /* Center the image */
+    border-radius: 8px; /* Optional: give images rounded corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: add a soft shadow */
+}
+
+/* Footer styling */
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 1rem;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2rem;
+    }
+
+    nav a {
+        font-size: 1rem;
+    }
+
+    main {
+        padding: 1rem;
+    }
+
+    footer {
+        font-size: 0.8rem;
+    }
+}
