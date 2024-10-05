@@ -7,71 +7,86 @@
 
 body {
     font-family: 'Arial', sans-serif;
-    line-height: 1.6;
+    line-height: 1.8;
     margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(254, 246, 228, 0.7), rgba(240, 201, 135, 0.7)); /* Subtle warm, peachy gradient */
+    color: #2a2a2a; /* Darker but warm grey for text */
 }
 
 /* Header styling */
 header {
-    background-color: #333;
+    background-color: #3498db; /* Soft blue */
     color: #fff;
-    padding: 2rem 1rem;
+    padding: 2.5rem 1rem;
     text-align: center;
+    font-family: 'Georgia', serif;
 }
 
 header h1 {
-    font-size: 2.5rem;
+    font-size: 3rem;
     margin-bottom: 0.5rem;
+    letter-spacing: 1px;
 }
 
 header p {
     font-size: 1.2rem;
     max-width: 800px;
     margin: 0 auto;
+    font-style: italic;
+    opacity: 0.85;
 }
 
 /* Navigation styling */
 nav {
-    margin: 1rem;
+    margin: 1.5rem 0;
     text-align: center;
 }
 
 nav a {
-    margin: 0 15px;
+    margin: 0 20px;
     text-decoration: none;
-    color: #333;
+    color: #e67e22; /* Warm orange for nav links */
     font-weight: bold;
     font-size: 1.1rem;
+    letter-spacing: 0.5px;
+    transition: color 0.3s ease;
 }
 
 nav a:hover {
-    color: #007bff;
+    color: #f39c12; /* Slightly brighter orange on hover */
 }
 
 /* Main content styling */
 main {
-    margin: 20px auto;
+    margin: 30px auto;
     max-width: 800px;
     padding: 2rem;
-    background-color: #fff;
+    background-color: #fff5e1; /* Soft off-white/peach background */
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
 }
 
-main h2 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
+section {
+    padding: 1.5rem 0;
 }
 
-main h3 {
-    font-size: 1.5rem;
-    margin-top: 2rem;
-}
-
-main p {
+p {
+    padding: 0.5rem 0;
     font-size: 1.1rem;
-    margin-bottom: 1rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+    text-align: justify;
+    color: #4a4a4a; /* Softer warm grey for readability */
+}
+
+main a {
+    color: #3498db; /* Match the blue header */
+    text-decoration: none;
+}
+
+main a:hover {
+    text-decoration: underline;
 }
 
 /* Post links styling */
@@ -86,27 +101,28 @@ main p {
 
 .post-links a {
     font-size: 1.3rem;
-    color: #007bff;
+    color: #3498db; /* Same blue for consistency */
     text-decoration: none;
+    transition: color 0.3s ease;
 }
 
 .post-links a:hover {
-    text-decoration: underline;
+    color: #2980b9; /* Slightly darker blue on hover */
 }
 
 /* Image styling */
 img {
-    max-width: 100%; /* Ensure image does not overflow its container */
-    height: auto; /* Maintain aspect ratio */
+    max-width: 100%;
+    height: auto;
     display: block;
-    margin: 20px auto; /* Center the image */
-    border-radius: 8px; /* Optional: give images rounded corners */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: add a soft shadow */
+    margin: 20px auto;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Footer styling */
 footer {
-    background-color: #333;
+    background-color: #e67e22; /* Warm orange footer */
     color: #fff;
     text-align: center;
     padding: 1rem;
@@ -116,10 +132,15 @@ footer {
     font-size: 0.9rem;
 }
 
+footer p {
+    margin: 0;
+    opacity: 0.9;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     header h1 {
-        font-size: 2rem;
+        font-size: 2.5rem;
     }
 
     nav a {
