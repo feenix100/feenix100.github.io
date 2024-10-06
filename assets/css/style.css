@@ -1,157 +1,156 @@
-/* Reset default margin and padding */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/* Import a Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Roboto:wght@400;500&display=swap');
 
+/* Global styles */
 body {
-    font-family: 'Arial', sans-serif;
-    line-height: 1.8;
+    font-family: 'Merriweather', serif; /* Primary font for readability */
+    color: #333;
+    line-height: 1.6;
+    padding: 0;
     margin: 0;
-    padding: 20px;
-    background: linear-gradient(135deg, rgba(254, 246, 228, 0.7), rgba(240, 201, 135, 0.7)); /* Subtle warm, peachy gradient */
-    color: #2a2a2a; /* Darker but warm grey for text */
+    background-color: #f4f4f4;
 }
 
-/* Header styling */
+h1, h2, h3 {
+    font-family: 'Roboto', sans-serif; /* Use a clean sans-serif font for headings */
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+
+h1 {
+    font-size: 2rem; /* Reduced size */
+    font-weight: 700;
+}
+
+h2 {
+    font-size: 1.75rem;
+    font-weight: 500;
+}
+
+h3 {
+    font-size: 1.5rem;
+    font-weight: 400;
+}
+
+section p {
+    font-size: 1.1em;
+    margin-bottom: 1.5rem;
+    color: #555;
+}
+
+/* Header Styling */
 header {
-    background-color: #3498db; /* Soft blue */
-    color: #fff;
-    padding: 2.5rem 1rem;
     text-align: center;
-    font-family: 'Georgia', serif;
+    background-color: #e0b588; /* Lighter color for the header */
+    color: white;
+    padding: 1rem;
 }
 
 header h1 {
-    font-size: 3rem;
-    margin-bottom: 0.5rem;
-    letter-spacing: 1px;
+    margin: 0;
+    font-size: 2rem; /* Reduced font size */
 }
 
 header p {
-    font-size: 1.2rem;
+    font-size: 1rem;
+    font-family: 'Roboto', sans-serif;
+    margin-top: 0.5rem;
+    color: #ecf0f1;
+}
+
+/* Image Styling */
+img {
+    /*width: 100%; /* Full width by default */
+    max-width: 50%; /* Limit the max width */
+    height: auto; /* Maintain aspect ratio */
+    display: block;
+    margin: 1.5rem auto;
+}
+
+/* Article and Section Styling */
+/*article {
     max-width: 800px;
-    margin: 0 auto;
-    font-style: italic;
-    opacity: 0.85;
-}
-
-/* Navigation styling */
-nav {
-    margin: 1.5rem 0;
-    text-align: center;
-}
-
-nav a {
-    margin: 0 20px;
-    text-decoration: none;
-    color: #e67e22; /* Warm orange for nav links */
-    font-weight: bold;
-    font-size: 1.1rem;
-    letter-spacing: 0.5px;
-    transition: color 0.3s ease;
-}
-
-nav a:hover {
-    color: #f39c12; /* Slightly brighter orange on hover */
-}
-
-/* Main content styling */
-main {
-    margin: 30px auto;
-    max-width: 800px;
+    margin: 2rem auto;
     padding: 2rem;
-    background-color: #fff5e1; /* Soft off-white/peach background */
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}*/
+
+/*
+article {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: linear-gradient(to bottom, rgba(173, 216, 230, 0.6), rgba(255, 255, 255, 0.7));
+     /* Soft blue-to-white gradient 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Soft shadow 
+    border-radius: 8px;
+    color: #333;
+} */
+
+/*I was trying to get the background to look like old paper, without hurting my eyes*/
+article {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: linear-gradient(to bottom, rgba(238, 224, 205, 0.7), rgba(255, 255, 255, 0.8)); /* Lighter aged paper-like gradient */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Soft shadow for a lifted effect */
+    border-radius: 8px;
+    color: #333;
+    font-family: 'Merriweather', serif; /* A classic, book-like feel */
+}
+
+article h3 {
+    color: #2980b9;
 }
 
 section {
-    padding: 1.5rem 0;
+    padding: 1rem;
 }
 
-p {
-    padding: 0.5rem 0;
-    font-size: 1.1rem;
-    line-height: 1.8;
-    margin-bottom: 1.5rem;
-    text-align: justify;
-    color: #4a4a4a; /* Softer warm grey for readability */
-}
-
-main a {
-    color: #3498db; /* Match the blue header */
+/* Link Styling */
+a {
+    color: #2980b9;
     text-decoration: none;
 }
 
-main a:hover {
+a:hover {
     text-decoration: underline;
 }
 
-/* Post links styling */
-.post-links {
-    list-style-type: none;
-    padding-left: 0;
-}
-
-.post-links li {
-    margin-bottom: 15px;
-}
-
-.post-links a {
-    font-size: 1.3rem;
-    color: #3498db; /* Same blue for consistency */
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.post-links a:hover {
-    color: #2980b9; /* Slightly darker blue on hover */
-}
-
-/* Image styling */
-img {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    margin: 20px auto;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Footer styling */
-footer {
-    background-color: #e67e22; /* Warm orange footer */
-    color: #fff;
+/* Footer Styling */
+footer p {
     text-align: center;
     padding: 1rem;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    font-size: 0.9rem;
+    background-color: #34495e;
+    color: rgb(231, 233, 120);
 }
 
-footer p {
-    margin: 0;
-    opacity: 0.9;
+footer a {
+    text-align: center;
+    padding: 1rem;
+    background-color: #34495e;
+    color: rgb(231, 233, 120);
 }
 
-/* Responsive Design */
+footer {
+    text-align: center;
+    padding: 1rem;
+    background-color: #34495e;
+    color: rgb(231, 233, 120);
+}
+/* Responsive Design for Smaller Screens */
 @media (max-width: 768px) {
     header h1 {
-        font-size: 2.5rem;
+        font-size: 1.75rem; /* Smaller header font on small screens */
     }
 
-    nav a {
-        font-size: 1rem;
+    header p {
+        font-size: 0.9rem; /* Adjusted subheading size */
     }
 
-    main {
-        padding: 1rem;
-    }
-
-    footer {
-        font-size: 0.8rem;
+    img {
+        width: 90%; /* Make the image smaller and dynamic on smaller screens */
     }
 }
