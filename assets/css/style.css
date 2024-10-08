@@ -15,6 +15,8 @@ h1, h2, h3 {
     font-family: 'Roboto', sans-serif; /* Use a clean sans-serif font for headings */
     color: #2c3e50;
     margin-bottom: 1rem;
+    letter-spacing: 0.5px; /* Slight spacing for clarity */
+    text-transform: capitalize; /* Capitalize each word for a neat look */
 }
 
 h1 {
@@ -23,9 +25,13 @@ h1 {
 }
 
 h2 {
-    font-size: 1.75rem;
-    font-weight: 500;
+    font-size: 2rem; /* Slightly larger for emphasis */
+    font-weight: 600; /* Stronger weight for better readability */
+    color: #34495e; /* A sophisticated dark blue-gray */
+    line-height: 1.4; /* Improved line height for readability */
+    font-family: 'Helvetica Neue', Arial, sans-serif; /* Modern, clean font */
 }
+
 
 h3 {
     font-size: 1.5rem;
@@ -55,7 +61,7 @@ header p {
     font-size: 1rem;
     font-family: 'Roboto', sans-serif;
     margin-top: 0.5rem;
-    color: #ecf0f1;
+    color: #0f147a;
 }
 
 /* Image Styling */
@@ -118,6 +124,44 @@ a {
 a:hover {
     text-decoration: underline;
 }
+
+code {
+    background-color: #1b1f3b; /* Dark indigo background */
+    color: #ffca28; /* Bright golden-yellow text */
+    padding: 2px 6px;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 1em;
+    border-radius: 4px;
+    border: 1px solid #ffca28; /* Golden border to match the text */
+}
+
+pre code {
+    display: block;
+    padding: 10px;
+    overflow-x: auto;
+    background-color: #0a192f; /* Dark navy blue background */
+    color: #e0e6f1; /* Soft, light text */
+    border-radius: 5px;
+    border: 1px solid #0a74da; /* Bright blue border */
+    white-space: pre-wrap;
+}
+
+pre code span.keyword {
+    color: #ff6f61; /* Bright coral for keywords */
+}
+
+pre code span.string {
+    color: #f5f567; /* Bright yellow-green for strings */
+}
+
+pre code span.comment {
+    color: #f78da7; /* Bright pink for comments */
+}
+
+pre code span.function {
+    color: #79b8ff; /* Sky blue for function names */
+}
+
 
 /* Footer Styling */
 footer p {

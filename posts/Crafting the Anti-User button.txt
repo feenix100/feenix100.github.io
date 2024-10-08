@@ -1,0 +1,40 @@
+Crafting the Anti-User button
+
+The year was 1998. The best console available was Playstation 1. Twisted metal 2 was the only game we played. Computers were restricted to desktops, no one carried one in their pocket. The world wide web was just released to the public. 
+
+A friend of mine showed me a program his brother had made on the computer. At the time, i knew nothing about coding. It was very simple, a button appeared in the middle of a window. It had a caption, "click here to keep an idiot entertained for hours." And so, I attempted to click on the button. To my surprise, the button moved away from the cursor. So, I tried moving in from a different direction. The button moved out of reach once again. You see, the button was not meant to be clicked on. My friend had created the "anti-user button".
+
+Fast forward to March 2024, chat gpt 3.5 is the current version of a.i released by open ai. I had used it to help with a few projects before, so I tried to recreate this anti user button. 
+
+The easiest way for me to do this was using html/javascript. One file to rule them all and in the darkness bind them. "reference a quote from lord of the rings"
+I described the behavior of the anti user button to chat gpt. Initially, it tried to correct me and make a button that wouldn't move. However, I explained the idea of an anti user button, one that can be seen but never touched. After that, it promptly provided a solution to my prompt with some javascript.
+
+After crafting the javascript version, I quickly used chat gpt to rewrite the code in several other programming languages. Python, c#, java swing, Rust( if you are into that sort of thing), and even visual basic for an Excel spreadsheet.  
+
+To begin I wrote some css for the style of the button.
+
+"insert code snippet"
+
+For the caption of the button, I use, "Click here to unsubscribe" . An unsubscribe button would be the perfect way to use this creation.
+
+I used the jquery javascript library -3.6.0.min.js . The code was fairly simple. I add a button tag inside the body. Then include the javascript inside a script tag. 
+I query the document, then the button and the window. I set some variables to define the document, window, start_x, start_y, speed, mouseNearThreshold(distance from cursor), and an interval.
+
+Then, I call a mousemove event function. I set variables for x and y locations on top of button. 
+I set var dx and dy = x-x0 and y - y0. Then i create a variable to calculate distance bewteen mouse cursor and the button center. 
+Create an if statement that compares distance to the threshold of the mouse cursor.
+I used a variable that creates a random angle using the Math method in javascript. 
+The dx and dy position is multiplied by cos and sin.
+
+If the button moves far enough away from the center, it will recenter automatically, when the mouse cursor is no longer detected.
+
+A couple lines of code are added to keep the button inside of the window bounds.
+
+I also create a 'click' event that does nothing, in case the button is somehow pressed. The point of this exercise is to make a button that moves away from the user's cursor.
+
+I add a function to move the button to the center of the window.
+
+Some math methods are used to determine the location of the button in relation to the mouse cursor. 
+The function calculates the size of the button started at the top left corner.
+
+Code for this thought excercise can be found at https://github.com/feenix100/chatgptButton
