@@ -47,21 +47,34 @@ section p {
 /* Header Styling */
 header {
     text-align: center;
-    background-color: #e0b588; /* Lighter color for the header */
+    background-color: #faf0e5; /* Lighter color for the header */
     color: white;
-    padding: 1rem;
+    padding: 0.5rem 2rem; /* Side padding for a spacious look */
+    border-radius: 10px; /* Rounded corners for a softer look */
+    margin: 1rem 0; /* Vertical margin to separate from other elements */
+    width: 100%; /* Full width of the window */
+    box-sizing: border-box; /* Ensure padding is included in total width */
 }
 
 header h1 {
     margin: 0;
-    font-size: 2rem; /* Reduced font size */
+    font-size: 1.5rem; /* Reduced font size */
 }
 
 header p {
-    font-size: 1rem;
+    font-size: 0.8rem; /* Slightly smaller font size */
     font-family: 'Roboto', sans-serif;
-    margin-top: 0.5rem;
-    color: #0f147a;
+    margin: 0.3rem 0; /* Reduced margin for a compact appearance */
+    color: #0922a1; /* White to blend in with the background */
+    opacity: 0.8; /* Slightly transparent for a softer look */
+}
+
+header a {
+    display: block; /* Make the link take its own line */
+    margin-top: 0.5rem; /* Space above the link */
+    color: rgb(80, 72, 244); /* Change this if you want a different color */
+    text-decoration: underline; /* Optional: underline for emphasis */
+    font-size: 1rem; /* Slightly larger for emphasis */
 }
 
 /* Image Styling */
@@ -73,29 +86,7 @@ img {
     margin: 1.5rem auto;
 }
 
-/* Article and Section Styling */
-/*article {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background-color: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-}*/
-
-/*
-article {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background: linear-gradient(to bottom, rgba(173, 216, 230, 0.6), rgba(255, 255, 255, 0.7));
-     /* Soft blue-to-white gradient 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Soft shadow 
-    border-radius: 8px;
-    color: #333;
-} */
-
-/*I was trying to get the background to look like old paper, without hurting my eyes*/
+/*main body styling*/
 article {
     max-width: 800px;
     margin: 2rem auto;
@@ -125,6 +116,12 @@ a:hover {
     text-decoration: underline;
 }
 
+p {
+    font-size: 1.2rem;
+    margin-top: 0.5rem;
+}
+
+/* Code snippet Styling */
 code {
     background-color: #1b1f3b; /* Dark indigo background */
     color: #ffca28; /* Bright golden-yellow text */
@@ -134,17 +131,23 @@ code {
     border-radius: 4px;
     border: 1px solid #ffca28; /* Golden border to match the text */
 }
-
 pre code {
     display: block;
-    padding: 10px;
-    overflow-x: auto;
-    background-color: #0a192f; /* Dark navy blue background */
+    padding: 15px; /* Increased padding for comfort */
+    overflow-x: auto; /* Allow horizontal scrolling */
+    background-color: #1c1c1c; /* Deep charcoal background */
     color: #e0e6f1; /* Soft, light text */
-    border-radius: 5px;
+    border-radius: 8px; /* Slightly more rounded corners */
     border: 1px solid #0a74da; /* Bright blue border */
-    white-space: pre-wrap;
+    white-space: pre-wrap; /* Maintain whitespace formatting */
+    font-family: 'Courier New', monospace; /* Monospace font for code */
+    font-size: 0.95rem; /* Slightly larger font size */
+    line-height: 1.5; /* Improved line spacing for readability */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    margin: 1rem 0; /* Margin above and below for separation */
 }
+
+
 
 pre code span.keyword {
     color: #ff6f61; /* Bright coral for keywords */
@@ -162,6 +165,34 @@ pre code span.function {
     color: #79b8ff; /* Sky blue for function names */
 }
 
+.post-date {
+    display: block; /* Ensure it appears on a new line */
+    font-size: 0.9em; /* Slightly smaller font size */
+    color: #666; /* Lighter gray color for subtlety */
+    margin-top: 4px; /* Space above the date for better separation */
+    font-style: italic; /* Italicize the date for emphasis */
+}
+
+/* Navigation Styling */
+nav {
+    text-align: center;
+    margin: 1.5rem;
+}
+
+nav a {
+    margin: 0 20px;
+    text-decoration: none;
+    color: #2c3e50;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+
+nav a:hover {
+    color: #007bff;
+}
+
+/*End global styles*/
 
 /* Footer Styling */
 footer p {
@@ -184,6 +215,143 @@ footer {
     background-color: #34495e;
     color: rgb(231, 233, 120);
 }
+
+/*Post Links styles*/
+.post-links {
+    list-style: none;
+    padding: 0;
+}
+
+.post-links li {
+    margin: 15px 0;
+}
+
+.post-links a {
+    font-size: 1.2rem;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.post-links a:hover {
+    text-decoration: underline;
+}
+
+/* Index/Home page Styling */
+header.home-page {
+    background: #CC9966;
+    color: #fff;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1)
+}
+
+h2.home-page {
+    font-size: 2rem;
+    color: #2c3e50;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+}
+
+h3.home-page {
+    font-size: 1.8rem;
+    color: #2980b9;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    margin-top: 1.5rem;
+}
+
+h1.home-page {
+font-size: 3rem;
+font-family: 'Roboto', sans-serif;
+font-weight: 700;
+margin-bottom: 0.5rem;
+}
+
+p.home-page {
+font-size: 1.1rem;
+margin-bottom: 1.5rem;
+}
+
+main.home-page {
+margin: 30px auto;
+max-width: 900px;
+padding: 2rem;
+background-color: #fff;
+box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+border-radius: 8px;
+}
+
+body.home-page {
+font-family: 'Merriweather', serif;
+line-height: 1.7;
+margin: 0;
+padding: 0;
+background-color: #f4f4f4;
+color: #333;
+}
+
+/*Contact page styles*/
+body.contact-page {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4; /* Light background for the page */
+    display: flex; /* Use flexbox for layout */
+    flex-direction: column; /* Stack children vertically */
+    align-items: center; /* Center children horizontally */
+    justify-content: center; /* Center children vertically */
+    height: 100vh; /* Full viewport height */
+}
+
+h1.contact-form {
+    color: #333; /* Darker text color for the heading */
+    text-align: center; /* Center the heading text */
+    margin-bottom: 20px; /* Space below the heading */
+}
+
+.contact-form {
+    background-color: #fff; /* White background for the form */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    padding: 20px; /* Padding around the form */
+    max-width: 600px; /* Limit the width of the form */
+    width: 100%; /* Full width on small screens */
+    box-sizing: border-box; /* Include padding in total width */
+}
+
+label {
+    display: block; /* Labels on separate lines */
+    margin-bottom: 8px; /* Space below each label */
+    font-weight: bold; /* Bold labels for emphasis */
+}
+
+input, textarea {
+    width: 100%; /* Full width for inputs */
+    padding: 10px; /* Padding inside inputs */
+    margin-bottom: 15px; /* Space below each input */
+    border: 1px solid #ccc; /* Light gray border */
+    border-radius: 4px; /* Rounded corners */
+}
+
+button {
+    background-color: #0a74da; /* Button background color */
+    color: white; /* Button text color */
+    border: none; /* No border */
+    padding: 10px 15px; /* Padding for the button */
+    border-radius: 4px; /* Rounded corners for the button */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+button:hover {
+    background-color: #0a5bbf; /* Darker blue on hover */
+}
+
+.inline-padding{
+    margin-left: 3rem;
+}
+
+
+
 /* Responsive Design for Smaller Screens */
 @media (max-width: 768px) {
     header h1 {
