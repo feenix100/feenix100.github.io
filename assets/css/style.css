@@ -87,6 +87,10 @@ header a {
     font-size: 1rem; /* Slightly larger for emphasis */
 }
 
+header p strong {
+    margin-left: 3rem;
+}
+
 /* Image Styling */
 img {
     /*width: 100%; /* Full width by default */
@@ -246,33 +250,9 @@ footer {
     text-decoration: underline;
 }
 
-header p strong {
-    margin-left: 3rem;
-}
+
 
 /* Index/Home page Styling */
-header.home-page {
-    background: #CC9966;
-    color: #fff;
-    padding: 2rem;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1)
-}
-
-h2.home-page {
-    font-size: 2rem;
-    color: #c9d077;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 500;
-}
-
-h3.home-page {
-    font-size: 1.8rem;
-    color: #2980b9;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 500;
-    margin-top: 1.5rem;
-}
 
 h1.home-page {
 font-size: 3rem;
@@ -290,9 +270,9 @@ main.home-page {
 margin: 30px auto;
 max-width: 900px;
 padding: 2rem;
-background-color: #fff;
 box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 border-radius: 8px;
+background-color: #1b1f3b;
 }
 
 body.home-page {
@@ -300,8 +280,7 @@ font-family: 'Merriweather', serif;
 line-height: 1.7;
 margin: 0;
 padding: 0;
-background-color: #f4f4f4;
-color: #333;
+background-color: #070a20;
 }
 
 /*Contact page styles*/
