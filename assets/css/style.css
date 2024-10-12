@@ -4,16 +4,29 @@
 /* Global styles */
 body {
     font-family: 'Merriweather', serif; /* Primary font for readability */
-    color: #333;
+    color: #f7f2f2;
     line-height: 1.6;
     padding: 0;
     margin: 0;
-    background-color: #f4f4f4;
+    background-color: #4f5f76; 
 }
+
+/* color pallete
+Blue Popsicle: #0f2862
+
+Redline: #9e363a
+
+Silver Tongue: #628078
+
+Purple Shadow: #091f36
+
+Apricot: #F7882F
+Grey Blue Leaf: #4f5f76
+*/
 
 h1, h2, h3 {
     font-family: 'Roboto', sans-serif; /* Use a clean sans-serif font for headings */
-    color: #2c3e50;
+    color: #F7882F;
     margin-bottom: 1rem;
     letter-spacing: 0.5px; /* Slight spacing for clarity */
     text-transform: capitalize; /* Capitalize each word for a neat look */
@@ -27,7 +40,6 @@ h1 {
 h2 {
     font-size: 2rem; /* Slightly larger for emphasis */
     font-weight: 600; /* Stronger weight for better readability */
-    color: #34495e; /* A sophisticated dark blue-gray */
     line-height: 1.4; /* Improved line height for readability */
     font-family: 'Helvetica Neue', Arial, sans-serif; /* Modern, clean font */
 }
@@ -41,13 +53,12 @@ h3 {
 section p {
     font-size: 1.1em;
     margin-bottom: 1.5rem;
-    color: #555;
+    color: #f9ffff;
 }
 
 /* Header Styling */
 header {
     text-align: center;
-    background-color: #faf0e5; /* Lighter color for the header */
     color: white;
     padding: 0.5rem 2rem; /* Side padding for a spacious look */
     border-radius: 10px; /* Rounded corners for a softer look */
@@ -65,14 +76,13 @@ header p {
     font-size: 0.8rem; /* Slightly smaller font size */
     font-family: 'Roboto', sans-serif;
     margin: 0.3rem 0; /* Reduced margin for a compact appearance */
-    color: #0922a1; /* White to blend in with the background */
+    color: #1ac6d9; /* White to blend in with the background */
     opacity: 0.8; /* Slightly transparent for a softer look */
 }
 
 header a {
     display: block; /* Make the link take its own line */
     margin-top: 0.5rem; /* Space above the link */
-    color: rgb(80, 72, 244); /* Change this if you want a different color */
     text-decoration: underline; /* Optional: underline for emphasis */
     font-size: 1rem; /* Slightly larger for emphasis */
 }
@@ -91,7 +101,7 @@ article {
     max-width: 800px;
     margin: 2rem auto;
     padding: 2rem;
-    background: linear-gradient(to bottom, rgba(238, 224, 205, 0.7), rgba(255, 255, 255, 0.8)); /* Lighter aged paper-like gradient */
+    background: linear-gradient(to bottom, rgba(4, 0, 18, 0.7), rgba(0, 4, 32, 0.8)); /* Lighter aged paper-like gradient */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Soft shadow for a lifted effect */
     border-radius: 8px;
     color: #333;
@@ -108,7 +118,7 @@ section {
 
 /* Link Styling */
 a {
-    color: #2980b9;
+    color: #15dbe2;
     text-decoration: none;
 }
 
@@ -236,6 +246,10 @@ footer {
     text-decoration: underline;
 }
 
+header p strong {
+    margin-left: 3rem;
+}
+
 /* Index/Home page Styling */
 header.home-page {
     background: #CC9966;
@@ -247,7 +261,7 @@ header.home-page {
 
 h2.home-page {
     font-size: 2rem;
-    color: #2c3e50;
+    color: #c9d077;
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
 }
@@ -346,12 +360,6 @@ button:hover {
     background-color: #0a5bbf; /* Darker blue on hover */
 }
 
-.inline-padding{
-    margin-left: 3rem;
-}
-
-
-
 /* Responsive Design for Smaller Screens */
 @media (max-width: 768px) {
     header h1 {
@@ -363,6 +371,7 @@ button:hover {
     }
 
     img {
-        width: 90%; /* Make the image smaller and dynamic on smaller screens */
+        height: auto;
+        width: 60%; /* Make the image smaller and dynamic on smaller screens */
     }
 }
