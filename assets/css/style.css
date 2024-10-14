@@ -51,12 +51,12 @@ h3 {
 }
 
 section p {
-    font-size: 1.1em;
+    font-size: 1.1rem;
     margin-bottom: 1.5rem;
-    color: #f9ffff;
+    color: #D9D9D9;
+    letter-spacing: .01rem;
 }
-
-/* Header Styling */
+/* Header Styling e5f5f5f4 */
 header {
     text-align: center;
     color: white;
@@ -80,6 +80,10 @@ header p {
     opacity: 0.8; /* Slightly transparent for a softer look */
 }
 
+header p strong {
+    margin-left: 3rem;
+}
+
 header a {
     display: block; /* Make the link take its own line */
     margin-top: 0.5rem; /* Space above the link */
@@ -87,9 +91,7 @@ header a {
     font-size: 1rem; /* Slightly larger for emphasis */
 }
 
-header p strong {
-    margin-left: 3rem;
-}
+
 
 /* Image Styling */
 img {
@@ -105,12 +107,17 @@ article {
     max-width: 800px;
     margin: 2rem auto;
     padding: 2rem;
-    background: linear-gradient(to bottom, rgba(4, 0, 18, 0.7), rgba(0, 4, 32, 0.8)); /* Lighter aged paper-like gradient */
+    background: linear-gradient(to bottom, rgba(3, 2, 21, 0.7), rgba(2, 1, 43, 0.8));
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Soft shadow for a lifted effect */
     border-radius: 8px;
     color: #333;
     font-family: 'Merriweather', serif; /* A classic, book-like feel */
 }
+
+/*
+    background: radial-gradient(circle at center, rgba(3, 2, 21, 0.7), rgba(2, 1, 43, 0.8)),
+                conic-gradient(from 180deg at center, rgba(3, 2, 21, 0.1), rgba(2, 1, 43, 0.1), transparent);
+*/
 
 article h3 {
     color: #2980b9;
@@ -141,7 +148,7 @@ code {
     color: #ffca28; /* Bright golden-yellow text */
     padding: 2px 6px;
     font-family: "Courier New", Courier, monospace;
-    font-size: 1em;
+    font-size: 1rem;
     border-radius: 4px;
     border: 1px solid #ffca28; /* Golden border to match the text */
 }
@@ -181,7 +188,7 @@ pre code span.function {
 
 .post-date {
     display: block; /* Ensure it appears on a new line */
-    font-size: 0.9em; /* Slightly smaller font size */
+    font-size: 0.9rem; /* Slightly smaller font size */
     color: #666; /* Lighter gray color for subtlety */
     margin-top: 4px; /* Space above the date for better separation */
     font-style: italic; /* Italicize the date for emphasis */
@@ -228,6 +235,16 @@ footer {
     padding: 1rem;
     background-color: #34495e;
     color: rgb(231, 233, 120);
+    /*position: fixed; /* Fixed position */
+    width: 100%; /* Full width of the page */
+}
+
+/* Adding text using the ::before pseudo-element */
+footer::before {
+    content: "2024 Rain Dust Blog. All rights reserved."; /* Text for the footer */
+    display: block;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
 }
 
 /*Post Links styles*/
@@ -250,8 +267,6 @@ footer {
     text-decoration: underline;
 }
 
-
-
 /* Index/Home page Styling */
 
 h1.home-page {
@@ -264,6 +279,12 @@ margin-bottom: 0.5rem;
 p.home-page {
 font-size: 1.1rem;
 margin-bottom: 1.5rem;
+}
+
+div img{
+    height: 30%;
+    width: 30%;
+    object-fit: cover;
 }
 
 main.home-page {
