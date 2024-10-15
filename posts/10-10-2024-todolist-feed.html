@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Feed Your To-Do List To A Person</title>
      <link rel="stylesheet" href="../assets/css/style.css">
+     <script src="../assets/scripts/script.js"></script>
+     
 </head>
+
 <body>
 <article>
 <header>
@@ -15,26 +18,33 @@
         <a href="../index.html">Home Page</a>
 </header>
 
+<button id="backToTopBtn" class="back-to-top">Back to Top</button>
+
 <div>
  <img src="../assets/imgs/todolist.jpg" alt="an alternative to do list">
 </div>
 
- <section>
+<div class="toc">
+    <h2>Table of Contents</h2>
+    <ul id="toc-list"></ul>
+</div>
 
+<section>
+    
 <p><a href="../posts/todolist/index.html">Try the to do list here!</a></p>
 
-<h2>Not The Average To Do list</h2>
+<h2 class="subsection-title">Not The Average To Do list</h2>
     <p>
        In a world overflowing with a plethora of methods for organizing tasks—ranging from simple text editors and sticky notes to the most unconventional approaches (like jotting down reminders on your grandpa's adult diapers)—the classic to-do list can often feel stale and uninspired. We’ve all been there, staring at a monotonous list of tasks, feeling the weight of productivity pressures without any excitement. 
     </p>
     <p>
         As the task ascends, it morphs into a colorful, playful representation that captures the essence of what the task entailed—be it a bright, cheerful icon or a stylized text bubble. The transition is smooth, creating a sense of flow that draws the user's attention. This floating animation not only brings the task to life but also establishes a visual connection between the user and the quirky character on the screen.
     </p>
-    <h2>The Twist On The List</h2>
+    <h2 class="subsection-title">The Twist On The List</h2>
     <p>
         The animated task moves toward the quirky character, which is designed to be charming and humorous. The character, a cartoonish figure with exaggerated features, eagerly anticipates the task. As the floating task reaches its mouth, it playfully “eats” the task.
     </p>
-    <h2>The Poop</h2>
+    <h2 class="subsection-title">The Poop</h2>
     <p>
         Once the task is consumed, the animation takes a humorous turn—the character processes the completed task, leading to a lighthearted visual effect where a small, cartoonish “poop” drops out from the bottom of the character, humorously signifying that the task has been fully completed and “processed”. This playful conclusion reinforces the notion of productivity being a lighthearted endeavor rather than a burdensome obligation.
     </p>
@@ -49,7 +59,7 @@
         The entire animation process is designed to be quick and engaging, allowing users to see their progress in a fun way without disrupting their workflow. By the end of the animation, users not only feel a sense of accomplishment but are also left with a smile, eager to tackle the next task on their list. This clever integration of animation serves to enhance motivation and make the mundane feel extraordinary.
     </p>
 
-    <h2>How It Works</h2>
+    <h2 class="subsection-title">How It Works</h2>
 
     <p>
      To bring this creative idea to life, I started with a straightforward HTML structure that lays the foundation for the app's functionality and design. In the head element, I included a link to an external stylesheet, ensuring that the visual aspects of the app could be easily managed and updated. This approach not only keeps the HTML clean and organized but also allows for greater flexibility when it comes to styling elements later on.
@@ -101,7 +111,7 @@
         This setup allows for easy updates and modifications to the animation logic in the future. If I want to introduce new animations or refine existing ones, I can do so with minimal disruption to the overall structure of the application. The combination of the canvas element, Anime.js, and my custom script creates a compelling visual narrative that enhances the user experience, making productivity feel like a delightful adventure.
     </p>
 
-    <h2>Setting Up the Animation</h2>
+    <h2 class="subsection-title">Setting Up the Animation</h2>
 
     <p>
       Inside the app.js file, I begin the process by selecting the canvas element from the DOM, which is crucial for all subsequent drawing and animation tasks. Utilizing the document.getElementById method, I effectively reference the specific canvas we set up in the HTML. This allows me to interact with the canvas programmatically, which is essential for creating the animations that will bring our quirky character to life.
@@ -214,7 +224,7 @@ resizeCanvas();</code></pre>
     requestAnimationFrame(animate);
 };</code></pre>
 
-    <h2>Try It Out!</h2>
+    <h2 class="subsection-title">Try It Out!</h2>
 
     <p>
         Curious to see this fun and functional to-do list in action? You can explore the complete code for this project on GitHub, where I’ve made the entire source code available for anyone to review, experiment with, and customize. The repository includes not only the HTML, CSS, and JavaScript files that power the app but also detailed comments throughout the code, explaining the logic and design choices behind each component.

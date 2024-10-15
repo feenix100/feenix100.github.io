@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="rain dust blog javascript three js warehouse">
     <title>Javascript Warehouse</title>
-    <link rel="stylesheet" href="../assets/css/style.css">  <!-- Link to your stylesheet if needed -->
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="../assets/scripts/script.js"></script>
+
 </head>
 <body>
 
@@ -19,13 +21,21 @@
   <div>
     <img src="../assets/imgs/digitalwarehouse.jpg" alt="digital warehouse created with three js">
 </div>
+
+<div class="toc">
+    <h2>Table of Contents</h2>
+    <ul id="toc-list"></ul>
+</div>
+
+<button id="backToTopBtn" class="back-to-top">Back to Top</button>
+
 <section>
    
     <p>
         <a href="../posts/warehouse/index.html">Here is the Javascript Warehouse!</a>
     </p>
     
-    <h2>The Map</h2>
+    <h2 class="subsection-title">The Map</h2>
 
     <p>
         Five months ago, I embarked on a new journey working at a distribution center. Initially, I was completely lost—every aisle and shelf felt like a maze. The manager, a seasoned veteran of the facility, seemed to have an encyclopedic memory of every item’s location. After spending an exasperating 45 minutes searching for a single part, I quickly realized I needed a map to navigate this new territory. That’s when I decided to leverage my skills in JavaScript.</p>
@@ -40,7 +50,7 @@
         <p>
             I began by designing a basic floor layout with gridlines indicating the X and Z coordinates, along with shelves placed throughout the space. Utilizing sliders from the dat.gui JavaScript library, I was able to customize and adjust the layout dynamically. This initial framework allowed me to establish a general overview of the warehouse, which I then refined with finer details for improved accuracy and usability.</p>
 
-<h2>Creating A Digital Warehouse</h2>
+<h2 class="subsection-title">Creating A Digital Warehouse</h2>
     
     <p>Three.js is a versatile JavaScript library and application programming interface (API) designed for creating and displaying animated 3D graphics in web browsers using WebGL. The library’s source code is openly available on GitHub, allowing developers to explore and contribute to its functionality.
     </p>
@@ -54,19 +64,18 @@
     In our physical warehouse, parts are organized by function or brand, and each part is assigned a distinct company number for easy identification. I will leverage these company numbers to streamline the process of locating and retrieving parts within the system.
 </p> 
 
-<h2>The Code Is On Github</h2>
+<h2 class="subsection-title">The Code Is On Github</h2>
 
 <p>
     <a href="https://github.com/feenix100/3d_warehouse_map">Check out the code for this project on GitHub!</a>
 </p>
 
-<h2>Import The Scripts</h2>
+<h2 class="subsection-title">Import The Scripts</h2>
 
 <p>
     I utilized six JavaScript scripts in my project, each serving a specific purpose to enhance functionality:
 </p>
 
-<h2>The Libraries</h2>
 <p> 
     1. **Three.js**: The core library for creating and displaying 3D graphics. <br>
     2. **OrbitControls**: This script allows for intuitive camera controls, enabling users to orbit around the 3D scene.<br>
@@ -78,7 +87,7 @@
     These scripts collectively contribute to a rich and interactive experience in the 3D warehouse visualization.
 </p>
 
-<h2>The Code</h2>
+<h2 class="subsection-title">The Code Walk Through</h2>
 
     <p>
     With approximately 650 lines of JavaScript in the app.js file, the real magic unfolds.
@@ -117,7 +126,7 @@ function createBackgroundTexture() {
 }
 </code></pre>
 
-<h2>The Lighting</h2>
+<h2 class="subsection-title">The Lighting</h2>
 <p>
     Next, I devoted time to crafting dramatic lighting for the scene. Lighting is a fundamental element in any Three.js environment, as it can transform a basic 3D space into a captivating experience. Well-executed lighting and shadows not only enhance the visual appeal but also improve the overall user experience. Shadows contribute depth to the scene, while appropriate textures help objects appear more realistic, reducing that overly computer-generated look.
 </p>
@@ -198,7 +207,7 @@ function addLighting() {
 }
 </code></pre>
 
-<h2>The axes helper</h2>
+<h2 class="subsection-title">The axes helper</h2>
 
 <p>
 I incorporated a function for an AxesHelper, which visualizes the x, y, and z axes in the scene. This feature is invaluable for positioning the shelves accurately, as it provides a clear reference for spatial orientation.
@@ -225,7 +234,7 @@ const shelfDimensions = {
 };
 </code></pre>
 
-<h2>Arrays</h2>
+<h2 class="subsection-title">Arrays</h2>
 
     <p>
     I employ a two-dimensional array to store all the part numbers for each shelf.
@@ -258,7 +267,7 @@ const extraLongShelfNames = [
 ];
 </code></pre>
 
-<h2>What If</h2>
+<h2 class="subsection-title">What If</h2>
 
 <p>
 I implemented an if statement for each shelf to ensure that each section is named consistently, with each name incremented by one for every shelf in the set. This systematic approach helps maintain organization within the shelving structure.
@@ -283,7 +292,7 @@ for (let i = 0; i < 7; i++) {
 In this code snippet, the loop runs seven times, generating names such as Row_1_Midsection, Row_2_Midsection, and so forth, up to Row_7_Midsection. By following this naming convention, I ensure that each shelf section is uniquely identifiable while maintaining a clear and organized structure.
 </p>
 
-<h2>The Shelves</h2>
+<h2 class="subsection-title">The Shelves</h2>
 
     <p>
     Finally, I implemented the createShelves function, passing the positions array as an argument. This function is crucial for setting the spacing between individual shelves and the spacing between different shelf sets, ensuring a well-organized layout.
@@ -389,7 +398,7 @@ function createShelves(positions) {
 }
 </code></pre>
 
-<h2>The Contents Of The Shelves</h2>
+<h2 class="subsection-title">The Contents Of The Shelves</h2>
 <p>
 Next, I implemented a function to display the part numbers associated with each shelf. This function enhances user interactivity by allowing users to click on a shelf set and see relevant part numbers in a convenient 2D floating window next to the shelf.
 </p>
@@ -437,7 +446,7 @@ function createShelfLabel(group, text, yPosition) {
 }
 </code></pre>
 
-<h2>Slice!</h2>
+<h2 class="subsection-title">Slice!</h2>
 
 <p>
 I employed the slice method to segment the arrays and map the part numbers to each shelf set effectively.
@@ -453,7 +462,7 @@ const shelfSetPartNumbers = {
 };
 </code></pre>
 
-<h2>Push!</h2>
+<h2 class="subsection-title">Push!</h2>
 
 <p>
 Afterward, I added the positions for each shelf set to an array, categorizing them according to their type and shelfSetName.
@@ -486,7 +495,7 @@ positions.push({ startX: -80, startZ: 50, shelfType: 'extraLong_Rotated', shelfS
 positions.push({ startX: 0, startZ: -90, shelfType: 'extraLong', shelfSetName: extraLongShelfNames [2], setIndex: 3 });
 </code></pre>
 
-<h2>The Front Desk</h2>
+<h2 class="subsection-title">The Front Desk</h2>
 
 <p>
 I also created a desk within the scene, which serves as a reference point for orientation—specifically indicating the north direction. This addition is crucial for organizing the shelves in relation to a fixed position, as it provides a clear and consistent framework for layout.
@@ -553,7 +562,7 @@ function createDesk() {
 }
 </code></pre>
 
-<h2>The Search Bar</h2>
+<h2 class="subsection-title">The Search Bar</h2>
 
 <p>
 Naturally, I had to create a search bar. The search bar may be the greatest invention since the wheel.
@@ -628,7 +637,7 @@ function searchPartNumber() {
 }
 </code></pre>
 
-<h2>Listen Up</h2>
+<h2 class="subsection-title">Listen Up</h2>
 
 <p>
 Set up event listeners to manage both click events and keypress actions.
@@ -656,7 +665,7 @@ document.getElementById('searchInput').addEventListener('keypress', function(eve
 });
 </code></pre>
 
-<h2>Get On The Floor</h2>
+<h2 class="subsection-title">Get On The Floor</h2>
 
 Then I create the floor. All the shelves will rest on the floor of the digital warehouse.
 
@@ -678,7 +687,7 @@ function createFloor() {
 }
 </code></pre>
 
-<h2>I See You</h2>
+<h2 class="subsection-title">I See You</h2>
 
 <p>
 I implemented a function to render the scene, which is essential when using Three.js. This process requires a continuous loop that prompts the renderer to redraw the scene every time the screen refreshes, typically at a rate of 60 frames per second on standard displays.
@@ -792,7 +801,7 @@ function onMouseClick(event) {
 }
 </code></pre>
 
-<h2>Just The Tip</h2>
+<h2 class="subsection-title">Just The Tip</h2>
 
 <p>
 I also integrated a tooltip feature that appears when the mouse hovers over a shelf. This tooltip provides a list of the part numbers located on that shelf, enhancing user interaction and accessibility to information.
@@ -877,7 +886,7 @@ camera.position.set(0, 20, 100);
 animate();
 </code></pre>
 
-<h2>Final Thoughts</h2>
+<h2 class="subsection-title">Final Thoughts</h2>
 
 <p>
 This serves as a brief demonstration of the incredible possibilities offered by the Three.js library, though there is ample room for enhancement. I envision adding objects to the shelves that visually represent each part, which could be quite complex given the thousands of different items stored in the warehouse, each identified by a unique number.
