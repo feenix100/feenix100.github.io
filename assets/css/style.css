@@ -97,6 +97,7 @@ img {
 
 .toc li {
     margin: 5px 0;
+    text-transform: capitalize; /* Capitalize each word for a neat look */
 }
 
 .toc a {
@@ -114,11 +115,11 @@ img {
 
 /*main body styling*/
 article {
-    max-width: 75%;
+    max-width: 90%;
     margin: auto;
     padding: 1rem;
     border-radius: 8px;
-    font-family: 'Merriweather', serif; /* A classic, book-like feel */
+    font-family: 'Merriweather', serif;
 }
 
 /*
@@ -139,6 +140,7 @@ section p {
     margin-bottom: 1.5rem;
     color: #D9D9D9;
     letter-spacing: .01rem;
+    line-height: 2rem;
 }
 
 /* Link Styling */
@@ -166,10 +168,10 @@ p {
     border-radius: 5px;
     padding: 10px 15px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 1rem;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
     transition: opacity 0.3s ease;
-    opacity: 0.5; /* Slightly transparent */
+    opacity: 0.2; /* mostly transparent */
 }
 
 .back-to-top:hover {
@@ -256,12 +258,6 @@ footer p {
     color: #e7e978;
 }
 
-footer a {
-    text-align: center;
-    padding: 1rem;
-    color: #e7e978;
-}
-
 footer {
     text-align: center;
     padding: 1rem;
@@ -270,6 +266,15 @@ footer {
     /*position: fixed; /* Fixed position */
     width: 100%; /* Full width of the page */
 }
+
+footer a {
+    font-size: 1.5rem;
+    color: #e7e978;
+    padding: 1rem;
+    text-decoration: none;
+    text-align: center;
+}
+
 
 /* Adding text using the ::before pseudo-element */
 footer::before {
@@ -340,7 +345,6 @@ body.contact-page {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4; /* Light background for the page */
     display: flex; /* Use flexbox for layout */
     flex-direction: column; /* Stack children vertically */
     align-items: center; /* Center children horizontally */

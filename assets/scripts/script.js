@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Show the button when scrolled down 200px
     window.onscroll = function() {
-        if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+        if (document.body.scrollTop > 600 || document.documentElement.scrollTop > 600) {
             backToTopBtn.style.display = "block";
         } else {
             backToTopBtn.style.display = "none";
@@ -42,3 +42,29 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+
+//contact page functionality
+// Function to display the email
+
+function displayEmail() {
+    var part1 = "raindust";
+    var part2 = "@myyahoo.com";
+    var email = part1 + part2;
+
+    // Find the div by its ID and insert the email link
+    document.getElementById("email").innerHTML = '<a href="mailto:' + email + '">' + email + '</a>';
+}
+
+// Function to display the X profile link
+function displayXLink() {
+    var xProfileUrl = "https://x.com/az_rain_dust"; // Replace 'yourprofile' with your actual profile name
+    
+    // Find the div by its ID and insert the X profile link
+    document.getElementById("x-link").innerHTML = '<a href="' + xProfileUrl + '" target="_blank">Message me on X (formerly known as twitter)</a>';
+}
+
+// Call the functions when the page loads
+window.onload = function() {
+    displayEmail();
+    displayXLink();
+};
