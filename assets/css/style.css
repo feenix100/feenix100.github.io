@@ -143,6 +143,10 @@ section p {
     line-height: 2rem;
 }
 
+section.contact-page{
+    text-align: center;
+}
+
 /* Link Styling */
 a {
     color: #15dbe2;
