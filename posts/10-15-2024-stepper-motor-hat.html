@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="rain dust blog waveshare stepper motor hat for raspberry pi 4">
+    <meta name="robots" content="index, follow">
+    <meta name="keywords" content="rain dust, personal blog, creative writing, life thoughts, philosophy">
+    <meta name="author" content="Justin Stewart">
+
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="../assets/scripts/script.js"></script>
+
+    <title>Waveshare Stepper Motor Hat</title>
+
+</head>
+<body>
+
+<article>
+    <header>
+        <h1>Waveshare Stepper Motor Hat</h1>
+        <p><strong>By: </strong> Justin Stewart<strong><br>10-15-2024</strong></p>
+        <br>
+        <a href="../index.html">Home Page</a>
+    </header>
+
+    <button id="backToTopBtn" class="back-to-top">Back to Top</button>
+    
+    <div>
+        <img src="../assets/imgs/steppermotorhat.jpg" alt="waveshare stepper motor hat for raspberry pi 4">
+    </div>
+    
+    <div class="toc">
+        <h2>Table of Contents</h2>
+        <ul id="toc-list"></ul>
+    </div>
+
+    <section>
+
+        <h2 class="subsection-title">A Stepper Motor Hat for the raspberry pi 4</h2>
+
+        <p>
+
+I recently embarked on a robotics project where I needed to control multiple motors. For this, I chose the Raspberry Pi 4 due to its versatility and ease of use. However, I needed more precise control over the motors, so I opted for the Waveshare Stepper Motor Hat. I found that detailed documentation for the Hat was lacking, which inspired me to document my experience for future tinkerers who may find themselves in a similar situation. The stepper motor hat is available on amazon, for about $20.
+</p>
+
+<p>
+
+The Waveshare Stepper Motor Hat provides the ability to control two stepper motors simultaneously through the Raspberry Pi’s GPIO pins. Using Python, you can send commands to adjust the speed, direction, and stepping modes of each motor. Inside my Github repository there is a  Python script <code>motor.py</code> that offers basic control functionalities, while the <code>DRV8825.py</code> script enhances control by interfacing with the DRV8825 stepper driver.
+</p>
+
+	<p>
+Additionally, I created a 3D printable mount to securely attach the hat to my Raspberry Pi 4, using M2.5 screws for stability. Given that my workspace can reach temperatures of 100°F (38°C) during the summer, I added a GeeekPi cooling fan to prevent the system from overheating. To accommodate both the fan and the motor hat, I installed two 40-pin stacker headers, which raised the hat slightly above the Pi, leaving room for airflow.
+        </p>
+
+        <hr>
+      
+        <h2 class="subsection-title">Power Requirements</h2>
+        
+        <p>
+Powering the entire setup required careful consideration. I used a 12V, 4A power supply that was capable of powering the Raspberry Pi 4, the Waveshare Hat, and the NEMA 23 stepper motor all at once. By connecting the power supply to the Hat's DC barrel jack, I could power both the Hat and the Raspberry Pi via the Hat's integrated on/off switch. For those who prefer to power the Raspberry Pi separately, it is also possible to use a dedicated power adapter for the Pi, though I found the single power source setup more convenient.
+        </p>
+
+        <hr>
+
+        <h2 class="subsection-title">Wiring and Configuration</h2>
+
+        <p>
+
+To ensure the stepper motors were wired correctly, I referred to the datasheet of my NEMA 23 motor, which specified connections for the A+ and A- terminals on the Hat. Additionally, the Hat has DIP switches located on the underside, which can be adjusted to configure the step mode (e.g., full-step, half-step, etc.). For most users, leaving the DIP switches in the "0" position will allow software control of the step mode through the <code>DRV8825.py</code> script. See the pdf manual for further explanation.
+The first three switches affect the 1st motor, and the remaining three affect the 2nd motor.
+        </p>
+
+        <hr>
+
+        <h2 class="subsection-title">Manual and Datasheet</h2>
+
+        <p>
+       For more advanced configurations and detailed instructions, I recommend checking out the official <a href="https://www.waveshare.com/wiki/Stepper_Motor_HAT">Waveshare Stepper Motor Hat Wiki</a>. Be aware that some of the instructions may require interpretation, as they can be somewhat technical.
+
+	</p>
+
+	<p>
+I also documented my project on <a href="https://github.com/feenix100/stepper_Motor_Hat">Github</a>, where I’ve provided scripts and 3D models for anyone looking to replicate this setup.
+
+
+        </p>
+	
+	<br>
+
+        <hr>
+
+        <h2 class="subsection-title">3d printed support</h2>
+
+        <p>
+
+One of the more unique aspects of my setup was the use of a 3D-printed support structure, which helped stabilize the Hat as it sat atop the Raspberry Pi. You can find the <code>rpiHatCylinder.stl</code> file for 3D printing on my Github repository. With this addition, the Hat remains securely in place, even when the motors are in motion. This setup was particularly useful when controlling a robotic gripper that I designed using a pair of scissors.
+	</p>
+	
+
+<h2 class="subsection-title">final thoughts</h2>
+
+	<p>
+
+By following these steps and making use of the resources provided, you can achieve precise control of stepper motors in your Raspberry Pi projects. Whether you’re building a robot or automating a mechanical task, the Waveshare Stepper Motor Hat offers a robust solution for motor control. 
+        </p>
+
+<h2 class="subsection-title">Get The Code</h2>
+
+        <p>
+           For more information, including the necessary code and a PDF manual, you can visit the project's <a href="https://github.com/feenix100/stepper_Motor_Hat"> repository on Github</a>.
+        </p>    
+
+</section>
+
+
+</article>
+
+<footer>
+        <br>
+        <a class="post-links" href="../index.html">Home Page</a></ul>
+        <br>
+        <br>
+        <a class="post-links" href="about-me.html">Contact Me</a></ul>
+        <br>
+</footer>
+
+</body>
+</html>

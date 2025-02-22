@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Crafting the Anti-User Button rain dust blog">
+    <meta name="robots" content="index, follow">
+    <meta name="keywords" content="rain dust, personal blog, creative writing, life thoughts, philosophy">
+    <meta name="author" content="Justin Stewart">
+
+    <title>Crafting the Anti User Button</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="../assets/scripts/script.js"></script>
+
+</head>
+<body>
+
+<article>
+    <header>
+        <h1>Crafting the Anti-User Button</h1>
+        <p><strong>10/7/2024</strong></p>
+        <p><strong>Author: </strong> J Stewart</p>
+        <br>
+        <a href="../index.html">Home Page</a>
+    </header>
+  <div>
+    <img src="../assets/imgs/antiuser.jpg" alt="the anti user button">
+</div>
+
+<div class="toc">
+    <h2>Table of Contents</h2>
+    <ul id="toc-list"></ul>
+</div>
+
+<button id="backToTopBtn" class="back-to-top">Back to Top</button>
+
+    <section>
+        <h2 class="subsection-title">In the year 1998</h2>
+        <p>
+            Back in 1998, the Playstation 1 was the best console we had availaible in my neighborhood, and *Twisted Metal 2* was our game of choice.<br>
+            <br>Personal computers were large, not portable, and restricted to desktops.<br>
+            <br>
+            Mobile devices were a distant dream. The World Wide Web had just been introduced to the public, opening up new possibilities we couldn’t yet imagine.
+        </p>
+
+        <hr> <!-- Horizontal line for separation -->
+      
+        <h2 class="subsection-title">The Anti-User Button</h2>
+        
+        <p>
+            One day, a friend of mine showed me a small program his brother had created. I had no knowledge of coding back then, so it was all fascinating. <br>
+            <br>
+            The program opened a simple window with a button in the middle. <br>
+            <br>
+            The button read, 
+            "Click here to keep an idiot entertained for hours"<br>
+            <br>
+            Naturally, I tried to click it. To my surprise, as soon as the cursor neared the button, it darted away. No matter how I approached it, the button stayed just out of reach, dancing around the screen. 
+            It was frustrating, amusing, and genius all at once—a true "anti-user button."
+        </p>
+
+        <hr>
+
+        <h2 class="subsection-title">Modern times</h2>
+        <p>
+            Now, fast forward to March 2024. Technology has become what we used to see on television in the 90's. ChatGPT 3.5 is the latest version of AI from OpenAI, and I’ve used it in several projects. It got me thinking: could I recreate the anti-user button using today’s tools?
+        </p>
+
+        <hr>
+
+        <h2 class="subsection-title">Crafting the prompt</h2>
+        <p>
+            The most straightforward way was using HTML and JavaScript. It’s all I needed to bring this idea back to life. All the code fits into one html file and it can run local in the browser. I described the behavior of the anti-user button to ChatGPT. 
+            <br>
+            <br>
+            At first, the AI didn’t understand the goal and provided a standard button that could be clicked. Once I explained that the button needed to move away from the user’s cursor, ChatGPT promptly provided a solution to my prompts.
+        </p>
+
+        <hr>
+
+        <h2 class="subsection-title">How the anti-user button was forged</h2>
+
+        <p>
+            I used the jQuery JavaScript library (`-3.6.0.min.js`) to make things simpler. The code works by creating a button within the HTML body, then using JavaScript to manipulate its behavior. 
+                <br>
+                <br>
+                Here’s a breakdown of how it works:
+                <br>
+                <br>
+                - The script detects the mouse’s position in relation to the button.<br>
+                <br>
+                - It calculates the distance between the cursor and the button using `dx` and `dy` (differences in x and y coordinates).<br>
+                <br>
+                - If the cursor gets too close, the button moves away in a random direction.<br>
+                <br>
+                - A random angle is generated using JavaScript’s `Math` methods to make the button’s movements unpredictable.<br>
+                <br>
+                - If the button moves too far from the center of the screen, it automatically re-centers when the mouse is far enough away.<br>
+                <br>
+                - The button is also constrained to the window’s bounds, so it won’t escape off-screen.<br>
+                <br>
+                - Finally, a ‘click’ event is added that does nothing—just in case someone miraculously clicks it.<br>
+        </p>
+
+        <p>
+            For the caption, I decided on *"Click here to unsubscribe."* Imagine an unsubscribe button that runs away when a user tries to click it—perfect for this anti-user button!
+        </p>
+
+        <p>
+            This little thought experiment was a fun challenge, and it’s great to see how easy it is to achieve with modern coding tools.
+            <br>
+            Who knows? Maybe one day, this "anti-user button" will make its way into real-world applications.
+            <br>
+            <br>You can find the full code for this project on GitHub: <a href="https://github.com/feenix100/anti_user_button">Anti User Button on GitHub</a>
+        </p>
+        
+        <h2 class="subsection-title">On the seventh day</h2>
+        
+        <p>
+            After crafting the JavaScript version, I challenged myself to recreate the button in other programming languages.<br>
+            <br>
+            Using ChatGPT’s assistance, I created the anti-user button using Python, C#, Java Swing, Rust (for those who are into that sort of thing), and even Visual Basic in Excel!
+        </p>
+
+        <h2 class="subsection-title">The Code</h2>
+
+        <p>
+            Here’s the JavaScript that brings it to life:
+        </p>
+
+        <p>
+            <pre>
+                <code>&lt;!DOCTYPE html&gt;
+                &lt;html lang="en"&gt;
+                &lt;!-- script created by chat gpt 3.5 march 20th 2024 :) 
+                     I asked it to create a button that constantly moves
+                     away from the mouse cursor ~~~   --&gt;
+                &lt;head&gt;
+                    &lt;meta charset="UTF-8"&gt;
+                    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+                    &lt;title&gt;Moving Button&lt;/title&gt;
+                    &lt;style&gt;
+                        body, html {
+                            height: 100%;
+                            margin: 0;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                        }
+                        #movingButton {
+                            position: absolute;
+                            cursor: pointer;
+                        }
+                    &lt;/style&gt;
+                    &lt;script src="https://code.jquery.com/jquery-3.6.0.min.js"&gt;&lt;/script&gt;
+                &lt;/head&gt;
+                &lt;body&gt;
+                    &lt;button id="movingButton"&gt;Click here to &lt;br&gt;unsubscribe&lt;/button&gt;
+                
+                    &lt;script&gt;
+                        $(document).ready(function () {
+                            var $button = $('#movingButton');
+                            var $window = $(window);
+                            var start_x = $window.width() / 2;
+                            var start_y = $window.height() / 2;
+                            var speed = 100;
+                            var mouseNearThreshold = 100;
+                            var interval = 50;
+                
+                            $button.css({
+                                left: start_x + 'px',
+                                top: start_y + 'px'
+                            });
+                
+                            $button.on('mousemove', function (event) {
+                                var x = event.clientX;
+                                var y = event.clientY;
+                                var buttonOffset = $button.offset();
+                                var x0 = buttonOffset.left;
+                                var y0 = buttonOffset.top;
+                                var dx = x - x0;
+                                var dy = y - y0;
+                
+                                // Calculate the distance between the mouse and the button center
+                                var dist = Math.sqrt(dx ** 2 + dy ** 2);
+                
+                                if (dist &lt; mouseNearThreshold) {
+                                    // Move button randomly if the mouse is near
+                                    var randomAngle = Math.random() * 2 * Math.PI;
+                                    dx = Math.cos(randomAngle) * speed;
+                                    dy = Math.sin(randomAngle) * speed;
+                                } else {
+                                    // Move button back to center if the mouse is far
+                                    var dist_x = start_x - x0;
+                                    var dist_y = start_y - y0;
+                                    var centerDist = Math.sqrt(dist_x ** 2 + dist_y ** 2);
+                
+                                    if (centerDist &gt; 0) {
+                                        dx = (dist_x / centerDist) * speed;
+                                        dy = (dist_y / centerDist) * speed;
+                                    }
+                                }
+                
+                                var newLeft = x0 + dx;
+                                var newTop = y0 + dy;
+                
+                                // Ensure the button stays within window bounds
+                                newLeft = Math.max(0, Math.min($window.width() - $button.outerWidth(), newLeft));
+                                newTop = Math.max(0, Math.min($window.height() - $button.outerHeight(), newTop));
+                
+                                $button.css({
+                                    left: newLeft + 'px',
+                                    top: newTop + 'px'
+                                });
+                            });
+                
+                            $button.on('click', function (event) {
+                                event.preventDefault();
+                                return false;
+                            });
+                
+                            function moveButtonToCenter() {
+                                var buttonOffset = $button.offset();
+                                var x0 = buttonOffset.left;
+                                var y0 = buttonOffset.top;
+                                var dist_x = start_x - x0;
+                                var dist_y = start_y - y0;
+                                var dist = Math.sqrt(dist_x ** 2 + dist_y ** 2);
+                
+                                if (dist &gt; 1) {
+                                    var dx = (dist_x / dist) * (speed / 10);
+                                    var dy = (dist_y / dist) * (speed / 10);
+                
+                                    var newLeft = x0 + dx;
+                                    var newTop = y0 + dy;
+                
+                                    // Ensure the button stays within window bounds
+                                    newLeft = Math.max(0, Math.min($window.width() - $button.outerWidth(), newLeft));
+                                    newTop = Math.max(0, Math.min($window.height() - $button.outerHeight(), newTop));
+                
+                                    $button.css({
+                                        left: newLeft + 'px',
+                                        top: newTop + 'px'
+                                    });
+                                }
+                            }
+                
+                            setInterval(moveButtonToCenter, interval);
+                        });
+                    &lt;/script&gt;
+                &lt;/body&gt;
+                &lt;/html&gt;
+                </code>
+                </pre>                
+        </p>
+
+    </section>
+</article>
+
+</body>
+
+<footer>
+    <br>
+    <a class="post-links" href="../index.html">Home Page</a></ul>
+    <br>
+    <br>
+    <a class="post-links" href="about-me.html">Contact Me</a></ul>
+    <br>
+</footer>
+
+</html>

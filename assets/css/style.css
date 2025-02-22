@@ -1,0 +1,421 @@
+/* Import a Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Roboto:wght@400;500&display=swap');
+
+/* Global styles */
+body {
+    font-family: 'Merriweather', serif; /* Primary font for readability */
+    line-height: 1.6;
+    padding: 0;
+    margin: 0;
+    background:#202020; /*background color #212121 1b1919    font color #ececec*/
+}
+
+h1, h2, h3 {
+    font-family: 'Roboto', sans-serif; /* Use a clean sans-serif font for headings */
+    color: #F7882F;
+    margin-bottom: 1rem;
+    letter-spacing: 0.5px; /* Slight spacing for clarity */
+    text-transform: capitalize; /* Capitalize each word for a neat look */
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+h2 {
+    font-size: 1.5rem;
+    font-weight: 600; /* Stronger weight for better readability */
+    line-height: 1.4; /* Improved line height for readability */
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+h3 {
+    font-size: 1.1rem;
+    font-weight: 400;
+}
+
+/* Header Styling */
+header {
+    text-align: center;
+    color: white;
+    padding: 0.5rem 2rem; /* Side padding for a spacious look */
+    border-radius: 10px; /* Rounded corners for a softer look */
+    margin: 1rem 0; /* Vertical margin to separate from other elements */
+    width: 100%; /* Full width of the window */
+    box-sizing: border-box; /* Ensure padding is included in total width */
+}
+
+header h1 {
+    margin: 0;
+}
+
+header p {
+    font-family: 'Roboto', sans-serif;
+    margin: 0.3rem 0; /* Reduced margin for a compact appearance */
+    color: #1ac6d9; /* White to blend in with the background */
+    opacity: 0.8; /* Slightly transparent for a softer look */
+}
+
+header p strong {
+    margin-left: 3rem;
+}
+
+header a {
+    display: block; /* Make the link take its own line */
+    margin-top: 0.5rem; /* Space above the link */
+    text-decoration: underline; /* Optional: underline for emphasis */
+    font-size: 1rem; /* Slightly larger for emphasis */
+}
+
+/* Image Styling */
+img {
+    /*width: 100%; /* Full width by default */
+    max-width: 50%; /* Limit the max width */
+    height: auto; /* Maintain aspect ratio */
+    display: block;
+    margin: 1.5rem auto;
+}
+
+ul {
+    color:#ececec;
+}
+
+ul li{
+    color:#ececec;
+    line-height: 1.5rem;
+}
+
+.toc {
+    padding: 15px;
+    margin-bottom: 20px;
+    text-align: center; /* Center the contents */
+}
+
+.toc h2 {
+    margin: 0 0 10px;
+    color:#e7e978;
+}
+
+.toc ul {
+    list-style-type: none;
+    padding: 0;
+    display: inline-block;
+    text-align: left;
+}
+
+.toc li {
+    margin: 5px 0;
+    text-transform: capitalize; /* Capitalize each word for a neat look */
+}
+
+.toc a {
+    text-decoration: none;
+}
+
+.toc a:hover {
+    text-decoration: underline;
+}
+
+.toc div{
+    height: auto;
+    width: 60%;
+}
+
+/*main body styling*/
+article {
+    max-width: 90%;
+    margin: auto;
+    padding: 1rem;
+    border-radius: 8px;
+    font-family: 'Merriweather', serif;
+}
+
+/*
+    background: radial-gradient(circle at center, rgba(3, 2, 21, 0.7), rgba(2, 1, 43, 0.8)),
+                conic-gradient(from 180deg at center, rgba(3, 2, 21, 0.1), rgba(2, 1, 43, 0.1), transparent);
+*/
+
+article h3 {
+    color: #2980b9;
+}
+
+section {
+    padding: 1rem;
+}
+     
+section p {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    color: #ececec; /*color: #ececec  #D9D9D9*/
+    letter-spacing: .01rem;
+    line-height: 2rem;
+}
+
+/* Link Styling */
+a {
+    color: #15dbe2;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+p {
+    font-size: 1rem;
+    margin-top: 0.5rem;
+}
+
+.back-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    transition: opacity 0.3s ease;
+    opacity: 0.2; /* mostly transparent */
+}
+
+.back-to-top:hover {
+    background-color: #0056b3;
+    opacity: 1; /* Fully opaque on hover */
+}
+
+/* Code snippet Styling */
+code {
+    background-color: #1b1f3b; /* Dark indigo background */
+    color: #ffca28; /* Bright golden-yellow text */
+    padding: 2px 6px;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 1rem;
+    border-radius: 4px;
+    border: 1px solid #ffca28; /* Golden border to match the text */
+}
+
+pre code {
+    display: block;
+    padding: 15px; /* Increased padding for comfort */
+    overflow-x: auto; /* Allow horizontal scrolling */
+    background-color: #1c1c1c; /* Deep charcoal background */
+    color: #e0e6f1; /* Soft, light text */
+    border-radius: 8px; /* Slightly more rounded corners */
+    border: 1px solid #0a74da; /* Bright blue border */
+    white-space: pre-wrap; /* Maintain whitespace formatting */
+    font-family: 'Courier New', monospace; /* Monospace font for code */
+    font-size: 0.95rem; /* Slightly larger font size */
+    line-height: 1.5; /* Improved line spacing for readability */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    margin: 1rem 0; /* Margin above and below for separation */
+}
+
+pre code span.keyword {
+    color: #ff6f61; /* Bright coral for keywords */
+}
+
+pre code span.string {
+    color: #f5f567; /* Bright yellow-green for strings */
+}
+
+pre code span.comment {
+    color: #f78da7; /* Bright pink for comments */
+}
+
+pre code span.function {
+    color: #79b8ff; /* Sky blue for function names */
+}
+
+.post-date {
+    display: block; /* Ensure it appears on a new line */
+    font-size: 0.9rem; /* Slightly smaller font size */
+    color: #66e5ec; /* Lighter gray color for subtlety */
+    margin-top: 4px; /* Space above the date for better separation */
+    font-style: italic; /* Italicize the date for emphasis */
+}
+
+/* Navigation Styling */
+nav {
+    text-align: center;
+    margin: 1.5rem;
+}
+
+nav a {
+    margin: 0 20px;
+    text-decoration: none;
+    color: #2c3e50;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+
+nav a:hover {
+    color: #007bff;
+}
+
+/*End global styles*/
+
+/* Footer Styling */
+footer p {
+    text-align: center;
+    padding: 1rem;
+    color: #e7e978;
+}
+
+footer {
+    text-align: center;
+    padding: 1rem;
+    background: linear-gradient(to bottom, rgba(3, 2, 21, 0.7), rgba(2, 1, 43, 0.8));
+    color: #e7e978;
+    /*position: fixed; /* Fixed position */
+    width: 100%; /* Full width of the page */
+}
+
+footer a {
+    font-size: 1.5rem;
+    color: #e7e978;
+    padding: 1rem;
+    text-decoration: none;
+    text-align: center;
+}
+
+
+/* Adding text using the ::before pseudo-element */
+footer::before {
+    content: "2024 Rain Dust Blog. All rights reserved."; /* Text for the footer */
+    display: block;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+/*Post Links styles*/
+.post-links {
+    list-style: none;
+    padding: 0;
+}
+
+.post-links li {
+    margin: 15px 0;
+}
+
+.post-links a {
+    font-size: 1.2rem;
+    color: #fffcef;
+    text-decoration: none;
+}
+
+.post-links a:hover {
+    text-decoration: underline;
+}
+
+/* Index/Home page Styling */
+
+h1.home-page {
+font-size: 3rem;
+font-family: 'Roboto', sans-serif;
+font-weight: 700;
+margin-bottom: 0.5rem;
+}
+
+p.home-page {
+font-size: 1.1rem;
+margin-bottom: 1.5rem;
+}
+
+div img{
+    height: 30%;
+    width: 30%;
+    object-fit: cover;
+}
+
+main.home-page {
+margin: 30px auto;
+max-width: 900px;
+padding: 2rem;
+box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+border-radius: 8px;
+background: linear-gradient(to bottom, rgba(3, 2, 21, 0.7), rgba(2, 1, 43, 0.8));
+}
+
+body.home-page {
+font-family: 'Merriweather', serif;
+line-height: 1.7;
+margin: 0;
+padding: 0;
+}
+
+/*Contact page styles*/
+body.contact-page {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex; /* Use flexbox for layout */
+    flex-direction: column; /* Stack children vertically */
+    align-items: center; /* Center children horizontally */
+    justify-content: center; /* Center children vertically */
+    height: 100vh; /* Full viewport height */
+}
+
+h1.contact-form {
+    color: #333; /* Darker text color for the heading */
+    text-align: center; /* Center the heading text */
+    margin-bottom: 20px; /* Space below the heading */
+}
+
+.contact-form {
+    background-color: #fff; /* White background for the form */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    padding: 20px; /* Padding around the form */
+    max-width: 600px; /* Limit the width of the form */
+    width: 100%; /* Full width on small screens */
+    box-sizing: border-box; /* Include padding in total width */
+}
+
+label {
+    display: block; /* Labels on separate lines */
+    margin-bottom: 8px; /* Space below each label */
+    font-weight: bold; /* Bold labels for emphasis */
+}
+
+input, textarea {
+    width: 100%; /* Full width for inputs */
+    padding: 10px; /* Padding inside inputs */
+    margin-bottom: 15px; /* Space below each input */
+    border: 1px solid #ccc; /* Light gray border */
+    border-radius: 4px; /* Rounded corners */
+}
+
+button {
+    background-color: #0a74da; /* Button background color */
+    color: white; /* Button text color */
+    border: none; /* No border */
+    padding: 10px 15px; /* Padding for the button */
+    border-radius: 4px; /* Rounded corners for the button */
+    cursor: pointer; /* Pointer cursor on hover */
+}
+
+button:hover {
+    background-color: #0a5bbf; /* Darker blue on hover */
+}
+
+/* Responsive Design for Smaller Screens */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 1.75rem; /* Smaller header font on small screens */
+    }
+
+    header p {
+        font-size: 0.9rem; /* Adjusted subheading size */
+    }
+
+    img {
+        height: auto;
+        width: 60%; /* Make the image smaller and dynamic on smaller screens */
+    }
+}

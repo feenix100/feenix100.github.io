@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="rain dust blog Road Trip On Math">
+    <meta name="robots" content="index, follow">
+    <meta name="keywords" content="rain dust, personal blog, creative writing, philosophy, code, tech, javascript, python, computer science, Road Trip On Math, ford, f150, electric vehicle, gasoline vehicle, automobile">
+    <meta name="author" content="Justin Stewart">
+
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="../assets/scripts/script.js"></script>
+
+    <title>Road Trip On Math</title>
+
+</head>
+<body>
+
+<article>
+    <header>
+
+        <h1>Road Trip On Math</h1>
+        
+        <p><strong>By: </strong> Justin Stewart<strong><br>11-14-2024</strong></p>
+        
+        <br>
+        
+        <a href="../index.html">Home Page</a>
+
+    </header>
+
+    <button id="backToTopBtn" class="back-to-top">Back to Top</button>
+    
+    <div>
+        <img src="../assets/imgs/roadtrip.jpeg" alt="an electric truck with extra batteries in the back">
+    </div>
+    
+    <div class="toc">
+        <h2>Table of Contents</h2>
+        <ul id="toc-list"></ul>
+    </div>
+
+    <section>
+        <h2 class="subsection-title">Road Trip</h2>
+        <p>
+            How much time will it take to drive from California to New York using a gasoline powered vehicle, versus an electric powered vehicle? 
+        </p>
+
+        <p>
+            Imagine you and a group of friends decide to embark on an epic road trip from Sacramento, California, to New York City, near the end of the year 2024. From the west coast to the east coast. With 2,900 miles of highway ahead of you, the big question is: what kind of vehicle should you take?
+        </p>
+
+        <p>
+            By constructing mathematical models based on the 2024 Ford F-150 Platinum (gas-powered) and the 2024 Ford F-150 Lightning Lariat (electric), we will estimate the total time required for the trip, factoring in stops for refueling and recharging.A linear equation will be used to calculate the total amount of time it will take for each type of vehicle. A graph will also be used to illustrate the data. On one hand, there’s the classic reliability of a gas-powered truck. On the other, the sleek promise of an electric vehicle, boasting cutting-edge technology and environmental benefits. You’re standing at a crossroads, trying to decide: Will the convenience of quick refueling in a gas truck win out, or will the electric vehicle’s need for charging stations slow you down?
+        </p>
+        
+        <p>
+            I am determined to figure this out using math, exploring both vehicles to estimate the total time it would take for each to make the cross-country trek. With Google Maps projecting 42 hours of driving, I will factor in the logistics of refueling and recharging stops, exploring the impact of fuel efficiency, battery capacity, and charging speeds. This article will take you on that journey—comparing the road trip experiences of a gas-powered Ford F-150 and its electric counterpart, breaking down every stop along the way to reveal which vehicle would truly be the better choice for a long-distance adventure.
+        </p>
+
+        <hr>
+
+        <h2 class="subsection-title">Hit The Road</h2>
+        
+        <p>
+            Since this road trip is all about exploring the journey through math, we have the freedom to select any vehicle we want. However, I chose the Ford F150, not just for its iconic status but for its proven reliability and practicality. Ford has a long-standing reputation for building trucks that can handle tough road trips, making it a perfect candidate for this cross-country comparison. Whether it's the classic gas-powered model or the cutting-edge electric version, Ford offers two distinct experiences for this trip. 
+        </p>    
+
+        <p>
+            Best of all, this journey won’t cost a single drop of gas or a single kilowatt of electricity. The only thing we’ll be spending is the time it takes to do the math. By working through calculations on fuel efficiency, charging times, and driving ranges, we can experience the entire trip from the comfort of a spreadsheet. It's a road trip without the traffic jams, refueling stops, or recharging delays—just pure data-driven exploration. So, let’s dive into the numbers and see how these two vehicles stack up against each other when it comes to the ultimate test: time.
+        </p>
+
+        <hr>
+
+        <h2 class="subsection-title">The Comparison</h2>
+        <p>
+            For this project, we will analyze the time it takes to travel from Sacramento, California, to New York, New York, in both a gas-powered and an electric vehicle. The journey spans approximately 2,900 miles, and we will compare travel times using real-world data on fuel efficiency, electric vehicle (EV) charging times, and vehicle range. 
+        </p>
+
+        <p>
+            By constructing mathematical models based on the 2024 Ford F-150 Platinum (gas-powered) and the 2024 Ford F-150 Lariat (electric), we will estimate the total time required for the trip, factoring in stops for refueling and recharging. Our calculations will rely on best-case manufacturer scenarios and standard refueling and charging conditions, with the goal of determining which vehicle type completes the trip more efficiently. 
+        </p>
+
+        <p>    
+            The data used in this analysis comes from manufacturer websites and Google searches, with the only limiting factor being the time required to stop for refueling or recharging. For simplicity, we assume that multiple drivers are available for continuous driving, and we will not consider delays such as detours, weather conditions, or mechanical issues.
+        </p>
+
+        <hr>
+
+        <h2 class="subsection-title">Refuel or Recharge</h2>
+        
+        <p>
+            These figures represent the best-case scenarios according to the
+            manufacturers.
+        </p>
+        
+        <p>
+            I will compare two 2024 Ford F-150 models:
+            <br>
+            Gas-powered: F-150 Platinum with a 36-gallon tank, capable of 26 miles
+            per gallon (mpg) on the highway.
+            
+            Gasoline Vehicle Range: 936 miles (36-gallon gas tank * 26 mpg)
+            
+            Gasoline Refueling - in our scenario, refueling a gas vehicle takes 15 minutes
+            at a gas station. Each refuel provides the full range of the vehicle.
+        </p>
+
+        <p>    
+            Electric-powered: F-150 Lariat with an extended-range battery, offering a
+            range of 320 miles on a full charge.
+            Electric Vehicle Range: 320 miles on a full charge, but after the first leg,
+            only 256 miles due to charging constraints.
+            <br>
+            Electric vehicles (EVs) have a complex and mysterious charging process. The
+            time to charge an EV varies based on charger speed: 
+        </p>
+
+        <p>
+        
+        <ul>
+            <li>Level 1 chargers: 40-50 hours, typically found in a home charging system.</li>
+            <br>
+            <li>Level 2 chargers: 4-10 hours, most common, available at public charging stations.</li>
+            <br>
+            <li>Level 3 chargers: 1 hour, to 80% charge, available at public charging stations.</li>
+        
+        </ul>
+        
+        </p>
+        
+        <p>
+            Typically, charging an electric vehicle from 20% to 80% takes around one hour at a DC fast charger. During long trips, it's more efficient to charge only up to 80% of the battery, as the last 20% can take significantly longer to charge than the initial 80%. This strategy helps minimize time spent at charging stations.
+        </p>
+
+        <hr>
+
+        <h2 class="subsection-title">The Math</h2>
+
+       <p>
+
+        <ul>
+            Gas-Powered Vehicle: - Total trip time(gasoline): 42 hours + 1 hour = 43 hours
+        </ul>
+
+        <ul>    
+        - Total range: 936 miles
+        </ul>    
+        
+        <ul>
+        - Number of stops: 2,900 miles / 936 miles = 4 stops
+        </ul>
+        
+        <ul>
+        - Time per stop: 0.25 hours (15 minutes)
+        </ul>
+
+        <ul>
+        - Total time for stops: 0.25 hours * 4 stops} = 1 hour
+        </ul>
+
+        <ul>
+        - Final Equation: (2900 / 936 * .25) + 42 = 43 hours
+        </ul>
+        
+        <ul>
+        - Cost of Gas: $3.50/gallon average * 26 miles per gallon, 2900/26 * 3.5 = $390
+        </ul>
+        </p>
+
+        <p>
+            Electric-Powered Vehicle:
+            Total trip time (electric)(best case): 42 hours + 11 hours = 53 hours
+            <br>
+            - Total range (first charge): 320 miles
+            <br>
+            - Total range (subsequent recharges): 256 miles (80% recharge)
+            <br>
+            - Number of stops: 2,900 - 320 miles / 256 miles= 11 stops
+            <br>
+            - Time per stop (best case): 1 hour per stop
+            <br>
+            - Total time for stops (best case): 1 hour * 11 stops = 11 hours
+        </p>
+
+        <p>
+            - Final Equation: ( 2900 - 320 / 256 * 1 ) + 42 = 53 hours
+            <br>
+            - Cost of electricity: $20 average per charge, 20*11 = $220
+        </p>
+
+        <p>
+            In a more realistic scenario, charging times can increase:
+            <br>
+            - Time per stop (realistic scenario): 4 hours per stop
+            <br>
+            - Total time for stops (realistic scenario): 4 hours * 11 stops = 44 hours
+            <br>
+            - Final Equation (realistic scenario): ( 2900 - 320 / 256 * 4 ) + 42 = 83 hours
+        </p>
+
+        <hr>
+
+        <h2 class="subsection-title">The Conclusion</h2>
+
+        <p>
+            How much time will it take to drive from California to New York using a gasoline powered vehicle, versus an electric powered vehicle?
+        </p>
+
+        <p>
+            Gasoline Vehicle: 43 hours
+            Electric Vehicle (best case): 53 hours
+            Electric Vehicle (realistic case): 83 hours
+        </p>
+
+        <p>
+            In conclusion, this analysis shows that, for long-distance trips like the one from Sacramento to New York, the gas-powered vehicle offers a clear advantage in terms of overall travel time. With its ability to refuel quickly and cover more miles per stop, the gas-powered F-150 completes the journey with fewer delays. The time spent at gas stations is minimal compared to the time required for recharging an electric vehicle, even under optimal conditions.
+        </p>
+
+        <p>
+                However, the performance of electric vehicles (EVs) is more complex and highly dependent on the availability and efficiency of charging infrastructure. In areas with abundant DC fast chargers, the time difference between the gas-powered and electric vehicles might be less dramatic, but in regions with fewer fast chargers, charging times could extend the trip significantly. Moreover, electric vehicles introduce other benefits, such as lower emissions and reduced fuel costs, which may be appealing for those prioritizing environmental impact over time efficiency.
+        </p>
+
+        <p>
+                As technology continues to improve, the gap between EVs and gas-powered vehicles in terms of long-distance travel time is likely to narrow. With advancements in battery technology, faster charging capabilities, and a growing network of charging stations, electric vehicles may one day become just as practical as their gas-powered counterparts for cross-country road trips. For now, though, this comparison highlights that gas-powered vehicles remain the faster option for long-haul drives.
+        </p>
+
+        <hr>
+
+        <h2 class="subsection-title">Sources</h2>
+
+        <p>
+            I wrote this post based on data from these sites.
+            <ul class="post-links">
+            <li><a href="https://www.ford.com/trucks/f150/models/f150-platinum/">Ford Trucks</a></li>
+            <li><a href="https://www.transportation.gov/rural/ev/toolkit/ev-basics/charging-speeds">Department of Transportation Ev Website</a></li>
+            <li><a href="https://octopusev.com/ev-hub/how-long-does-it-take-to-charge-an-electric-carl">Octupus EV.com</a></li>
+            <li><a href="https://blog.redguard.com/understanding-ev-range-modev">Understanding Ev Range redguard.com</a></li>
+            <li><a href="https://calculator.academy/ev-range-calculator/">EV Range Calculator</a></li>
+            </ul>
+        </p>
+
+    </section>
+</article>
+
+<footer>
+    <br>
+    <a class="post-links" href="../index.html">Home Page</a></ul>
+    <br>
+    <br>
+    <a class="post-links" href="about-me.html">Contact Me</a></ul>
+    <br>
+</footer>
+
+</body>
+</html>

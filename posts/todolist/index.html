@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enhanced 2D Animation</title>
+  <style>
+    body {
+      display: flex;
+      height: 100vh;
+      margin: 0;
+      background-color: #f4f4f4;
+    }
+    #instructions {
+      width: 100%;
+      padding: 20px;
+      background-color: #282c34;
+      color: white;
+      text-align: center;
+      font-size: 1.2em;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+    }
+    #toDoContainer {
+      width: 33%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: #fff;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    #toDoForm {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    #toDoInput {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+    }
+    #toDoList {
+      width: 100%;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .toDoItem {
+      padding: 10px;
+      background-color: #e0e0e0;
+      margin-bottom: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .finishButton {
+      padding: 5px 10px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+    #itemsContainer {
+      width: 33%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    #animationContainer {
+      width: 33%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    canvas {
+      background-color: #fff;
+      border: 1px solid #ccc;
+    }
+    .floatingTask {
+      position: absolute;
+      background-color: #ff0000;
+      color: white;
+      padding: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+  <div id="instructions">
+    Add a task to the list.<br>When a task is finished, the person will eat your task and it will be processed and recycled.
+  </div>
+  <div id="itemsContainer">
+    <div id="toDoContainer">
+      <form id="toDoForm">
+        <input type="text" id="toDoInput" placeholder="Enter new task">
+        <button type="submit">Add Task</button>
+      </form>
+      <ul id="toDoList"></ul>
+    </div>
+  </div>
+  <div id="animationContainer">
+    <canvas id="animationCanvas"></canvas>
+  </div>
+  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>-->
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.2/lib/anime.min.js"></script>
+
+  <script>
+    const canvas = document.getElementById('animationCanvas');
+const ctx = canvas.getContext('2d');
+
+// Resize the canvas to fit the container
+const resizeCanvas = () => {
+  canvas.width = document.getElementById('animationContainer').offsetWidth;
+  canvas.height = window.innerHeight;
+};
+
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+// Person object with improved appearance
+const person = {
+  x: canvas.width / 2, // Center the person horizontally
+  y: 200,
+  width: 50,
+  height: 100,
+  bodyColor: '#87CEEB',
+  head: { x: 15, y: -40, width: 40, height: 40, color: '#FFD700' }, // Made head rounder
+  arms: [
+  { x: -10, y: 20, width: 10, height: 40, color: '#000000' }, // Left arm with black sleeve
+  { x: 50, y: 20, width: 10, height: 40, color: '#000000' } // Right arm with black sleeve
+],
+  legs: { y: 80, width: 10, height: 40, color: '#8B4513' }
+};
+
+const poop = [];
+
+// Draw the person
+function drawPerson() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Draw the person (simplified version)
+  ctx.fillStyle = '#FFC0CB'; // Skin color
+  ctx.beginPath();
+  ctx.arc(person.x, person.y, 50, 0, Math.PI * 2); // Head
+  ctx.fill();
+
+  ctx.fillStyle = '#000000'; // Eyes
+  ctx.beginPath();
+  ctx.arc(person.x - 20, person.y - 15, 5, 0, Math.PI * 2); // Left eye
+  ctx.arc(person.x + 20, person.y - 15, 5, 0, Math.PI * 2); // Right eye
+  ctx.fill();
+
+  ctx.strokeStyle = '#000000'; // Mouth
+  ctx.beginPath();
+  ctx.arc(person.x, person.y + 15, 20, 0, Math.PI); // Smile
+  ctx.stroke();
+
+  ctx.fillStyle = '#000000'; // Body
+  ctx.fillRect(person.x - 25, person.y + 50, 50, 100); // Body
+
+  ctx.fillStyle = '#0000FF'; // Legs
+  ctx.fillRect(person.x - 25, person.y + 150, 20, 50); // Left leg
+  ctx.fillRect(person.x + 5, person.y + 150, 20, 50); // Right leg
+
+  ctx.fillStyle = '#FF0000'; // Pants
+  ctx.fillRect(person.x - 25, person.y + 100, 50, 10); // Pants
+
+  ctx.fillStyle = '#FFFF00'; // Shoes
+  ctx.fillRect(person.x - 25, person.y + 200, 20, 10); // Left shoe
+  ctx.fillRect(person.x + 5, person.y + 200, 20, 10); // Right shoe
+}
+
+// Draw the poop
+const drawPoop = () => {
+  poop.forEach(p => {
+    ctx.fillStyle = 'brown';
+    ctx.beginPath();
+    ctx.moveTo(p.x, p.y);
+    ctx.quadraticCurveTo(p.x + 15, p.y - 15, p.x + 30, p.y);
+    ctx.quadraticCurveTo(p.x + 45, p.y - 15, p.x + 60, p.y);
+    ctx.quadraticCurveTo(p.x + 30, p.y + 30, p.x, p.y);
+    ctx.fill();
+
+    // Draw the text inside the poop
+    ctx.fillStyle = 'white';
+    ctx.font = '12px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText(p.text, p.x + 30, p.y + 15);
+  });
+};
+
+// Animation loop
+const animate = () => {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawPerson();
+  drawPoop();
+  requestAnimationFrame(animate);
+};
+
+// Animate the poop coming out of the person
+const poopItOut = (text) => {
+  let poopPiece = { x: person.x - 20, y: person.y + 200, width: 20, height: 20, text: text };
+  poop.push(poopPiece);
+
+  anime({
+    targets: poopPiece,
+    y: poopPiece.y + 50,
+    duration: 1000,
+    easing: 'easeInOutQuad',
+    complete: () => {
+      if (poop.length < 5) {
+        poopItOut(text);
+      }
+    }
+  });
+};
+
+// Animate the task moving towards the person's head
+const eatTask = (taskElement) => {
+  const taskRect = taskElement.getBoundingClientRect();
+  const floatingTask = document.createElement('div');
+  floatingTask.classList.add('floatingTask');
+  floatingTask.style.left = `${taskRect.left}px`;
+  floatingTask.style.top = `${taskRect.top}px`;
+  floatingTask.style.width = `${taskRect.width}px`;
+  floatingTask.style.height = `${taskRect.height}px`;
+  floatingTask.textContent = taskElement.textContent.trim();
+
+  document.body.appendChild(floatingTask);
+
+  anime({
+    targets: floatingTask,
+    left: `${canvas.getBoundingClientRect().left + person.x}px`,
+    top: `${canvas.getBoundingClientRect().top + person.y - 20}px`,
+    width: '20px',
+    height: '20px',
+    borderRadius: ['0%', '50%'],
+    duration: 2000,
+    easing: 'easeInOutQuad',
+    complete: () => {
+      const text = taskElement.textContent.trim();
+      floatingTask.remove();
+      taskElement.remove();
+      poopItOut(text);
+    }
+  });
+};
+
+// Add new task to the list
+document.getElementById('toDoForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const toDoInput = document.getElementById('toDoInput');
+  const taskText = toDoInput.value.trim();
+  if (taskText) {
+    addTask(taskText);
+    toDoInput.value = '';
+  }
+});
+
+// Add task item to the list with finish button
+const addTask = (taskText) => {
+  const toDoList = document.getElementById('toDoList');
+  const li = document.createElement('li');
+  li.className = 'toDoItem';
+  li.textContent = taskText;
+
+  const finishButton = document.createElement('button');
+  finishButton.className = 'finishButton';
+  finishButton.textContent = 'Finish';
+  finishButton.addEventListener('click', () => eatTask(li));
+
+  li.appendChild(finishButton);
+  toDoList.appendChild(li);
+};
+
+// Initialize the animation loop
+document.addEventListener('DOMContentLoaded', () => {
+  animate();
+});
+  </script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="rain dust blog recreating yahoo towers">
+    <meta name="robots" content="index, follow">
+    <meta name="keywords" content="rain dust, personal blog, creative writing, philosophy, code, tech, javascript, python, computer science, yahoo towers">
+    <meta name="author" content="Justin Stewart">
+
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="../assets/scripts/script.js"></script>
+
+    <title>Recreating Yahoo Towers</title>
+
+</head>
+<body>
+
+<article>
+    <header>
+
+        <h1>Rebuilding Yahoo Towers</h1>
+        
+        <p><strong>By: </strong> Justin Stewart<strong><br>10-19-2024</strong></p>
+        
+        <br>
+        
+        <a href="../index.html">Home Page</a>
+
+    </header>
+
+    <button id="backToTopBtn" class="back-to-top">Back to Top</button>
+    
+    <div class="image-top">
+        <img src="../assets/imgs/yahootowers.jpg" alt="yahoo towers gameplay screenshot">
+    </div>
+    
+    <div class="toc">
+        <h2>Table of Contents</h2>
+        <ul id="toc-list"></ul>
+    </div>
+
+    <section>
+    
+    <hr>
+
+<h2 class="subsection-title">about yahoo towers</h2>
+    
+    <p>        
+        Yahoo! Towers first appeared on the scene in late 1999 as a beta, then in December of 1999 as a flash based game written in Java. The cult classic game was availble on www.games.yahoo.com, however, it was removed a long time ago. It quickly gained popularity and after a few months 10,000 players would be on at any given time. I spent many hours playing this game in high school.
+    </p>
+    
+    <p>
+        At its peak in the summer of 2000, over 10,000 users could be found playing at once. Nearly everyone stopped playing by the time 2002 rolled around. As of 2006, the average amount of players was in the hundreds. 
+    </p>
+
+    <p>
+        Videos of the gameplay can be found by searching on youtube for yahoo towers.
+    </p> 
+
+    <p>
+        Yahoo! Towers was a multiplayer game. It was a puzzle game similar to tetris involving falling blocks. Games are played with 2-8 players. Each game lobby had 8 individual boards for players to join. Players are split into 4 teams. This can lead to a combination of players in the game, 1 on 2, 2 on 2, 2 vs 1 vs 1 and more.
+    </p>
+
+    <hr>
+
+    <h2 class="subsection-title">Recreating the game</h2>
+
+    <p>
+        I’m working on recreating Yahoo! Towers using JavaScript, keeping all the original functionality intact. Right now, there aren’t any games quite like it available online, so I want to bring it back for players to enjoy. My goal is to make it free, quick, and easy to jump into matches against random opponents, just like the classic version. I want to run it in the browser with no download required. A simple sign in and play type multiplayer game.
+    </p>
+
+    <hr>
+
+    <h2 class="subsection-title">Gameplay</h2>
+
+    <p>
+        Blocks are created with three individual blocks stuck together as one block. Individual blocks are distinguished by one of six colours and an associated character (one for each of Y, A, H two for O, and !). Each block will have a random color and letter. By grouping blocks into lines of three or more (vertically, horizontally, or diagonally) of the same color, they will clear, and the blocks from above will fall into their place.
+    </p>
+
+    <p> 
+        You can strategically place blocks to set off chain reactions when clearing groups. As the game progresses, the blocks will fall faster, raising the stakes. The goal is to outlast your opponents or fill their boards with blocks by activating 'YAHOO!' and clearing your own blocks. 
+    </p>
+
+    <p>
+        Yahoo! Towers sets itself apart from traditional Tetris-style games with a special feature: spelling "Y-A-H-O-O!" triggers an ability known as "Yahooing." When players pull off a successful Yahoo, they gain a temporary power that lets them send random blocks to other players stacks by causing chain reactions of block destruction on their own board.
+    </p>
+
+    <p>
+        There are various ways to "yahoo," each granting different amounts of "falls"—the number of blocks a player can drop before the ability wears off. This adds a strategic layer to the game, which made Yahoo! Towers a unique and competitive experience.
+    </p>
+    
+    <p>
+        Defense blocks help you and your partner (if you have one) clear your boards. Attack blocks hurt opposing teams' chances to win by several means.
+    </p>
+    
+    <hr>
+
+    <h2 class="subsection-title">The power blocks</h2>
+
+    <p>
+        You can also get other special powers that can devastate a player. "Targeting" is when a player deliberately sends offensive powers to attack another specific player. This is effective when used by advanced players to eliminate competition quickly. Your objective is to be the last player, or a member of the team with the last player, who has space to drop more blocks onto their screen (much like the end-game in Tetris). 
+    </p>
+
+    <p>
+        When attack/defense blocks were destroyed by combining three of the same color together, they would be added to the player inventory. By pressing the space bar, and the number of the game board to target, a player could change blocks on other players boards. This could help you win when done correctly. You can use these, defense blocks for yourself/teammate, and attack blocks against your opponents. 
+    </p>
+
+    <p>
+    <ul>
+        <li>Y- is grey, and associated with adding or subtracting a row of blocks.</li>
+        <li>A- is green, and associated with dithering or clumping.</li>
+        <li>H- is blue, and associated with adding or dropping stones.</li>
+        <li>O- is purple, and associated with color blasts or defuses.</li>
+        <li>O- is yellow, and associated with "medusa" and "midas" blocks.</li>
+        <li>!- is orange, and associated with removing opponents' powers or removing a color from the screen.</li>
+    </ul>
+    </p>
+
+    <p>
+        By spelling the entire "YAHOO!", you can further devastate your enemies, by showering them with remnants of any blocks that you clear in the next few blocks that are created. If you spell it horizontally, you have one round to throw blocks on to your opponents screens, if diagonally, 2 turns, and vertically yields three turns. Combinations of these will further extend your attempts, and this is how better players will typically try to start a game. The blocks that are added to your opponents will be metal and unbreakable. They must be converted to regular blocks using a yellow defense block, before the metal blocks can be destroyed.
+    </p>
+      
+    <h2 class="subsection-title">Final Thoughts</h2>
+
+    <p>
+        Recreating Yahoo Towers has become one of my side projects. This classic game holds a lot of nostalgia for me, and I want to make it simple for people to play with random opponents right in their browser. I'm working on building the game logic in JavaScript, staying true to the original experience while adding some modern features. I will develop a new name for it. Bringing this old favorite back to life is both a fun challenge and a trip down memory lane.
+    </p>
+
+    </section>
+</article>
+
+<footer>
+    <br>
+    <a class="post-links" href="../index.html">Home Page</a></ul>
+    <br>
+    <br>
+    <a class="post-links" href="about-me.html">Contact Me</a></ul>
+    <br>
+</footer>
+
+</body>
+</html>

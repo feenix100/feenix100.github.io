@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="personal blog alternative to do list code javascript canvas">
+    <meta name="robots" content="index, follow">
+    <meta name="keywords" content="rain dust, personal blog, creative writing, life thoughts, philosophy">
+    <meta name="author" content="Justin Stewart">
+
+    <title>Feed Your To-Do List To A Person</title>
+     <link rel="stylesheet" href="../assets/css/style.css">
+     <script src="../assets/scripts/script.js"></script>
+     
+</head>
+
+<body>
+<article>
+<header>
+    <h1>Feed Your To-Do List To A Person</h1>
+<p><strong>By:</strong> J Stewart <strong class="inline-padding">10-10-2024</strong> </p>
+        <br>
+        <a href="../index.html">Home Page</a>
+</header>
+
+<button id="backToTopBtn" class="back-to-top">Back to Top</button>
+
+<div>
+ <img src="../assets/imgs/todolist.jpg" alt="an alternative to do list">
+</div>
+
+<div class="toc">
+    <h2>Table of Contents</h2>
+    <ul id="toc-list"></ul>
+</div>
+
+<section>
+    
+<p><a href="../posts/todolist/index.html">Try the to do list here!</a></p>
+
+<h2 class="subsection-title">Not The Average To Do list</h2>
+    <p>
+       In a world overflowing with a plethora of methods for organizing tasks—ranging from simple text editors and sticky notes to the most unconventional approaches (like jotting down reminders on your grandpa's adult diapers)—the classic to-do list can often feel stale and uninspired. We’ve all been there, staring at a monotonous list of tasks, feeling the weight of productivity pressures without any excitement. 
+    </p>
+    <p>
+        As the task ascends, it morphs into a colorful, playful representation that captures the essence of what the task entailed—be it a bright, cheerful icon or a stylized text bubble. The transition is smooth, creating a sense of flow that draws the user's attention. This floating animation not only brings the task to life but also establishes a visual connection between the user and the quirky character on the screen.
+    </p>
+    <h2 class="subsection-title">The Twist On The List</h2>
+    <p>
+        The animated task moves toward the quirky character, which is designed to be charming and humorous. The character, a cartoonish figure with exaggerated features, eagerly anticipates the task. As the floating task reaches its mouth, it playfully “eats” the task.
+    </p>
+    <h2 class="subsection-title">The Poop</h2>
+    <p>
+        Once the task is consumed, the animation takes a humorous turn—the character processes the completed task, leading to a lighthearted visual effect where a small, cartoonish “poop” drops out from the bottom of the character, humorously signifying that the task has been fully completed and “processed”. This playful conclusion reinforces the notion of productivity being a lighthearted endeavor rather than a burdensome obligation.
+    </p>
+    <p>
+        Imagine a to-do list that not only helps you keep track of your responsibilities but also entertains you along the way. This notion of blending creativity with productivity sparked my inspiration to design a to-do list app that is not just functional but also visually captivating and engaging. By adding a playful twist to task management, I aimed to create an experience that brings joy to the process of checking off completed items, making productivity feel less like a chore and more like a rewarding game.
+    </p>
+
+    <p>
+        This innovative app allows users to create a task, compile a list of tasks, and check them off as they complete them. The twist? Upon finishing a task, an amusing animation plays out: the task is animated as if it’s being fed to a quirky character on the screen. It’s not just about getting things done; it’s about enjoying the process!
+    </p>
+    <p>
+        The entire animation process is designed to be quick and engaging, allowing users to see their progress in a fun way without disrupting their workflow. By the end of the animation, users not only feel a sense of accomplishment but are also left with a smile, eager to tackle the next task on their list. This clever integration of animation serves to enhance motivation and make the mundane feel extraordinary.
+    </p>
+
+    <h2 class="subsection-title">How It Works</h2>
+
+    <p>
+     To bring this creative idea to life, I started with a straightforward HTML structure that lays the foundation for the app's functionality and design. In the head element, I included a link to an external stylesheet, ensuring that the visual aspects of the app could be easily managed and updated. This approach not only keeps the HTML clean and organized but also allows for greater flexibility when it comes to styling elements later on.
+    </p>
+    <p>
+        The body element is thoughtfully divided into multiple divs, each serving a distinct purpose to enhance user interaction and experience. One div, labeled "instructions," provides clear guidance to users on how to navigate the app and utilize its features effectively. This section is crucial for onboarding, helping users understand what to expect and how to get started without any confusion.
+    </p>
+    <p>
+    Another div is dedicated to the core functionality of the app: the to-do list items. Within this container, users can input their tasks, view the list of what needs to be accomplished, and easily check off completed items. This section is designed to be intuitive and user-friendly, encouraging users to engage with the app regularly.
+    </p>
+    <p>
+    The third div houses the animation, which is a key feature of the app. This section is where the magic happens, as it provides the canvas on which the entertaining animations unfold. By separating the animation from the rest of the content, I ensure that the visual effects run smoothly and do not interfere with the task management functionalities.
+    </p>
+    <p>
+    Overall, this structured approach not only makes the app more organized but also enhances its maintainability. It allows for easy updates and additions to features in the future while ensuring that the user experience remains seamless and enjoyable. Each section works in harmony to create an engaging and dynamic to-do list app that stands out from conventional task management tools.
+    </p>
+
+    <pre><code>&lt;body&gt;
+        &lt;div id="instructions"&gt;
+            Add a task to the list.<br>
+            When a task is finished, the person will eat your task and it will be processed and recycled.
+        &lt;/div&gt;
+        &lt;div id="itemsContainer"&gt;
+            &lt;div id="toDoContainer"&gt;
+                &lt;form id="toDoForm"&gt;
+                    &lt;input type="text" id="toDoInput" placeholder="Enter new task"&gt;
+                    &lt;button type="submit"&gt;Add Task&lt;/button&gt;
+                &lt;/form&gt;
+                &lt;ul id="toDoList"&gt;&lt;/ul&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;div id="animationContainer"&gt;
+            &lt;canvas id="animationCanvas"&gt;&lt;/canvas&gt;
+        &lt;/div&gt;
+        &lt;script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"&gt;&lt;/script&gt;
+        &lt;script src="app.js"&gt;&lt;/script&gt;
+    &lt;/body&gt;</code></pre>
+
+    <p>
+        Within the animation container, I included a canvas element, which serves as the vibrant stage for our engaging animations. The canvas element is a powerful HTML feature that allows for dynamic, scriptable rendering of 2D shapes and bitmap images, making it perfect for creating visually captivating animations. By using the canvas, I have the flexibility to draw, animate, and manipulate graphics in real time, providing a truly immersive experience for users.
+    </p>
+    <p>
+        To enhance the animation capabilities further, I imported the Anime.js library, a lightweight yet robust JavaScript animation library known for its ease of use and powerful features. Anime.js simplifies the process of creating complex animations by offering a clean and intuitive API that allows for smooth transitions, timing controls, and various easing functions. This library enables me to add flair and dynamism to the task completion animations, making them not only visually appealing but also fluid and responsive.
+    </p>
+    <p>
+        Alongside Anime.js, I created my own custom script to orchestrate the animations specifically tailored for our app. This script manages the animation lifecycle, from the moment a task is marked as complete to the intricate details of the character's playful interactions with the tasks. It includes functions for drawing the character, managing the task's movement toward it, and handling the humorous processing sequence that follows. By combining the powerful features of Anime.js with my tailored logic, I ensured that the animations are not only engaging but also seamlessly integrated with the overall functionality of the app.
+    </p>
+    <p>
+        This setup allows for easy updates and modifications to the animation logic in the future. If I want to introduce new animations or refine existing ones, I can do so with minimal disruption to the overall structure of the application. The combination of the canvas element, Anime.js, and my custom script creates a compelling visual narrative that enhances the user experience, making productivity feel like a delightful adventure.
+    </p>
+
+    <h2 class="subsection-title">Setting Up the Animation</h2>
+
+    <p>
+      Inside the app.js file, I begin the process by selecting the canvas element from the DOM, which is crucial for all subsequent drawing and animation tasks. Utilizing the document.getElementById method, I effectively reference the specific canvas we set up in the HTML. This allows me to interact with the canvas programmatically, which is essential for creating the animations that will bring our quirky character to life.
+    </p>
+    <p>
+        Once I have a reference to the canvas, the next step is to establish a 2D rendering context using canvas.getContext('2d'). This context acts as a bridge between the canvas and the JavaScript, providing the necessary tools and methods to draw shapes, text, and images on the canvas. The 2D context is particularly powerful, as it enables me to render graphics using straightforward commands, making it accessible for creating animations and visual effects.
+    </p>
+    <p>
+    With the 2D context established, I gain access to a rich set of functionalities. For instance, I can draw filled shapes, stroke outlines, and manipulate colors and gradients, which are all integral to creating a visually appealing user experience. This context allows me to control every aspect of what appears on the canvas, from the character's design to the way tasks animate as they are consumed.
+    </p>
+    <p>
+        Additionally, setting up the 2D context is just the beginning of the animation journey. I also implement a resize function to ensure that the canvas dimensions adapt to changes in the window size. This is crucial for maintaining a responsive design, allowing users to enjoy the animations seamlessly across different devices and screen resolutions. By listening for the resize event on the window object, I can adjust the canvas size dynamically, ensuring that our animations always fit perfectly within the visible area.
+    </p>
+    <p>
+        This initial setup within app.js lays the groundwork for the rich animations and interactions that follow. By selecting the canvas and establishing a 2D context, I create a flexible foundation that empowers the app to deliver a delightful and engaging user experience, inviting users to interact with their tasks in a fun and innovative way.
+    </p>
+
+    <pre><code>const canvas = document.getElementById('animationCanvas');
+const ctx = canvas.getContext('2d');
+
+// Resize the canvas to fit the container
+const resizeCanvas = () => {
+    canvas.width = document.getElementById('animationContainer').offsetWidth;
+    canvas.height = window.innerHeight;
+};
+
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();</code></pre>
+
+    <p>
+        The next step involves setting up a function dedicated to adding tasks to the list, which is a pivotal feature of the app. This functionality begins by listening for the form submission event, specifically targeting the event when a user enters a new task and clicks the "Add Task" button. To ensure a seamless user experience, the first action taken within this event handler is to prevent the default behavior of the form submission. By using e.preventDefault, I effectively stop the form from refreshing the page, which would interrupt the flow and erase the newly added task.
+    </p>
+    <p>
+        Once the default action is halted, the function proceeds to gather the input data. This is achieved by selecting the input field where users type their tasks, accessing its value through document.getElementById('toDoInput').value.trim(). The trim() method is particularly useful here, as it removes any leading or trailing whitespace, ensuring that users don’t accidentally add empty tasks or those with only spaces.
+    </p>
+    <p>
+        With the task text securely captured, the next step is to verify that the input isn’t empty. A simple conditional check ensures that only valid, non-empty tasks are added to the list. If the input passes this validation, the app calls the function responsible for adding the task to the visual list. This function constructs a new list item element, representing the task, and appends it to the existing task list displayed on the screen.
+    </p>
+    <p>
+        The process doesn’t stop there; each task item also includes an interactive "Finish" button. This button, when clicked, triggers a separate function that initiates the amusing animation process associated with task completion. By incorporating this interactive element, users are not only able to add tasks to their list but also engage with them in a fun way, making the entire experience more dynamic and enjoyable.
+    </p>
+    <p>
+        This function, therefore, serves as a crucial link in the workflow of the app, ensuring that the process of task creation is intuitive, efficient, and entertaining. By allowing users to add tasks seamlessly while preventing interruptions, I create a more enjoyable environment that encourages productivity and fosters a sense of accomplishment with every completed task.
+    </p>
+
+    <pre><code>document.getElementById('toDoForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const toDoInput = document.getElementById('toDoInput');
+    const taskText = toDoInput.value.trim();
+    if (taskText) {
+        addTask(taskText);
+        toDoInput.value = '';
+    }
+});</code></pre>
+
+    <p>
+        The addTask function is a key component of the app, designed to create a new list item that not only displays the user’s task but also includes an interactive button for marking it as finished. This function begins by generating a new list item element, which acts as a visual representation of the task within the to-do list. Each item is crafted with attention to detail, ensuring it is both functional and visually appealing.
+    </p>
+    <p>
+        Once the list item is created, I dynamically append it to the existing unordered list that displays all tasks. This ensures that users can see their newly added tasks immediately, fostering a sense of accomplishment. The new list item also features a dedicated "Finish" button, which is essential for the interactive aspect of the app. This button is not just a standard control; it’s designed to be inviting and engaging, encouraging users to click it when they complete a task.
+    </p>
+    <p>
+        When the user clicks the "Finish" button, the magic truly begins. This action triggers a separate function responsible for animating the task completion process. The task item, along with its associated text, begins a whimsical journey across the screen. It transforms into a small animated graphic that represents the task, floating towards the quirky character we’ve designed. This visual transition is smooth and captivating, capturing the user’s attention and adding a playful element to the task management experience.
+    </p>
+    <p>
+        As the task reaches the character, it appears to be “eaten,” accompanied by charming sound effects that enhance the humorous nature of the interaction. This moment not only reinforces the concept of completing a task but also makes it a memorable event in the user’s journey through their to-do list. The animation signifies not just the end of one task, but also a celebration of progress and productivity.
+    </p>
+    <p>
+        This entire process of creating the list item, adding interactivity, and animating the task completion serves to transform the mundane act of checking off tasks into an enjoyable and rewarding experience. The addTask function, therefore, is more than just a utility; it embodies the spirit of the app, blending functionality with entertainment and turning task management into a delightful adventure.
+    </p>
+
+    <pre><code>const addTask = (taskText) => {
+    const toDoList = document.getElementById('toDoList');
+    const li = document.createElement('li');
+    li.className = 'toDoItem';
+    li.textContent = taskText;
+
+    const finishButton = document.createElement('button');
+    finishButton.className = 'finishButton';
+    finishButton.textContent = 'Finish';
+    finishButton.addEventListener('click', () => eatTask(li));
+
+    li.appendChild(finishButton);
+    toDoList.appendChild(li);
+};</code></pre>
+
+    <p>
+        Finally, I implemented an animation loop to continuously draw our quirky character and the humorous "poop" that symbolizes the completed tasks. This animation loop is a critical aspect of the app, as it creates a seamless flow of visual activity that engages users and enhances their experience. By using the requestAnimationFrame method, I ensure that the animations run smoothly and efficiently, providing a responsive and visually delightful experience.
+    </p>
+    <p>
+        Inside this loop, I begin by clearing the canvas with ctx.clearRect, resetting the visual space for each frame. This allows for a fresh drawing of the character and any other elements on the canvas, preventing the visuals from becoming cluttered or confusing. The loop is designed to refresh at optimal intervals, ensuring that the animations appear fluid and natural.
+    </p>
+    <p>
+        As the loop iterates, I draw our charming character in a simplified yet expressive style. The character is designed to evoke a sense of fun and friendliness, making the task management experience feel more enjoyable. Its features, such as exaggerated facial expressions and playful movements, contribute to the overall whimsical atmosphere of the app.
+    </p>
+    <p>
+        Alongside the character, I also draw the "poop" that represents the completed tasks. This playful representation serves a dual purpose: it reinforces the theme of task completion while adding a humorous twist to the experience. Each time a task is consumed by the character, a new piece of "poop" is generated and animated, creating a visual representation of productivity that is both lighthearted and engaging.
+    </p>
+    <p>
+        The animation of the "poop" includes fun movements, such as bouncing or wobbling, as it drops from the character, enhancing the comedic aspect. Additionally, I incorporate text within the poop graphic to remind users of what task they have just completed. This clever integration of humor and functionality keeps the experience lively and encourages users to continue engaging with their tasks.
+    </p>
+    <p>
+        By combining these elements within the animation loop, I create a dynamic and entertaining visual narrative that aligns perfectly with the app’s theme. This continuous interaction not only reinforces the idea of completing tasks in a playful way but also keeps users motivated and entertained as they manage their daily responsibilities. The animation loop, therefore, becomes a vital part of the app's charm, turning task completion into an engaging and enjoyable adventure.    </p>
+    </p>
+
+    <pre><code>const animate = () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawPerson();
+    drawPoop();
+    requestAnimationFrame(animate);
+};</code></pre>
+
+    <h2 class="subsection-title">Try It Out!</h2>
+
+    <p>
+        Curious to see this fun and functional to-do list in action? You can explore the complete code for this project on GitHub, where I’ve made the entire source code available for anyone to review, experiment with, and customize. The repository includes not only the HTML, CSS, and JavaScript files that power the app but also detailed comments throughout the code, explaining the logic and design choices behind each component.
+    </p>
+    <p>
+        By visiting the GitHub page, you’ll find a well-organized structure that breaks down the project into its essential parts. You can see how the interactive elements are constructed, how the animations are implemented, and even how the visual styles are applied to create an engaging user interface. This transparency is not just for educational purposes; it invites fellow developers, designers, and enthusiasts to collaborate, suggest improvements, or even fork the project to create their own variations.
+    </p>
+    <p>
+        Additionally, the GitHub repository features a README file that provides an overview of the project, instructions for setup, and guidance on how to run the app locally. Whether you’re a seasoned developer looking for inspiration or a newcomer eager to learn, the documentation aims to make the project accessible and easy to understand.
+    </p>
+    <p>
+        I encourage you to dive into the code, experiment with the features, and perhaps even contribute your own ideas or enhancements. Open-source collaboration is a fantastic way to learn and grow, and I welcome any feedback or suggestions from the community.
+    </p>
+    <p>
+        So, if you’re ready to experience the delightful blend of productivity and playfulness that this to-do list offers, head over to GitHub and check it out! You’ll find not only a fun project but also an opportunity to engage with a community of creators who share a passion for innovative and entertaining applications.
+    </p>
+    <p>
+    <a href="https://github.com/feenix100/Styled_To_Do_List/tree/main"><strong>Check out the code on Github!</strong></a>
+    </p>
+
+    <p>
+        Embrace the joy of completing tasks and let this app add a delightful sprinkle of fun to your productivity routine! In today's fast-paced world, where juggling responsibilities can often feel overwhelming, it’s essential to find ways to make task management not just efficient but also enjoyable. This to-do list app is designed to transform the mundane act of checking off tasks into a playful experience that keeps you motivated and engaged.
+    </p>
+    <p>
+        Imagine starting your day with a list of tasks, each one representing a goal or an achievement waiting to be unlocked. As you navigate through your day, every time you complete a task, you’re not just crossing it off; you’re participating in a whimsical journey where each finished item is celebrated with entertaining animations. The quirky character on the screen becomes your playful companion, turning your productivity milestones into moments of joy.
+    </p>
+    <p>
+        This app encourages you to take pride in your accomplishments, no matter how small. The visual feedback and animations add a layer of satisfaction that reinforces positive habits. Completing tasks is no longer a chore; it’s an opportunity to indulge in a moment of fun, making your productivity routine feel less like a grind and more like a rewarding adventure.
+    </p>
+    <p>
+        Furthermore, the lighthearted nature of the app can help reduce stress and increase your overall well-being. By incorporating play into your daily tasks, you create a more enjoyable work environment, fostering creativity and focus. The laughter and smiles generated by the app can brighten even the busiest of days, reminding you that productivity doesn’t have to come at the expense of enjoyment.
+    </p>
+    <p>
+        So why not embrace this new approach to task management? Let this app serve as your cheerful ally in navigating your to-do list, adding a touch of whimsy to your workflow. Whether you’re a student balancing assignments, a professional managing projects, or anyone in between, this app is here to help you celebrate your progress. Download it, dive in, and experience firsthand how a little fun can transform your productivity routine into a joyful journey of accomplishment!
+    </p>
+
+    <p>Below is the javascript file that makes the magic work:</p>
+
+<pre><code>
+    const canvas = document.getElementById('animationCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    // Resize the canvas to fit the container
+    const resizeCanvas = () => {
+      canvas.width = document.getElementById('animationContainer').offsetWidth;
+      canvas.height = window.innerHeight;
+    };
+    
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    
+    // Person object with improved appearance
+    const person = {
+      x: canvas.width / 2, // Center the person horizontally
+      y: 200,
+      width: 50,
+      height: 100,
+      bodyColor: '#87CEEB',
+      head: { x: 15, y: -40, width: 40, height: 40, color: '#FFD700' }, // Made head rounder
+      arms: [
+      { x: -10, y: 20, width: 10, height: 40, color: '#000000' }, // Left arm with black sleeve
+      { x: 50, y: 20, width: 10, height: 40, color: '#000000' } // Right arm with black sleeve
+    ],
+      legs: { y: 80, width: 10, height: 40, color: '#8B4513' }
+    };
+    
+    const poop = [];
+    
+    // Draw the person
+    function drawPerson() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+      // Draw the person (simplified version)
+      ctx.fillStyle = '#FFC0CB'; // Skin color
+      ctx.beginPath();
+      ctx.arc(person.x, person.y, 50, 0, Math.PI * 2); // Head
+      ctx.fill();
+    
+      ctx.fillStyle = '#000000'; // Eyes
+      ctx.beginPath();
+      ctx.arc(person.x - 20, person.y - 15, 5, 0, Math.PI * 2); // Left eye
+      ctx.arc(person.x + 20, person.y - 15, 5, 0, Math.PI * 2); // Right eye
+      ctx.fill();
+    
+      ctx.strokeStyle = '#000000'; // Mouth
+      ctx.beginPath();
+      ctx.arc(person.x, person.y + 15, 20, 0, Math.PI); // Smile
+      ctx.stroke();
+    
+      ctx.fillStyle = '#000000'; // Body
+      ctx.fillRect(person.x - 25, person.y + 50, 50, 100); // Body
+    
+      ctx.fillStyle = '#0000FF'; // Legs
+      ctx.fillRect(person.x - 25, person.y + 150, 20, 50); // Left leg
+      ctx.fillRect(person.x + 5, person.y + 150, 20, 50); // Right leg
+    
+      ctx.fillStyle = '#FF0000'; // Pants
+      ctx.fillRect(person.x - 25, person.y + 100, 50, 10); // Pants
+    
+      ctx.fillStyle = '#FFFF00'; // Shoes
+      ctx.fillRect(person.x - 25, person.y + 200, 20, 10); // Left shoe
+      ctx.fillRect(person.x + 5, person.y + 200, 20, 10); // Right shoe
+    }
+    
+    // Draw the poop
+    const drawPoop = () => {
+      poop.forEach(p => {
+        ctx.fillStyle = 'brown';
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+        ctx.quadraticCurveTo(p.x + 15, p.y - 15, p.x + 30, p.y);
+        ctx.quadraticCurveTo(p.x + 45, p.y - 15, p.x + 60, p.y);
+        ctx.quadraticCurveTo(p.x + 30, p.y + 30, p.x, p.y);
+        ctx.fill();
+    
+        // Draw the text inside the poop
+        ctx.fillStyle = 'white';
+        ctx.font = '12px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(p.text, p.x + 30, p.y + 15);
+      });
+    };
+    
+    // Animation loop
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawPerson();
+      drawPoop();
+      requestAnimationFrame(animate);
+    };
+    
+    // Animate the poop coming out of the person
+    const poopItOut = (text) => {
+      let poopPiece = { x: person.x - 20, y: person.y + 200, width: 20, height: 20, text: text };
+      poop.push(poopPiece);
+    
+      anime({
+        targets: poopPiece,
+        y: poopPiece.y + 50,
+        duration: 1000,
+        easing: 'easeInOutQuad',
+        complete: () => {
+          if (poop.length < 5) {
+            poopItOut(text);
+          }
+        }
+      });
+    };
+    
+    // Animate the task moving towards the person's head
+    const eatTask = (taskElement) => {
+      const taskRect = taskElement.getBoundingClientRect();
+      const floatingTask = document.createElement('div');
+      floatingTask.classList.add('floatingTask');
+      floatingTask.style.left = `${taskRect.left}px`;
+      floatingTask.style.top = `${taskRect.top}px`;
+      floatingTask.style.width = `${taskRect.width}px`;
+      floatingTask.style.height = `${taskRect.height}px`;
+      floatingTask.textContent = taskElement.textContent.trim();
+    
+      document.body.appendChild(floatingTask);
+    
+      anime({
+        targets: floatingTask,
+        left: `${canvas.getBoundingClientRect().left + person.x}px`,
+        top: `${canvas.getBoundingClientRect().top + person.y - 20}px`,
+        width: '20px',
+        height: '20px',
+        borderRadius: ['0%', '50%'],
+        duration: 2000,
+        easing: 'easeInOutQuad',
+        complete: () => {
+          const text = taskElement.textContent.trim();
+          floatingTask.remove();
+          taskElement.remove();
+          poopItOut(text);
+        }
+      });
+    };
+    
+    // Add new task to the list
+    document.getElementById('toDoForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const toDoInput = document.getElementById('toDoInput');
+      const taskText = toDoInput.value.trim();
+      if (taskText) {
+        addTask(taskText);
+        toDoInput.value = '';
+      }
+    });
+    
+    // Add task item to the list with finish button
+    const addTask = (taskText) => {
+      const toDoList = document.getElementById('toDoList');
+      const li = document.createElement('li');
+      li.className = 'toDoItem';
+      li.textContent = taskText;
+    
+      const finishButton = document.createElement('button');
+      finishButton.className = 'finishButton';
+      finishButton.textContent = 'Finish';
+      finishButton.addEventListener('click', () => eatTask(li));
+    
+      li.appendChild(finishButton);
+      toDoList.appendChild(li);
+    };
+    
+    // Initialize the animation loop
+    document.addEventListener('DOMContentLoaded', () => {
+      animate();
+    });
+</code></pre>
+
+</section>
+</article>
+
+</body>
+
+<footer>
+    <br>
+    <a class="post-links" href="../index.html">Home Page</a></ul>
+    <br>
+    <br>
+    <a class="post-links" href="about-me.html">Contact Me</a></ul>
+    <br>
+</footer>
+
+</html>

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="rain dust blog electric vehicle Charging Station Map">
+    <meta name="robots" content="index, follow">
+    <meta name="keywords" content="rain dust, personal blog, creative writing, philosophy, code, tech, javascript, python, computer science, electric vehicle Charging Station Map">
+    <meta name="author" content="Justin Stewart">
+
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="../assets/scripts/script.js"></script>
+
+    <title>Open Charge Map.org</title>
+
+</head>
+<body>
+
+<article>
+    <header>
+
+        <h1>Open Charge Map</h1>
+        
+        <p><strong>By: </strong> Justin Stewart<strong><br>10-24-2024</strong></p>
+        
+        <br>
+        
+        <a href="../index.html">Home Page</a>
+
+    </header>
+
+    <button id="backToTopBtn" class="back-to-top">Back to Top</button>
+    
+    <div>
+        <img src="../assets/imgs/electric.jpeg" alt="electric vehicle">
+    </div>
+    
+    <div class="toc">
+        <h2>Table of Contents</h2>
+        <ul id="toc-list"></ul>
+    </div>
+
+    <section>
+        <h2 class="subsection-title">Openchargemap.org</h2>
+        
+<p>
+I have been searching for open-source projects to practice my programming skills, I stumbled upon this hidden gem: Open Charge Map. It is an open source web app that displays electric vehicle charging locations. While I don't make enough money to buy an electric car in order to save money on gas, I can certainly access a free code editor and dive into some coding. I remember when electricity was 10 cents a gallon... On a side note the local utility company in my area increased the price of electricity at the beginning of summer this year, probably so we can help pay for rich people to charge their Teslas.
+</p>
+
+<p>
+This is only a brief overview of this open source project. I’m excited to share this discovery with you and explore the potential contributions we can make together!
+</p>
+
+<p>
+Here is the link for <a href="https://openchargemap.org/site">openchargemap.org</a>!
+</p>
+
+<p>
+The Open Charge Map website is incredibly user-friendly, featuring a dynamic canvas element that updates in real time with the locations of charging stations. Most users will find that their location is automatically detected, making navigation effortless.
+</p>
+
+<p>
+When you click on the map, you’ll be prompted to sign in, and there’s also a handy search bar to quickly find charging stations in your area. It can be used without signing in. This platform serves as a global public registry of electric vehicle charging stations, established in 2011. Its crowdsourced dataset combines manually entered information with open data imported from government-run registries and charging networks, all under an MIT License.
+</p>
+
+<hr>
+
+<h2 class="subsection-title">The API</h2>
+
+<p>
+Developers interested in building their own applications can easily tap into the wealth of data provided by OpenChargeMap through its API. This allows you to integrate charging station information into your projects seamlessly. If you're curious about how the map application is built, you can explore the source code, which utilizes the latest technologies like Ionic, Angular, and TypeScript. 
+</p>
+
+<p>
+Check out the repository 
+<a href="https://github.com/openchargemap/ocm-system">on Github.</a>
+</p>
+
+<p>
+To appreciate how OpenChargeMap functions behind the scenes, let's break down its server-side architecture into digestible sections:
+</p>
+
+<ul>
+<li>
+Open Charge Map relies on a robust database system that stores all the charging station data. This data is continuously updated through community contributions and integrated from various open data sources.
+
+Data is primarily stored in SQL Server, using Entity Framework Core for data access. This allows for seamless interactions with the database while leveraging modern ORM capabilities. Additionally, OpenChargeMap employs a caching layer utilizing MongoDB to enhance performance and reduce latency in data retrieval.
+</li>
+
+<br>
+
+<li>
+The API layer acts as an interface for developers, enabling them to query and retrieve charging station information effortlessly. This layer handles requests and responses, ensuring smooth communication between the client-side applications and the database, allowing you to build applications that leverage this vital information.
+</li>
+
+<br>
+
+<li>
+The platform employs data processing techniques to validate and format the crowdsourced data. This step is crucial for maintaining the accuracy and reliability of the information presented to users.
+Secure user authentication ensures that contributors can sign in safely and manage their submissions. This system helps maintain the integrity of the crowdsourced data while providing a smooth user experience.
+</li>
+
+<br>
+
+<li>
+User authentication is managed efficiently to ensure that contributors can securely sign in and update information as needed. This feature not only protects user data but also helps maintain the integrity of the crowdsourced dataset.
+The web application features dynamic mapping capabilities that render real-time updates of charging station locations. This interactive component enhances user engagement by providing an intuitive interface for exploring available charging stations.
+</li>
+
+<br>
+
+<li>
+The dynamic mapping component utilizes web technologies to render real-time updates of charging station locations on the canvas. This interactive experience allows users to engage with the map intuitively.
+</li>
+</ul>
+
+<hr>
+
+<h2 class="subsection-title">Server-Side Architecture</h2>
+
+<p>
+OpenChargeMap.org is built using modern web technologies that ensure efficient data handling and high performance. Here's a breakdown of the server-side stack used in the project:
+</p>
+
+<p>
+OpenChargeMap's server-side code is primarily written in C#, and it includes a web application that interacts with users and developers alike.
+</p>
+
+<p>
+Why C# and .NET 6?
+</p>
+
+<p>
+C# is a versatile and powerful programming language, particularly well-suited for building server-side applications. .NET 6 brings performance enhancements and long-term support, making it an ideal choice for large-scale projects like OpenChargeMap. The project is built using Visual Studio 2022 Community Edition or higher, which provides a rich development environment with built-in tools for debugging and testing. .NET 6 support in Visual Studio allows developers to use the latest language features and take advantage of performance optimizations.
+</p>
+
+<p>
+Data for Open Charge Map is primarily stored in SQL Server, a relational database system known for its robustness and scalability.
+</p>
+
+<p>
+Entity Framework Core(EF Core) is used as the Object-Relational Mapper (ORM), allowing seamless interaction between the C# code and the SQL Server database. This enables developers to work with database records as C# objects, simplifying CRUD (Create, Read, Update, Delete) operations.
+EF Core allows for easy migrations and schema management, ensuring the database evolves alongside the application without manual intervention.
+</p>
+
+<pre><code>
+   public class ChargingLocation
+   {
+       public int Id { get; set; }
+       public string Name { get; set; }
+       public decimal Latitude { get; set; }
+       public decimal Longitude { get; set; }
+   }
+</pre></code>
+
+<hr>
+
+<h2 class="subsection-title">Mongo DB</h2>
+
+<p>
+To improve the performance of API reads, OpenChargeMap uses a MongoDB cache layer. Most read requests for data are serviced by this caching system, which drastically reduces the load on the SQL Server database and speeds up response times for users.
+</p>
+
+<p>
+MongoDB is a NoSQL database, optimized for read-heavy workloads with its flexible document storage format.
+Frequently accessed data, such as charging locations and related metadata, is cached in MongoDB to avoid repeated calls to SQL Server. This caching strategy ensures faster API responses, particularly for high-traffic endpoints.
+</p>
+
+<p>
+Example of MongoDB Usage:
+When a request is made for charging locations, the application first checks the MongoDB cache. If the data is present, it is returned immediately; otherwise, the application fetches the data from SQL Server, caches it in MongoDB, and serves it to the user.
+</p>
+
+<p>
+The combination of SQL Server for structured data storage and MongoDB for high-speed caching provides a robust system that can handle large datasets and high traffic efficiently. The choice of Entity Framework Core ensures that the database layer integrates smoothly with the application, while C# and .NET 6 provide the power and flexibility needed to build and maintain a large-scale, production-grade API.
+</p>
+
+<hr>
+
+<h2 class="subsection-title">Deployment</h2>
+
+<p>
+If you want to work on this project on your own machine, clone the github repository.
+Setting up the OpenChargeMap application involves several key steps to ensure everything runs smoothly. Follow these instructions to deploy the application successfully:
+</p>
+
+<p>
+Configure MongoDB. Set up MongoDB as a service on your server.
+Initialize the ocm_mirror database to manage cached data effectively.
+</p>
+
+<p>
+Configure the ASP.NET State Services to start automatically. This is crucial for maintaining session state across the application.
+Ensure that the service is started.
+</p>
+
+<p>
+Install the SQL Server 2012 CLR Data Types (Version 11.x), as this is required for Entity Framework to function properly. This step is essential for handling certain data types within your application.
+</p>
+
+<p>
+Install the URL Rewrite Module 2.0, which is necessary for proper handler mapping in the web application. This module helps with SEO-friendly URLs and routing requests appropriately.
+</p>
+
+<p>
+Enable read/write permissions for the application pool user on the \Temp folders. This access is vital for the application to write temporary files and logs during its operation.
+</p>
+
+<p>
+Finally, configure the web.config file according to your environment’s specifications. This file is crucial for managing settings such as database connections, authentication modes, and custom application settings.
+By following these steps, you will successfully deploy the OpenChargeMap application, making it ready for use and contributions.
+</p>
+
+<hr>
+
+<h2 class="subsection-title">System Requirements</h2>
+
+<p>
+To set up your own development environment for contributing to OpenChargeMap, you'll need the following system requirements:
+</p>
+
+<p>
+Operating System: Windows 7 or higher (or Windows Server 2008 or higher)
+Development Environment: Visual Studio 2015 Professional or equivalent Express Editions (Web, Windows) with the latest NuGet package manager and TypeScript add-in installed
+Database: MS SQL Express 2008 R2 or later
+Additional Tools: Node.js
+</p>
+
+<p>
+By meeting these requirements, you'll be well-equipped to dive into the OpenChargeMap codebase and start contributing to this valuable resource for electric vehicle charging stations.
+</p>
+
+</section>
+</article>
+
+<footer>
+    <br>
+    <a class="post-links" href="../index.html">Home Page</a></ul>
+    <br>
+    <br>
+    <a class="post-links" href="about-me.html">Contact Me</a></ul>
+    <br>
+</footer>
+
+</body>
+</html>
+

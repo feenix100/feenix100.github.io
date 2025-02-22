@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="rain dust blog Automated Trimming Solutions">
+    <meta name="robots" content="index, follow">
+    <meta name="keywords" content="rain dust, personal blog, creative writing, philosophy, code, tech, javascript, python, computer science, Automated Trimming Solutions">
+    <meta name="author" content="Justin Stewart">
+
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="../assets/scripts/script.js"></script>
+
+    <title>Automated Trimming Solutions</title>
+
+</head>
+<body>
+
+<article>
+    <header>
+<h1>Automated Trimming Solutions</h1>
+        
+        <p><strong>By: </strong> Justin Stewart<strong><br>11-1-2024</strong></p>
+        
+        <br>
+        
+        <a href="../index.html">Home Page</a>
+
+    </header>
+
+    <button id="backToTopBtn" class="back-to-top">Back to Top</button>
+    
+    <div>
+        <img src="../assets/imgs/automatedtrimming.PNG" alt="Automated Trimming Solution robot arm with scissors and camera">
+    </div>
+    
+    <div class="toc">
+        <h2>Table of Contents</h2>
+        <ul id="toc-list"></ul>
+    </div>
+
+    <section>
+
+<h2 class="subsection-title">Automated Trimming System</h2>
+
+<p>
+This robotics project started as a six-month side venture. When I began, I had zero robotics experience, no college degree, and a limited budget, but I knew how to write and run Python scripts, so I decided to dive in. What I created served as a proof of concept. The final system would look much different than what I am outlining here.
+</p>
+
+<p>
+While working at a dispensary, I experienced firsthand the time-consuming nature of trimming buds. The process, though simple in theory, requires considerable precision and dexterity—qualities that make it repetitive and tedious for people but potentially ideal for robotics. This experience sparked an idea: why not create an automated trimming solution? My concept was to develop a system using robotic arms, cameras, and machine learning algorithms to handle trimming tasks autonomously.
+</p>
+
+<p>
+To tackle this, I envisioned a setup with two robotic arms and cameras (or “eyes”) to simulate the dexterity and perception needed for precise trimming. The goal was to create a robot that could handle the trimming process on its own, freeing up time for other valuable tasks. Such a system would be ideal for dispensaries and growers looking to optimize their workflow and cut down on manual labor.
+</p>
+
+<p>
+My ambition for this project even extended beyond a single dispensary; I envisioned establishing a "Robot-as-a-Service" company, where businesses could rent automated trimmers as a service. By offering a scalable, efficient solution to one of the industry’s most time-consuming tasks, this project could redefine the role of robotics in the cannabis industry.
+</p>
+
+<p>
+Stay tuned as I dive deeper into the development of this system, from prototype to potential business model!
+</p>
+
+<h2 class="subsection-title">Building My First Robotics Project From Scratch</h2>
+
+<p>
+I used affordable, off-the-shelf parts, funding the project entirely out of my own pocket. While many suggest using external funding to get projects off the ground, I felt strongly about proving my concept on my own terms—even if that meant risking a bit of failure. My confidence kept me motivated, and I believed I could make it work without relying on someone else’s investment. Although I have frequently heard that a smart man starts a business using someone else's money.
+</p>
+
+<p>
+This project was a crash course in both robotics and resilience, and the journey taught me that knowledge and resources are not always the most important ingredients for success—passion and grit are.
+</p>
+
+<h2 class="subsection-title">Testing the system</h2>
+
+<p>
+In designing an effective robotic trimming system, there are numerous factors to ensure everything operates seamlessly. My initial goal was straightforward: test if the robotic scissors could cut through plant material, like a leaf or branch. To achieve this, I created a basic loop to control the scissors attached to the claw of the arm, opening and closing them repeatedly using a python script. After a few trials, I was thrilled to see that it worked—it could cut through the plant material.
+</p>
+
+<p>
+Encouraged by this success, I moved on to the next phase: adding a camera to bring vision to the system. The goal here was to enable the robot to activate the scissors only when a bud was within the cutting range. This is where the custom Yolo v5 object detection model comes in. I developed a Python script to control this functionality, triggering the scissors to cut at the precise moment a bud was detected within reach. This addition marked an exciting milestone in the project, as the robot was now equipped with both the precision and timing needed for selective pruning.
+</p>
+
+<p>
+After initial testing, it became clear that the robotic claw powered by a servo couldn't squeeze the scissors quite like a human hand. This insight marked the beginning of the next phase in development: reimagining the end effector to mimic the strength, precision, and control of the human hand. For this, the design would need to balance two critical aspects: it had to be lightweight for smooth robotic movement yet strong enough to apply the necessary pressure to close the scissors effectively.
+</p>
+
+<p>
+The complexity of the human hand offers an inspiring, albeit challenging, model. Comprised of 27 bones, 27 joints, 34 muscles, and over 100 ligaments and tendons, the human hand is a masterpiece of function and adaptability. Its sensory capabilities, controlled by intricate networks of blood vessels and nerves, give it unmatched precision and responsiveness. Replicating even a portion of these qualities in a robotic claw is ambitious but would bring the project closer to achieving human-like dexterity.
+</p>
+
+<p>
+This phase of the project is not just about engineering a tool but about creating a truly responsive and effective mechanism.
+</p>
+
+<h2 class="subsection-title">Why Servos Weren’t Enough</h2>
+
+<p>
+Reflecting on my initial robotics design, I now realize that it was fundamentally flawed for my project’s goals. I aimed to create a system that could close scissors with enough force to trim leaves or cut through branches, but the servos I used simply didn’t have the necessary torque. They couldn’t deliver the power needed for such tasks. Servos like nice in youtube videos, but were not practical for my intended use.
+</p>
+
+<p>
+What I truly needed was a hydraulic mechanism that would better mimic the strength and functionality of a human hand. However, the design and resources required to build that were beyond my initial timeframe, knowledge, and budget. So, I went ahead with more affordable, off-the-shelf parts. While these parts can be programmed to move autonomously, they just aren’t strong enough to perform intricate, high-force tasks like trimming.
+</p>
+
+<p>
+One of the biggest challenges I encountered was the weight-to-torque trade-off with servos. As servos increase in torque, their weight escalates exponentially. This means that a servo powerful enough to replicate the strength of a human hand would be incredibly heavy.
+</p>
+
+<p>
+Imagine if a human wrist needed a motor to close each finger—your arm would feel unbearably heavy! In robotics, this weight problem can severely limit mobility and efficiency, especially when trying to design lightweight and agile systems. This insight has been invaluable in helping me understand the importance of choosing the right power-to-weight ratio for any robotic project.
+</p>
+
+<p>
+Servos look impressive in YouTube videos, but their real-world limitations become apparent when put to practical use. This experience has taught me that, while servos have their place, understanding the required power output and function is key in selecting the right components for any project.
+</p>
+
+<h2 class="subsection-title">The human hand</h2>
+
+<p>
+In the human hand, tendons play a crucial role in translating the movements generated by muscles into the fine motor actions that allow us to grip, pinch, and manipulate objects with precision. Tendons are tough, fibrous connective tissues that attach muscles to bones. In the hand, they act as flexible yet strong connectors, allowing muscle contractions in the forearm and hand to move the fingers and thumb.
+</p>
+
+<p>
+There are two main types of tendons in the hand:
+</p>
+
+<p>
+Flexor Tendons: Located on the palm side, these tendons are responsible for bending (flexing) the fingers and thumb. When the muscles contract, the flexor tendons pull the fingers toward the palm, allowing us to grasp and hold objects.
+</p>
+
+<p>
+Extensor Tendons: Found on the back of the hand, these tendons allow the fingers and thumb to straighten or extend. The extensor tendons work with the forearm muscles to extend the fingers, which is essential for releasing objects or positioning the fingers for various tasks.
+</p>
+
+<p>
+Tendons work in close coordination with muscles, bones, ligaments, and joints to create precise, controlled movements. The intricate design of tendon sheaths and pulleys in the hand keeps the tendons aligned and stable, allowing the fingers to perform delicate tasks with accuracy and strength.
+</p>
+
+<h2 class="subsection-title">My vision</h2>
+
+<p>
+Imagine a fully automated system with two robotic arms and advanced camera-based object detection. Here’s how it would work:
+</p>
+
+<p>
+One arm would have a standard pair of trimming scissors(shears) attached, while the other arm would carefully pick up branches or buds, positioning them for trimming. Cameras would guide the movements of each arm, ensuring accuracy and efficiency. Once trimmed, each bud would be placed neatly in a tray, ready for collection.
+</p>
+
+<p>
+This setup would be required to operate reliably for 8 hours a day, 5 days a week. Ideally, the end user would only need to press a start button and place a bin of untrimmed buds and branches in front of the robot. From there, the system would handle the entire trimming process autonomously, freeing up valuable time and labor for other tasks.
+</p>
+
+<h2 class="subsection-title">The hardware</h2>
+
+<p>
+To bring my automated trimming concept to life, I started with a 6-DOF robotic arm from Yahboom, which I found on Amazon for around $600. This arm came mostly pre-assembled and was equipped with a Jetson Nano connected to an expansion board, allowing me to control the servos via PWM signals in Python. It became my foundation for the trimming system prototype.
+</p>
+
+<p>
+For video input, I initially tried a basic Amazon webcam, but it couldn’t keep up with real-time processing demands. Upgrading to an Oak-D Pro stereo depth camera, with its onboard processing capabilities, made a noticeable difference. With this setup, I wrote a script to detect cannabis buds, only activating the scissors when a bud was within 100 centimeters.
+</p>
+
+<p>
+I also swapped out the Jetson Nano for a Raspberry Pi 4 for greater flexibility. I found the jetson nano difficult to modify. The RPI 4 is much more user friendly. I tried a couple different servo hats attached to the RPI 4. To handle the necessary torque, I upgraded to high-torque servos, but even these couldn’t sustain the demands of repeatedly opening and closing scissors for extended periods. This experience has been a valuable lesson in the hardware requirements and limits involved in building a reliable, long-running automation system. 
+</p>
+
+<h2 class="subsection-title">Developing the Software</h2>
+
+<p>
+In developing my automated trimming prototype, I turned to Python for scripting and Google Colab to train a YOLOv5 model. The goal was to create a system capable of accurately detecting cannabis buds, so I began by capturing around 10,000 images to use for training. However, working on Colab’s free tier presented challenges: GPU availability was limited, and if a session timed out mid-training, all progress was lost, forcing a complete restart. Despite these setbacks, after multiple attempts, I finally trained a model that could detect buds with an impressive 99.9% accuracy on live video.
+</p>
+
+<p>
+The next step involved creating a Python script to manage the robotic claw, which held a pair of scissors. Using a simple loop, I scripted the claw to open and close based on the bud’s distance from the camera, as detected by the YOLOv5 model. This object detection-driven process allowed the robot to make precise, real-time trimming decisions.
+</p>
+
+<h2 class="subsection-title">Building a Scalable Robot as a Service Model</h2>
+
+<p>
+A key advantage of my automated trimming robot is its legality on a federal level, meaning it could be sold or rented across state lines to cannabis companies nationwide. My goal was to create a robotic arm system that could match the efficiency and effectiveness of a human trimmer, helping dispensaries streamline their operations.
+</p>
+
+<p>
+My vision for the business model was straightforward: for example, rent each robot for around $20 an hour, 40 hours a week, generating $800 per week per robot. With a fleet of just 60 robots, this scalable approach could allow me to match or even surpass my current income, all while providing dispensaries with a consistent, data-driven trimming solution.
+</p>
+
+<p>
+The ultimate goal for this prototype was to create a “robot-as-a-service” business model. Here’s the vision: A single human trimmer typically works an 8-hour shift. Arizona alone has over 100 dispensaries, each employing between 6 to 18 trimmers. Instead of paying wages to human trimmers, dispensaries could rent my robot by the hour, similar to a human employee—but without breaks or downtime. This automated approach would not only save time but also provide dispensary owners with valuable data from the robot’s cameras, capturing insights that human trimmers couldn’t.
+</p>
+
+<p>
+The demand for trimming is high and ongoing, making this a sustainable business model. By automating a time-intensive process, dispensaries could reduce their reliance on human labor, and my company could scale with the growing industry by providing an innovative solution that meets the unique needs of cannabis businesses across the country.
+</p>
+
+<p>
+Trimming is repetitive, time-consuming work, and an automated robot could handle it efficiently and continuously, transforming the industry with scalable, data-driven trimming solutions.
+</p>
+
+<h2 class="subsection-title">Check out the code</h2>
+
+<p>
+In my <a href="https://github.com/feenix100/flower_detection">Github repository</a>, you'll find custom-trained YOLO v5 image detection models designed to identify cannabis buds (flowers) in both images and live video. These models were developed with precision in mind, making them ideal for applications like automated trimming systems, where accurate detection is critical to efficiency. 
+</p>
+
+<p>
+Whether you're developing a similar automation solution or need reliable detection for cannabis-related projects, these models offer a solid foundation for your work.
+</p>
+
+<h2 class="subsection-title">Final Thoughts</h2>
+
+<p>
+This project marks a significant step toward the future of automated trimming, merging robotics with advanced machine learning to bring efficiency and precision to cannabis bud processing. Whether intended for personal use or scaled for commercial applications, this project offers a foundational blueprint for developing innovative automated solutions in the industry.
+</p>
+
+<p>
+Serving as a proof of concept, this project showcases the potential for a fully automated trimming system. With further modifications, I’m confident it could become an incredibly effective tool for automating one of the most time-intensive tasks in cannabis processing. What makes this journey exciting is how much progress I made, even with minimal robotics knowledge at the start—a testament to the accessibility and potential of automation in this field.
+</p>
+
+<p>
+This prototype has been an exciting journey into blending machine learning with robotics for automated trimming. As I continue to refine the system, I’m eager to push its capabilities even further, making automation more accessible and efficient in cannabis processing.
+</p>
+
+<p>
+Stay tuned for updates on the next phase and insights into transforming a concept into a fully operational system!
+</p>
+
+<h2 class="subsection-title">Resource Links</h2>
+
+<p>
+    These are links to some of the things I used to complete this project.
+</p>
+
+<p>
+<a href="https://shop.luxonis.com/">Oak D Pro Camera</a>
+</p>
+
+<p>
+<a href="https://colab.research.google.com/github/ultralytics/yolov5/blob/master/tutorial.ipynb">Google Colab For Yolo V5</a>
+</p>
+
+<p>
+<a href="https://www.raspberrypi.com/">Raspberry Pi Website</a>
+</p>
+
+</section>
+</article>
+
+<footer>
+    <br>
+    <a class="post-links" href="../index.html">Home Page</a></ul>
+    <br>
+    <br>
+    <a class="post-links" href="about-me.html">Contact Me</a></ul>
+    <br>
+</footer>
+
+</body>
+</html>
