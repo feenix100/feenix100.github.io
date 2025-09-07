@@ -175,53 +175,7 @@ article h3 {
 
 section {
     padding: 1rem;
-    border-radius: 12px; /* smooth rounded edges */
-    position: relative;
-    overflow: hidden; /* ensures gradient doesn’t spill */
-    color: #ececec;
-    z-index: 1;
-    
-    /* Psychedelic gradient */
-    background: linear-gradient(
-        135deg,
-        #ff00ff,
-        #00ffff,
-        #ffea00,
-        #00ff88,
-        #ff0088
-    );
-    background-size: 400% 400%;
-    animation: sectionPsychedelic 15s ease infinite;
 }
-
-/* Subtle frosted overlay for readability */
-section::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.4); /* dark overlay */
-    border-radius: 12px;
-    z-index: -1;
-}
-
-@keyframes sectionPsychedelic {
-    0% {
-        background-position: 0% 50%;
-    }
-    25% {
-        background-position: 50% 100%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    75% {
-        background-position: 50% 0%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
      
 section p {
     font-size: 1.1rem;
@@ -498,6 +452,7 @@ button:hover {
         width: 60%; /* Make the image smaller and dynamic on smaller screens */
     }
 }
+
 
 
 
