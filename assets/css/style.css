@@ -268,30 +268,61 @@ footer p {
 }
 
 footer {
+    position: relative;
+    padding: 1.5rem;
     text-align: center;
-    padding: 1rem;
-    background: linear-gradient(to bottom, rgba(3, 2, 21, 0.7), rgba(2, 1, 43, 0.8));
-    color: #e7e978;
-    /*position: fixed; /* Fixed position */
-    width: 100%; /* Full width of the page */
+    border-radius: 0; /* full-width strip */
+    color: #fffcef;
+    z-index: 1;
+    overflow: hidden;
+
+    /* Psychedelic animated gradient */
+    background: linear-gradient(
+        135deg,
+        #ff00ff,
+        #00ffff,
+        #ffea00,
+        #00ff88,
+        #ff0088
+    );
+    background-size: 400% 400%;
+    animation: footerPsychedelic 20s ease infinite;
+
+    /* Glow */
+    box-shadow: 0 -4px 20px rgba(255, 0, 255, 0.3),
+                0 -6px 35px rgba(0, 255, 255, 0.25);
+}
+
+/* Overlay for readability */
+footer::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4); /* translucent dark layer */
+    z-index: -1;
+}
+
+/* Footer gradient animation */
+@keyframes footerPsychedelic {
+    0%   { background-position: 0% 50%; }
+    25%  { background-position: 50% 100%; }
+    50%  { background-position: 100% 50%; }
+    75%  { background-position: 50% 0%; }
+    100% { background-position: 0% 50%; }
 }
 
 footer a {
-    font-size: 1.5rem;
-    color: #e7e978;
-    padding: 1rem;
+    font-size: 1.1rem;
+    color: #fffbea;
     text-decoration: none;
-    text-align: center;
+    margin: 0 1rem;
+    transition: color 0.3s ease;
 }
 
-
-/* Adding text using the ::before pseudo-element */
-footer::before {
-    content: "2024 Rain Dust Blog. All rights reserved."; /* Text for the footer */
-    display: block;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
+footer a:hover {
+    color: #ffea00;
 }
+
 
 /*Post Links styles*/
 .post-links {
@@ -333,14 +364,23 @@ div img{
     object-fit: cover;
 }
 
-main {
+main.home-page {
+margin: 30px auto;
+max-width: 900px;
+padding: 2rem;
+box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+border-radius: 8px;
+background: linear-gradient(to bottom, rgba(3, 2, 21, 0.7), rgba(2, 1, 43, 0.8));
+}
+
+/*main {
     position: relative;
     padding: 2rem;
     border-radius: 14px;
     max-width: 900px;
     margin: 2rem auto;
 
-    /* Psychedelic animated gradient */
+     Psychedelic animated gradient 
     background: linear-gradient(
         135deg,
         #ff00ff,
@@ -352,24 +392,24 @@ main {
     background-size: 400% 400%;
     animation: mainPsychedelic 18s ease infinite;
 
-    /* Add a glowing effect */
+    /* Add a glowing effect 
     box-shadow: 0 0 25px rgba(255, 0, 255, 0.4),
                 0 0 40px rgba(0, 255, 255, 0.3);
     z-index: 1;
-    overflow: hidden; /* keeps overlay rounded */
+    overflow: hidden; /* keeps overlay rounded 
 }
 
-/* Overlay for readability */
+/* Overlay for readability 
 main::before {
     content: "";
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.45); /* dark glassy layer */
+    background: rgba(0, 0, 0, 0.45); /* dark glassy layer 
     border-radius: inherit;
     z-index: -1;
 }
 
-/* Keyframes for shifting gradient */
+/* Keyframes for shifting gradient 
 @keyframes mainPsychedelic {
     0%   { background-position: 0% 50%; }
     25%  { background-position: 50% 100%; }
@@ -377,7 +417,7 @@ main::before {
     75%  { background-position: 50% 0%; }
     100% { background-position: 0% 50%; }
 }
-
+*/
 
 body.home-page {
 font-family: 'Merriweather', serif;
@@ -456,6 +496,7 @@ button:hover {
         width: 60%; /* Make the image smaller and dynamic on smaller screens */
     }
 }
+
 
 
 
