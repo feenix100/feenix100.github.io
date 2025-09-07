@@ -3,12 +3,44 @@
 
 /* Global styles */
 /* Psychedelic shifting gradient background */
+/* Psychedelic shifting gradient background */
 body {
-    font-family: 'Merriweather', serif; /* Primary font for readability */
+    font-family: 'Merriweather', serif;
     line-height: 1.6;
     padding: 0;
     margin: 0;
-    background:#202020; /*background color #212121 1b1919    font color #ececec*/
+    color: #ececec;
+
+    /* Animated psychedelic gradient */
+    background: linear-gradient(
+        -45deg,
+        #ff00ff,
+        #00ffff,
+        #ffea00,
+        #00ff88,
+        #ff0088
+    );
+    background-size: 400% 400%;
+    animation: psychedelicShift 20s ease infinite;
+}
+
+/* Animation keyframes */
+@keyframes psychedelicShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    25% {
+        background-position: 50% 100%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    75% {
+        background-position: 50% 0%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 h1, h2, h3 {
@@ -466,5 +498,6 @@ button:hover {
         width: 60%; /* Make the image smaller and dynamic on smaller screens */
     }
 }
+
 
 
