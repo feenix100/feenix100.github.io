@@ -10,6 +10,207 @@ body {
     background:#202020; /*background color #212121 1b1919    font color #ececec*/
 }
 
+/* ===========================
+   MATRIX MODE – Homepage only
+   Add to the end of your CSS
+   Usage: <body class="home-page matrix">
+   =========================== */
+
+:root {
+  --matrix-bg: #0b0f10;
+  --matrix-primary: #00ff9c;   /* neon glyphs */
+  --matrix-accent:  #15dbe2;   /* links/glow accent */
+  --matrix-soft:    #b7ffcf;   /* softer text/accent */
+}
+
+/* Turn on the effect only for homepage in matrix mode */
+body.home-page.matrix {
+  background: radial-gradient(1200px 600px at 15% -10%, rgba(0,255,156,0.15), transparent 60%),
+              radial-gradient(900px 500px at 85% 110%, rgba(0,255,156,0.1), transparent 60%),
+              var(--matrix-bg);
+  color: #e6ffee;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Matrix “code rain” layers (pure CSS via tiled inline SVG) */
+body.home-page.matrix::before,
+body.home-page.matrix::after {
+  content: "";
+  position: fixed;
+  inset: -200px 0 -200px 0; /* bleed outside to avoid gaps while scrolling */
+  pointer-events: none;
+  mix-blend-mode: screen;
+  opacity: 0.35;
+  z-index: 0;
+  background-repeat: repeat;
+  background-size: 220px 220px;
+  animation: matrixScroll 42s linear infinite;
+  /* Tiled SVG with rows of 0/1 glyphs in neon green */
+  background-image: url("data:image/svg+xml;utf8,\
+  <svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'>\
+    <rect width='100%' height='100%' fill='black'/>\
+    <g fill='%2300ff9c' font-family='ui-monospace, SFMono-Regular, Menlo, Consolas, monospace' font-size='14' opacity='.22'>\
+      <text x='0' y='18'>10100101100101101001101010100110</text>\
+      <text x='0' y='36'>00110100110100111001011001010110</text>\
+      <text x='0' y='54'>10101001011001011010010110010100</text>\
+      <text x='0' y='72'>01011010010110010110100101101001</text>\
+      <text x='0' y='90'>11001010100110100101100101101010</text>\
+      <text x='0' y='108'>01011001011010010110010110100101</text>\
+      <text x='0' y='126'>10100101100101101001011001011010</text>\
+      <text x='0' y='144'>00110100110100110100101100101101</text>\
+      <text x='0' y='162'>10100101100101101001011001011010</text>\
+      <text x='0' y='180'>00110100110100110100101100101101</text>\
+      <text x='0' y='198'>10100101100101101001011001011010</text>\
+    </g>\
+  </svg>");
+}
+
+/* Second layer: offset, slightly faster & softer to create parallax depth */
+body.home-page.matrix::after {
+  opacity: 0.22;
+  filter: blur(0.6px);
+  background-size: 260px 260px;
+  animation-duration: 26s;
+  animation-direction: reverse;
+  background-position: 120px 0;
+}
+
+/* Soft scanlines for CRT vibe (very subtle) */
+body.home-page.matrix .scanlines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.05;
+  background: repeating-linear-gradient(
+    to bottom,
+    #000 0 2px,
+    transparent 2px 4px
+  );
+}
+
+/* Neon headline & link tweaks */
+body.home-page.matrix h1,
+body.home-page.matrix h2,
+body.home-page.matrix h3 {
+  color: var(--matrix-primary);
+  text-shadow: 0 0 8px rgba(0,255,156,0.5), 0 0 24px rgba(0,255,156,0.25);
+}
+
+body.home-page.matrix a {
+  color: var(--matrix-accent);
+  text-decoration: none;
+  position: relative;
+}
+
+body.home-page.matrix a::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: -2px;
+  width: 100%; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--matrix-accent), transparent);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform .25s ease;
+}
+
+body.home-page.matrix a:hover::after { transform: scaleX(1); }
+
+/* Glassy content card for readability over the rain */
+main.home-page {
+  position: relative;
+  z-index: 2; /* above rain layers */
+  backdrop-filter: blur(4px) saturate(120%);
+  background: rgba(4, 18, 10, 0.55);
+  border: 1px solid rgba(0,255,156,0.35);
+  box-shadow:
+    0 0 0 1px rgba(0,255,156,0.15) inset,
+    0 10px 30px rgba(0, 0, 0, 0.6),
+    0 0 24px rgba(0,255,156,0.12);
+}
+
+/* Homepage headline hero treatment */
+h1.home-page {
+  font-size: 3.2rem;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.25rem;
+}
+
+p.home-page {
+  color: var(--matrix-soft);
+  text-shadow: 0 0 6px rgba(0,255,156,0.2);
+}
+
+/* Post list = glowing cards */
+.post-links {
+  margin-top: 1.25rem;
+}
+
+.post-links li {
+  list-style: none;
+  margin: 14px 0;
+  padding: 12px 14px;
+  border: 1px solid rgba(0,255,156,0.18);
+  background: rgba(6, 24, 14, 0.45);
+  border-radius: 10px;
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+
+.post-links li:hover {
+  transform: translateY(-2px);
+  border-color: rgba(0,255,156,0.35);
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.35), 0 0 18px rgba(0,255,156,0.18);
+}
+
+/* Code blocks pop nicely on green palette */
+pre code {
+  background-color: #0e1411;
+  color: #c9ffe5;
+  border: 1px solid rgba(0,255,156,0.35);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.35);
+}
+pre code span.keyword  { color: #7dffb5; }
+pre code span.string   { color: #c1ff72; }
+pre code span.comment  { color: #7affea; }
+pre code span.function { color: #9dffce; }
+
+/* Footer tint to match */
+footer {
+  border-top: 1px solid rgba(0,255,156,0.2);
+  box-shadow:
+    0 -4px 20px rgba(0, 255, 156, 0.15),
+    0 -6px 35px rgba(0, 255, 156, 0.12);
+}
+
+/* Back-to-top button = pill neon */
+.back-to-top {
+  background: rgba(0, 255, 156, 0.15);
+  color: var(--matrix-soft);
+  border: 1px solid rgba(0, 255, 156, 0.35);
+  backdrop-filter: blur(6px);
+}
+.back-to-top:hover {
+  background: rgba(0, 255, 156, 0.25);
+}
+
+/* Accessibility: users who prefer reduced motion get a static backdrop */
+@media (prefers-reduced-motion: reduce) {
+  body.home-page.matrix::before,
+  body.home-page.matrix::after {
+    animation: none;
+    background-attachment: fixed;
+    opacity: 0.18;
+  }
+}
+
+/* Keyframes for vertical scroll of tiled glyph sheet */
+@keyframes matrixScroll {
+  0%   { background-position: 0 0; }
+  100% { background-position: 0 2200px; }
+}
+
+
 h1, h2, h3 {
     font-family: 'Roboto', sans-serif; /* Use a clean sans-serif font for headings */
     color: #F7882F;
@@ -496,9 +697,4 @@ button:hover {
         width: 60%; /* Make the image smaller and dynamic on smaller screens */
     }
 }
-
-
-
-
-
 
