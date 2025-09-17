@@ -72,6 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const xLinkTarget = $id("x-link");
   if (xLinkTarget) {
     const xProfileUrl = "https://x.com/az_rain_dust";
-    xLinkTarget.innerHTML = `<a href="${xProfileUrl}" target="_blank" rel="noopener noreferrer">Message me on X (formerly known as Twitter)</a>`;
+    xLinkTarget.innerHTML = `<a href="${xProfileUrl}" target="_blank" rel="noopener noreferrer">Message me on X</a>`;
   }
 });
+
