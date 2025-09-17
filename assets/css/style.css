@@ -698,4 +698,111 @@ button:hover {
     }
 }
 
+/* =========================================
+   Homepage header layout (text left, image right)
+   ========================================= */
+/* Make header layout a simple vertical stack */
+.home-hero {
+  max-width: 900px;
+  margin: 1rem auto;
+  padding: 0 1rem;
+  text-align: left;
+}
+
+/* Make p + image share baseline */
+.home-hero p.home-page{
+  display:inline-flex;
+  align-items:center;
+  gap:0.8rem;
+}
+
+/* Circle = 2× text height */
+.portal.matrix-portal{
+  --r: 0%;              /* reveal radius */
+  --cx: 50%;
+  --cy: 50%;
+
+  display:inline-grid;
+  place-items:center;
+
+  width: 4em;           /* 2× text size */
+  height: 4em;          /* keep strictly square */
+  aspect-ratio: 1 / 1;  /* belt + suspenders */
+
+  border-radius: 50%;
+  overflow: hidden;
+  background: #0b0f10;
+
+  border: 1px solid rgba(0,255,156,.35);
+  box-shadow: 0 0 8px rgba(0,255,156,.2),
+              inset 0 0 0 1px rgba(0,255,156,.1);
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* IMAGE — make it truly fill the circle */
+.portal.matrix-portal .photo{
+  display: block;       /* remove inline image baseline gap */
+  width: 100%;
+  height: 100%;
+  min-width: 100%;      /* guard against intrinsic sizing quirks */
+  min-height: 100%;
+  object-fit: cover;    /* fill without distortion */
+  border-radius: 0;     /* let the container do the rounding */
+
+  /* Reveal via crisp circular clip; start at 0 from center */
+  -webkit-clip-path: circle(var(--r) at var(--cx) var(--cy));
+          clip-path: circle(var(--r) at var(--cx) var(--cy));
+  transition: clip-path .35s ease, -webkit-clip-path .35s ease,
+             filter .3s ease, transform .3s ease;
+}
+
+/* Placeholder target inside circle */
+.portal.matrix-portal::before{
+  content:"";
+  position:absolute; inset:0;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(0,255,156,.26) 0 42%, transparent 44%) center/75% 75% no-repeat,
+    repeating-radial-gradient(circle at 50% 50%, rgba(0,255,156,.16) 0 2px, transparent 2px 6px);
+  opacity:.9;
+  transition:opacity .25s ease;
+  pointer-events:none;
+}
+
+/* Hint chip (optional) */
+.portal.matrix-portal::after{
+  content:attr(data-hint);
+  position:absolute; left:50%; bottom:-1.3rem; transform:translateX(-50%);
+  font:600 .55rem/1 ui-sans-serif, system-ui, Roboto, Arial;
+  letter-spacing:.08em; text-transform:uppercase;
+  color:#aaffda; background:rgba(0,0,0,.5);
+  padding:.15rem .4rem; border-radius:999px;
+  border:1px solid rgba(0,255,156,.3);
+  opacity:.85;
+  transition:opacity .25s ease, transform .25s ease;
+}
+
+/* HOVER — reveal ALL of the circle (go beyond 50% to be safe) */
+.portal.matrix-portal:hover{ --r: 75%; }  /* 50% hits edge; 75% guarantees full coverage */
+.portal.matrix-portal:hover .photo{
+  filter: brightness(1) saturate(1.05);
+  transform: scale(1.004); /* micro up-scale to avoid 1px seams on some GPUs */
+}
+.portal.matrix-portal:hover::before,
+.portal.matrix-portal:hover::after{
+  opacity:0; transform:translateX(-50%) translateY(3px);
+}
+
+/* Optional cursor-centered opening */
+@media (pointer: fine){
+  .portal.matrix-portal{ cursor: pointer; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .portal.matrix-portal{ --r: 75%; }
+  .portal.matrix-portal .photo{ transition: none; }
+}
+
 
