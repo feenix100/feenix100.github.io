@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Block Burner the game</title>
+  <style>
+    :root{--bg:#0b0f14;--fg:#e6edf3;--line:#1f2833}
+    html, body { height: 100%; margin: 0; background: var(--bg); color: var(--fg); }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial; }
+    #site-header { position: sticky; top: 0; z-index: 10; backdrop-filter: blur(6px); background: color-mix(in srgb, var(--bg) 85%, transparent); border-bottom: 1px solid var(--line); padding: 14px 20px; }
+    #site-header h1 { margin: 0; font-size: 20px; letter-spacing: .3px; }
+
+    .block { min-height: 85vh; display: flex; align-items: stretch; border-bottom: 1px solid var(--line); }
+
+    .layout { flex: 1; display: flex; }
+    .scene { flex: 1; position: relative; }
+    .panel { width: min(360px, 32vw); padding: 24px 20px; border-left: 1px solid var(--line); background: linear-gradient(180deg, var(--bg) 0%, #0b0f14cc 70%, #0b0f1480 100%); display: flex; flex-direction: column; justify-content: center; gap: 12px; align-items: flex-start; }
+    .panel .tag { font-weight: 700; font-size: 24px; line-height: 1.2; letter-spacing: .2px; }
+    .panel p { margin: 0; font-size: 14px; line-height: 1.5; opacity: .9; letter-spacing: .2px; }
+    .btn { appearance: none; border: 1px solid var(--line); background: #11161c; color: var(--fg); padding: 10px 14px; border-radius: 10px; cursor: pointer; transition: transform .05s ease, box-shadow .2s ease, background .2s ease; }
+    .btn:hover { background:#121a22; }
+    .btn:active { transform: translateY(1px); }
+
+    .hint { position: fixed; left: 12px; bottom: 12px; font: 12px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji"; opacity: .8; }
+    .hint kbd { background: #11161c; border: 1px solid var(--line); padding: 2px 5px; border-radius: 4px; }
+  
+    /* Desert background canvas */
+    #desert-bg {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      display: block;
+    }
+    /* Lift content above canvas */
+    body > * { position: relative; z-index: 1; }
+    /* Slightly stronger panel bg for readability */
+    .panel { background: linear-gradient(180deg, color-mix(in srgb, var(--bg) 75%, #000 0%) 0%, #0b0f14dd 70%, #0b0f14b0 100%); }
+
+</style>
+</head>
+<body>
+  <canvas id="desert-bg"></canvas>
+  <a id="top"></a>
+
+  <header id="site-header"><h1>Powerups: Block Burner</h1></header>
+
+  <section id="block1" class="block">
+    <div class="layout">
+      <div class="scene" data-block="1" data-img="./def/defB.png"></div>
+      <aside class="panel">
+        <div class="tag">“Bottom Sweep”</div>
+        <p>Defensive - Clears your bottom row</p>
+        <button class="btn" data-target="#block2">Next block ↓</button>
+      </aside>
+    </div>
+  </section>
+
+  <section id="block2" class="block">
+    <div class="layout">
+      <div class="scene" data-block="2" data-img="./def/defU.png"></div>
+      <aside class="panel">
+        <div class="tag">“Chroma Wipe”</div>
+        <p>Defensive - Clears all blocks of one random color
+</p>
+        <button class="btn" data-target="#block3">Next block ↓</button>
+      </aside>
+    </div>
+  </section>
+
+  <section id="block3" class="block">
+    <div class="layout">
+      <div class="scene" data-block="3" data-img="./def/defRyellow.png"></div>
+      <aside class="panel">
+        <div class="tag">“Midas Touch”</div>
+        <p>Defensive - Spawns a Midas block</p>
+        <button class="btn" data-target="#block4">Next block ↓</button>
+      </aside>
+    </div>
+  </section>
+
+  <section id="block4" class="block">
+    <div class="layout">
+      <div class="scene" data-block="4" data-img="./def/defN.png"></div>
+      <aside class="panel">
+        <div class="tag">“Color Burst”</div>
+        <p>Defensive - Spawns a same-color cluster</p>
+        <button class="btn" data-target="#block5">Next block ↓</button>
+      </aside>
+    </div>
+  </section>
+
+  <section id="block5" class="block">
+    <div class="layout">
+      <div class="scene" data-block="5" data-img="./def/defE.png"></div>
+      <aside class="panel">
+        <div class="tag">“Counter Gaze”</div>
+        <p>Defensive - Revert two "medusa" blocks</p>
+        <button class="btn" data-target="#block6">Next block ↓</button>
+      </aside>
+    </div>
+  </section>
+
+  <section id="block6" class="block">
+    <div class="layout">
+      <div class="scene" data-block="6" data-img="./def/defRwhite.png"></div>
+      <aside class="panel">
+        <div class="tag">“Forge Spark”</div>
+        <p>Defensive - Convert two blocks to powerups</p>
+        <button class="btn" data-target="#block7">Next block ↑</button>
+      </aside>
+    </div>
+  </section>
+
+
+  <!-- Offensive section title -->
+<!-- Offensive Blocks 1-6 -->
+  <section id="block7" class="block">
+    <div class="layout">
+      <div class="scene" data-block="7" data-img="off/offB.png"></div>
+      <aside class="panel">
+        <div class="tag">“Underpressure”</div>
+        <p>Offensive - Add a bottom row</p>
+        <button class="btn" data-target="#block8">Next block ↓</button>
+      </aside>
+    </div>
+  </section>
+
+  <section id="block8" class="block">
+    <div class="layout">
+      <div class="scene" data-block="8" data-img="off/offU.png"></div>
+      <aside class="panel">
+        <div class="tag">“Shuffle Spark”</div>
+        <p>Offensive - Randomly rearranges blocks</p>
+        <button class="btn" data-target="#block9">Next block ↓</button>
+      </aside>
+    </div>
+  </section>
+
+  <section id="block9" class="block">
+    <div class="layout">
+      <div class="scene" data-block="9" data-img="off/offRyellow.png"></div>
+      <aside class="panel">
+        <div class="tag">“Stone Storm”</div>
+        <p>Offensive - Add a few random individual "medusa" blocks to your opponent's grid</p>
+        <button class="btn" data-target="#block10">Next block ↓</button>
+      </aside>
+    </div>
+  </section>
+
+  <section id="block10" class="block">
+    <div class="layout">
+      <div class="scene" data-block="10" data-img="off/offN.png"></div>
+      <aside class="panel">
+        <div class="tag">“Medusa Spawn”</div>
+        <p>Offensive - Spawn a "medusa" block on the opponent's grid</p>
+        <button class="btn" data-target="#block11">Next block ↓</button>
+      </aside>
+    </div>
+  </section>
+
+  <section id="block11" class="block">
+    <div class="layout">
+      <div class="scene" data-block="11" data-img="off/offE.png"></div>
+      <aside class="panel">
+        <div class="tag">“Disarm”</div>
+        <p>Offensive - Remove one power block from an opponent's inventory</p>
+        <button class="btn" data-target="#block12">Next block ↓</button>
+      </aside>
+    </div>
+  </section>
+
+  <section id="block12" class="block">
+    <div class="layout">
+      <div class="scene" data-block="12" data-img="off/offRwhite.png"></div>
+      <aside class="panel">
+        <div class="tag">“Junk Drop”</div>
+        <p>Offensive - Drop a few blocks on your opponent's grid</p>
+        <button class="btn" data-target="#block13">Next block ↓</button>
+      </aside>
+    </div>
+  </section>
+  <!-- Special Blocks: Midas & Medusa -->
+  <section id="block13" class="block">
+    <div class="layout">
+      <div class="scene" data-block="13" data-img="def/midasblock.png"></div>
+      <aside class="panel">
+        <div class="tag">“Midas Block”</div>
+        <p>Special - Changes nearby blocks into gold “R” blocks, priming huge clears or combos.</p>
+        <button class="btn" data-target="#block14">Next block ↓</button>
+      </aside>
+    </div>
+  </section>
+
+  <section id="block14" class="block">
+    <div class="layout">
+      <div class="scene" data-block="14" data-img="off/medusablock.png"></div>
+      <aside class="panel">
+        <div class="tag">“Medusa Block”</div>
+        <p>Special - Petrifies nearby blocks, turning them into unbreakable Medusa blocks that must be handled strategically.</p>
+        <button class="btn" data-target="#top">Back to Top ↑</button>
+      </aside>
+    </div>
+  </section>
+
+
+  <div class="hint">Drag to orbit • Scroll to zoom • Press <kbd>R</kbd> to toggle rotation</div>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    // Smooth scroll buttons
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-target]');
+      if (!btn) return;
+      const sel = btn.getAttribute('data-target');
+      const el = document.querySelector(sel);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    const sceneEls = Array.from(document.querySelectorAll('.scene'));
+
+    // Shared state across blocks
+    const contexts = []; // {renderer, camera, controls, cube, clock, container}
+    let spinning = true;
+    window.addEventListener('keydown', (e) => {
+      if (e.key.toLowerCase() === 'r') spinning = !spinning;
+    });
+
+    // Preload unique textures per block based on data-img
+    const loader = new THREE.TextureLoader();
+    Promise.all(
+      sceneEls.map(el => new Promise((res, rej) => {
+        const path = el.getAttribute('data-img') || './Bredincanstyle.png';
+        loader.load(
+          path,
+          (tex) => { tex.colorSpace = THREE.SRGBColorSpace; res({ el, tex }); },
+          undefined,
+          (err) => { console.error('Failed to load', path, err); res({ el, tex: null }); }
+        );
+      }))
+    ).then(items => {
+      for (const { el, tex } of items) {
+        contexts.push(createScene(el, tex));
+      }
+      animate();
+    });
+
+    function createScene(container, tex) {
+      // Renderer per block
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(container.clientWidth, container.clientHeight);
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      container.appendChild(renderer.domElement);
+
+      // Scene & Camera
+      const scene = new THREE.Scene();
+      scene.background = null;
+
+      const camera = new THREE.PerspectiveCamera(55, container.clientWidth / container.clientHeight, 0.1, 100);
+      camera.position.set(2.4, 1.8, 2.4);
+
+      // Lights
+      scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+      const dirLight = new THREE.DirectionalLight(0xffffff, 1.1);
+      dirLight.position.set(3, 4, 2);
+      scene.add(dirLight);
+
+      // Controls
+      const controls = new OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+
+      // Geometry & Material (use tex if provided; fallback to color)
+      const size = 1.2;
+      const geometry = new THREE.BoxGeometry(size, size, size);
+      let material;
+      if (tex) {
+        tex.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 8);
+        material = new THREE.MeshStandardMaterial({ map: tex, roughness: 0.6, metalness: 0.05 });
+      } else {
+        material = new THREE.MeshStandardMaterial({ color: 0x446688, roughness: 0.6, metalness: 0.05 });
+      }
+      const cube = new THREE.Mesh(geometry, material);
+      scene.add(cube);
+
+      const clock = new THREE.Clock();
+
+      // Resize for this container
+      function onResize() {
+        const w = container.clientWidth, h = container.clientHeight;
+        camera.aspect = w / h; camera.updateProjectionMatrix();
+        renderer.setSize(w, h);
+      }
+      const ro = new ResizeObserver(onResize); ro.observe(container);
+      window.addEventListener('resize', onResize);
+
+      return { renderer, camera, controls, cube, clock, container, scene };
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      for (const ctx of contexts) {
+        const t = ctx.clock.getDelta();
+        if (spinning) { ctx.cube.rotation.y += t * 0.6; ctx.cube.rotation.x += t * 0.25; }
+        ctx.controls.update();
+        ctx.renderer.render(ctx.scene, ctx.camera);
+      }
+    }
+  </script>
+
+  
+  
+  <script>
+    (function() {
+      const canvas = document.getElementById('desert-bg');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const DPR = window.devicePixelRatio || 1;
+
+      function size() {
+        const cssW = canvas.clientWidth || window.innerWidth;
+        const cssH = canvas.clientHeight || window.innerHeight;
+        canvas.width  = Math.floor(cssW * DPR);
+        canvas.height = Math.floor(cssH * DPR);
+        layoutStars();
+        draw();
+      }
+
+      // Star layers with slight "bloom" glow
+      let stars = [];
+      function layoutStars() {
+        const W = canvas.width, H = canvas.height;
+        stars = [];
+        const nFar = Math.floor((W * H) / 22000);
+        const nNear = Math.floor((W * H) / 55000);
+        function mkStar(alphaMin, alphaMax, rMin, rMax, glowMult) {
+          return {
+            x: Math.random() * W,
+            y: Math.random() * H,
+            r: Math.random() * (rMax - rMin) + rMin,
+            a: alphaMin + Math.random() * (alphaMax - alphaMin),
+            g: glowMult * (0.8 + Math.random() * 0.4) // bloom scale
+          };
+        }
+        for (let i = 0; i < nFar; i++) stars.push(mkStar(0.35, 0.7, 0.4, 1.2, 1.8));
+        for (let i = 0; i < nNear; i++) stars.push(mkStar(0.55, 1.0, 0.8, 1.8, 2.8));
+      }
+
+      function drawSky() {
+        const W = canvas.width, H = canvas.height;
+        const g = ctx.createLinearGradient(0, 0, 0, H);
+        g.addColorStop(0, '#020713');
+        g.addColorStop(0.4, '#07152d');
+        g.addColorStop(1, '#02050d');
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, W, H);
+      }
+
+      function drawStars(time) {
+        // Time-based slight twinkle
+        const t = (time || 0) * 0.001;
+        ctx.save();
+        for (const s of stars) {
+          // subtle twinkle factor
+          const tw = 0.85 + 0.15 * Math.sin((s.x * 0.0007 + s.y * 0.0004) + t * 1.2);
+          const baseA = s.a * tw;
+
+          // bloom/glow using radial gradient
+          const glowR = s.r * (2.5 * s.g);
+          const grad = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, glowR);
+          grad.addColorStop(0.0, 'rgba(255,255,255,' + Math.min(0.22 * baseA, 0.22) + ')');
+          grad.addColorStop(0.5, 'rgba(180,200,255,' + Math.min(0.10 * baseA, 0.10) + ')');
+          grad.addColorStop(1.0, 'rgba(0,0,0,0)');
+          ctx.fillStyle = grad;
+          ctx.beginPath(); ctx.arc(s.x, s.y, glowR, 0, Math.PI * 2); ctx.fill();
+
+          // star core
+          ctx.globalAlpha = Math.min(1, baseA);
+          ctx.fillStyle = '#ffffff';
+          ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2); ctx.fill();
+          ctx.globalAlpha = 1;
+        }
+        ctx.restore();
+      }
+
+      let rafId = null;
+      function draw(time=0) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawSky();
+        drawStars(time);
+        rafId = requestAnimationFrame(draw);
+      }
+
+      window.addEventListener('resize', size, { passive: true });
+      size();
+      if (!rafId) rafId = requestAnimationFrame(draw);
+    })();
+  </script>
+
+
+
+</body>
+</html>
