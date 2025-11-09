@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Penny Shooter — Three.js</title>
+  <style>
+    html, body { height: 100%; margin: 0; background: #0b0f17; overflow: hidden; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; }
+    #ui { position: fixed; inset: 0; pointer-events: none; color: #e9edf5; }
+    .hud { position: absolute; left: 12px; top: 12px; display: flex; gap: 16px; align-items: center; pointer-events: none; }
+    .hud > div { background: rgba(0,0,0,.35); padding: 8px 12px; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,.3); backdrop-filter: blur(6px); }
+    .big { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: auto; }
+    .card { text-align: center; background: rgba(6,10,18,.7); padding: 24px 28px; border-radius: 16px; border: 1px solid rgba(255,255,255,.08); box-shadow: 0 20px 60px rgba(0,0,0,.35); }
+    .title { font-size: 28px; letter-spacing: .3px; margin-bottom: 4px; }
+    .subtitle { opacity: .8; margin-bottom: 18px; }
+    .btn { display: inline-block; pointer-events: auto; background: #ff9152; color: #120b04; font-weight: 700; border: 0; border-radius: 999px; padding: 12px 18px; cursor: pointer; box-shadow: 0 8px 20px rgba(255,145,82,.35); }
+    .btn:hover { filter: brightness(1.05); }
+    .right { position: absolute; right: 12px; top: 12px; display: flex; gap: 10px; }
+    .pill { background: rgba(0,0,0,.35); padding: 6px 10px; border-radius: 999px; font-size: 13px; }
+
+    /* High-contrast crosshair */
+    .crosshair { position: absolute; left: 50%; top: 50%; width: 30px; height: 30px; transform: translate(-50%, -50%); border: 3px solid rgba(255,255,255,0.95); border-radius: 50%; opacity: 1; pointer-events: none; z-index: 10000; box-shadow: 0 0 0 2px rgba(0,0,0,0.7), 0 0 14px rgba(255,255,255,0.55); mix-blend-mode: difference; }
+    .crosshair::before, .crosshair::after { content: ""; position: absolute; left: 50%; top: 50%; width: 3px; height: 36px; background: rgba(255,255,255,0.95); transform: translate(-50%, -50%); box-shadow: 0 0 10px rgba(255,255,255,0.55); }
+    .crosshair::after { transform: translate(-50%, -50%) rotate(90deg); }
+    .crosshair.pulse { animation: crosshairPulse 450ms ease-out; }
+    .crosshair.boom { animation: crosshairBoom 140ms ease-out; }
+    @keyframes crosshairPulse { 0% { box-shadow: 0 0 0 3px rgba(0,0,0,0.8), 0 0 0 rgba(255,255,255,0); } 60% { box-shadow: 0 0 0 3px rgba(0,0,0,0.8), 0 0 20px rgba(255,255,255,0.8); } 100% { box-shadow: 0 0 0 3px rgba(0,0,0,0.8), 0 0 14px rgba(255,255,255,0.55); } }
+    @keyframes crosshairBoom { 0% { transform: translate(-50%, -50%) scale(1.0); } 70% { transform: translate(-50%, -50%) scale(1.25); } 100% { transform: translate(-50%, -50%) scale(1.0); } }
+
+    .flash { position: fixed; inset: 0; background: radial-gradient(circle at center, rgba(255,255,255,.4), transparent 60%); opacity: 0; transition: opacity .1s ease-out; pointer-events: none; }
+    .flash.on { opacity: .8; }
+    .toast { position: absolute; left: 50%; bottom: 22px; transform: translateX(-50%); background: rgba(0,0,0,.45); padding: 8px 12px; border-radius: 10px; font-size: 13px; letter-spacing: .2px; }
+
+    @media (max-width: 700px) { .title { font-size: 22px; } .subtitle { font-size: 14px; } }
+
+    .vignette { position: fixed; inset: 0; pointer-events:none; background: radial-gradient(120% 100% at 50% 50%, rgba(0,0,0,0) 55%, rgba(0,0,0,0.25) 75%, rgba(0,0,0,0.5) 100%); }
+  .premise { max-width: 720px; margin: 10px auto 0; line-height: 1.4; color: #e5e9f2; opacity: .95; font-size: 15px; }
+  </style>
+
+  <!-- Import map fixes bare-spec imports like "three" in addon modules -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <canvas id="c" style="cursor:none"></canvas>
+  <div id="ui">
+    <div class="hud" aria-live="polite" aria-atomic="true">
+      <div id="scoreBox">Score: <strong id="score">0</strong></div>
+      <div id="waveBox">Wave: <strong id="wave">1</strong></div>
+      <div id="levelBox">Level: <strong id="level">1</strong></div>
+      <div id="livesBox">Lives: <strong id="lives">3</strong></div>
+      <div id="ammoBox">Shots: <strong id="ammo">3</strong></div>
+    </div>
+    <div class="right">
+      <div class="pill">Click to shoot • Hit the pennies</div>
+    </div>
+    <div class="big" id="overlay">
+      <div class="card">
+        <div class="title">Penny Shooter</div>
+        <div class="subtitle">Duck Hunt vibes — but with flying pennies.</div>
+        <div class="premise">
+          <strong>Penny Purge Protocol:</strong> A preposterous pile of pennies is polluting the place! The U.S. Mint has
+          <em>paused producing new pennies</em>, so you must perform a prompt, precise, penny‑purging patrol.
+          Pop those pesky projectiles, protect the prairie, and pad your points while you <em>pick up</em> and
+          prevent pervasive penny pollution.
+        </div>
+        <button class="btn" id="startBtn">Start</button>
+        <div class="toast" style="margin-top:12px">Tip: Headshots don't matter — edges are easier to click!</div>
+      </div>
+    </div>
+    <div class="big" id="gameOver" style="display:none">
+      <div class="card">
+        <div class="title">Game Over</div>
+        <div class="subtitle">Final score: <span id="finalScore">0</span></div>
+        <button class="btn" id="restartBtn">Play Again</button>
+      </div>
+    </div>
+    <div class="crosshair" aria-hidden="true"></div>
+    <div class="flash" id="flash"></div>
+    <div class="vignette" aria-hidden="true"></div>
+  </div>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+    import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+    import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+
+    // ---- Renderer / Scene / Camera -------------------------------------------------
+    const canvas = document.getElementById('c');
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    renderer.setSize(innerWidth, innerHeight);
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x0b1626); // Dark-mode sky (Duck Hunt at night)
+
+    const camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 0.1, 1000);
+    camera.position.set(0, 1.6, 9);
+
+    // Compute visible world-space bounds at a given Z depth (for guaranteed on-screen spawns)
+    function frustumBoundsAtZ(z) {
+      const dist = Math.abs(camera.position.z - z);
+      const vFOV = THREE.MathUtils.degToRad(camera.fov);
+      const height = 2 * Math.tan(vFOV / 2) * dist;
+      const width  = height * camera.aspect;
+      const cx = 0;                 // camera.x
+      const cy = camera.position.y; // camera.y
+      return { minX: cx - width / 2, maxX: cx + width / 2, minY: cy - height / 2, maxY: cy + height / 2 };
+    }
+
+    // Postprocessing setup
+    const composer = new EffectComposer(renderer);
+    const renderPass = new RenderPass(scene, camera);
+    const bloomPass = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.35, 0.4, 0.9);
+    composer.addPass(renderPass);
+    composer.addPass(bloomPass);
+
+    // Lights
+    const hemi = new THREE.HemisphereLight(0x8aa6ff, 0x050505, 0.45);
+    scene.add(hemi);
+    const dir = new THREE.DirectionalLight(0xffd7a3, 0.7);
+    dir.position.set(5, 8, 5);
+    scene.add(dir);
+
+    // --- Duck Hunt style ground & hedgerow ----------------------------------------
+    function makeCanvasTexture(draw, size=128) {
+      const cvs = document.createElement('canvas');
+      cvs.width = cvs.height = size;
+      const ctx = cvs.getContext('2d');
+      draw(ctx, size);
+      const tex = new THREE.CanvasTexture(cvs);
+      tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+      tex.magFilter = THREE.NearestFilter; // retro pixels
+      tex.minFilter = THREE.NearestMipMapNearestFilter;
+      return tex;
+    }
+
+    // Grass texture (pixely checker of darker greens)
+    const grassTex = makeCanvasTexture((ctx, S) => {
+      const g1 = '#1e7a39', g2 = '#0f5927', g3 = '#2a8e4a';
+      ctx.fillStyle = g2; ctx.fillRect(0,0,S,S);
+      for (let y=0; y<S; y+=8) {
+        for (let x=0; x<S; x+=8) {
+          ctx.fillStyle = ((x+y)/8)%2? g1 : g3;
+          ctx.fillRect(x, y+((x/8)%2?2:0), 8, 6);
+        }
+      }
+    }, 128);
+
+    // Hedgerow/bush band texture
+    const bushTex = makeCanvasTexture((ctx, S) => {
+      ctx.fillStyle = '#1f6b32'; ctx.fillRect(0,0,S,S);
+      ctx.fillStyle = '#124a22';
+      for (let i=0;i<120;i++) {
+        const x = Math.random()*S, y = Math.random()*S; const r = Math.random()*3+1;
+        ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+      }
+      ctx.fillStyle = '#2c9b4f';
+      for (let i=0;i<60;i++) { const x = Math.random()*S, y = Math.random()*S; ctx.fillRect(x|0, y|0, 2, 2); }
+    }, 128);
+
+    // Ground plane
+    const groundGeo = new THREE.PlaneGeometry(400, 80);
+    const groundMat = new THREE.MeshStandardMaterial({ map: grassTex, roughness: 1, metalness: 0 });
+    grassTex.repeat.set(20, 4);
+    const ground = new THREE.Mesh(groundGeo, groundMat);
+    ground.rotation.x = -Math.PI/2; ground.position.set(0, -2.4, -5); ground.receiveShadow = true; scene.add(ground);
+
+    // Bush strip (vertical billboard near horizon)
+    const bushGeo = new THREE.PlaneGeometry(400, 14);
+    const bushMat = new THREE.MeshStandardMaterial({ map: bushTex, transparent: false });
+    bushTex.repeat.set(10, 1);
+    const bushes = new THREE.Mesh(bushGeo, bushMat); bushes.position.set(0, -1.5, -25); scene.add(bushes);
+
+    // Simple dark orange ground strip (NES base)
+    const baseGeo = new THREE.PlaneGeometry(400, 6);
+    const baseMat = new THREE.MeshBasicMaterial({ color: 0x7A4E1A });
+    const baseStrip = new THREE.Mesh(baseGeo, baseMat); baseStrip.rotation.x = -Math.PI/2; baseStrip.position.set(0, -2.8, -2); scene.add(baseStrip);
+
+    // Clouds ------------------------------------------------------------------------
+    const cloudTex = makeCanvasTexture((ctx, S) => {
+      ctx.fillStyle = 'rgba(220,230,255,0.82)'; ctx.clearRect(0,0,S,S);
+      const puff = (x,y,r)=>{ ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill(); };
+      puff(36,60,18); puff(56,60,12); puff(46,50,16); puff(26,60,12);
+    }, 64);
+    const cloudMat = new THREE.SpriteMaterial({ map: cloudTex, transparent: true, depthWrite: false });
+    const cloudGroup = new THREE.Group(); scene.add(cloudGroup);
+    function spawnCloud() {
+      const s = new THREE.Sprite(cloudMat); const k = THREE.MathUtils.randFloat(8, 18);
+      s.scale.set(k*2, k, 1); s.position.set(THREE.MathUtils.randFloat(-80, 80), THREE.MathUtils.randFloat(4, 12), THREE.MathUtils.randFloat(-30, -10));
+      cloudGroup.add(s);
+    }
+    for (let i=0;i<14;i++) spawnCloud();
+    function updateScenery(dt) { cloudGroup.children.forEach(s => { s.position.x -= dt * 2; if (s.position.x < -100) s.position.x = 100; }); }
+
+    // ---- Penny factory --------------------------------------------------------------
+    const PENNY_RADIUS = 0.75; const PENNY_THICK = 0.08;
+    // Bronze/copper materials (subtle glow for night)
+    const copper = new THREE.MeshStandardMaterial({ color: 0xb87333, metalness: 0.9, roughness: 0.35, emissive: 0xff7b33, emissiveIntensity: 0.18 });
+    const edgeMat = new THREE.MeshStandardMaterial({ color: 0x9f6130, metalness: 0.85, roughness: 0.48, emissive: 0xff6a1f, emissiveIntensity: 0.12 });
+    const rimGeo = new THREE.CylinderGeometry(PENNY_RADIUS, PENNY_RADIUS, PENNY_THICK, 48, 1, true);
+    const faceGeo = new THREE.CylinderGeometry(PENNY_RADIUS, PENNY_RADIUS, PENNY_THICK, 48);
+
+    function makePenny() {
+      const g = new THREE.Group(); const rim = new THREE.Mesh(rimGeo, edgeMat); const faces = new THREE.Mesh(faceGeo, copper);
+      g.add(rim, faces); g.userData.kind = 'penny'; g.userData.active = false; g.rotation.z = Math.random() * Math.PI; return g;
+    }
+
+    // Pool
+    const pool = []; const ACTIVE = new Set(); for (let i = 0; i < 24; i++) pool.push(makePenny());
+
+    // Particles (copper shards) -------------------------------------------------------
+    const shardGeo = new THREE.TetrahedronGeometry(0.05);
+    const shardMat = new THREE.MeshStandardMaterial({ color: 0xc47a3c, metalness: 0.8, roughness: 0.35 });
+    const shardsPool = []; for (let i = 0; i < 200; i++) { const m = new THREE.Mesh(shardGeo, shardMat); m.visible = false; scene.add(m); shardsPool.push(m); }
+    function burstAt(pos) {
+      const count = 12 + (Math.random() * 8 | 0);
+      for (let i = 0; i < count; i++) { const s = shardsPool.find(x => !x.visible); if (!s) break; s.visible = true; s.position.copy(pos); s.userData.vx = (Math.random() - 0.5) * 4; s.userData.vy = Math.random() * 3 + 0.6; s.userData.vz = (Math.random() - 0.5) * 2; s.userData.life = 0.7 + Math.random() * 0.5; s.rotation.set(Math.random()*6.28, Math.random()*6.28, Math.random()*6.28); }
+    }
+
+    // ---- Game state -----------------------------------------------------------------
+    const ui = {
+      overlay: document.getElementById('overlay'), gameOver: document.getElementById('gameOver'),
+      startBtn: document.getElementById('startBtn'), restartBtn: document.getElementById('restartBtn'),
+      score: document.getElementById('score'), finalScore: document.getElementById('finalScore'),
+      wave: document.getElementById('wave'), lives: document.getElementById('lives'), ammo: document.getElementById('ammo'),
+      flash: document.getElementById('flash'), level: document.getElementById('level'), crosshair: document.querySelector('.crosshair'),
+    };
+
+    const state = { running: false, score: 0, wave: 1, level: 1, lives: 3, ammo: 3, spawnCooldown: 0, spawnEvery: 1.0, maxConcurrent: 3, gravity: -8.0, time: 0 };
+
+    function resetGame() {
+      state.running = false; state.score = 0; state.wave = 1; state.level = 1; applyLevelTuning(); state.lives = 3; state.ammo = 3; updateHUD();
+      ACTIVE.forEach(p => { scene.remove(p); p.userData.active = false; pool.push(p); }); ACTIVE.clear();
+      scene.children.slice().forEach(o => { if (o.userData && o.userData.kind === 'penny') { scene.remove(o); o.userData.active = false; pool.push(o); } });
+      shardsPool.forEach(s => { s.visible = false; });
+    }
+    function updateHUD() { ui.score.textContent = state.score; ui.wave.textContent = state.wave; ui.level.textContent = state.level; ui.lives.textContent = state.lives; ui.ammo.textContent = state.ammo; }
+
+    // ---- Level tuning ---------------------------------------------------------------
+    function levelConfig(lvl) {
+      const t = Math.max(0, Math.min(lvl - 1, 12));
+      const spawnEvery = Math.max(0.28, 1.0 - t * 0.07);
+      const maxConcurrent = Math.min(3 + Math.floor(t / 2), 9);
+      const zMin = -80 - t * 20; const zMax = -40 - t * 8; const speedScale = 1 + t * 0.1; const windMax = 0.6 + t * 0.12;
+      return { spawnEvery, maxConcurrent, zMin, zMax, speedScale, windMax };
+    }
+    function applyLevelTuning() { const cfg = levelConfig(state.level); state.spawnEvery = cfg.spawnEvery; state.maxConcurrent = cfg.maxConcurrent; }
+
+    // ---- Spawning & movement --------------------------------------------------------
+    function spawnPenny() {
+      const p = pool.pop() || makePenny(); p.userData.active = true;
+      const startZ = THREE.MathUtils.randFloat(-2.5, 1.5); const b = frustumBoundsAtZ(startZ); const margin = 0.2;
+      const startX = b.minX + margin; const startY = THREE.MathUtils.clamp(THREE.MathUtils.randFloat(b.minY + margin, b.maxY - margin), b.minY + margin, b.maxY - margin);
+      p.position.set(startX, startY, startZ);
+      const base = THREE.MathUtils.randFloat(4.0, 6.0) * (1 + state.wave * 0.02) * (1 + (state.level-1) * 0.08);
+      const vx = Math.abs(base) * THREE.MathUtils.randFloat(0.95, 1.25); const vy = THREE.MathUtils.randFloat(2.0, 5.0); const vz = THREE.MathUtils.randFloat(-1.0, -3.0);
+      p.userData.vel = new THREE.Vector3(vx, vy, vz);
+      const ax = THREE.MathUtils.randFloat(0.0, 0.5); const az = THREE.MathUtils.randFloatSpread(0.5); const ay = THREE.MathUtils.randFloat(-0.4, 0.2);
+      p.userData.acc = new THREE.Vector3(ax, ay, az); p.userData.spin = new THREE.Vector3(Math.random()*2, Math.random()*2, Math.random()*2);
+      scene.add(p); ACTIVE.add(p);
+    }
+
+    function tClamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
+
+    function advancePenny(p, dt) {
+      const v = p.userData.vel;
+      if (p.userData.acc) v.addScaledVector(p.userData.acc, dt);
+      v.y += state.gravity * dt;
+      p.position.addScaledVector(v, dt);
+      p.rotation.x += p.userData.spin.x * dt;
+      p.rotation.y += p.userData.spin.y * dt;
+      p.rotation.z += p.userData.spin.z * dt;
+      if (p.position.x > 48 || p.position.y < -3.2 || p.position.z < -50 || p.position.z > 20) {
+        despawnPenny(p, /*miss*/true);
+      }
+    }
+
+    function despawnPenny(p, missed=false) {
+      if (!ACTIVE.has(p)) return; ACTIVE.delete(p); scene.remove(p); p.userData.active = false; pool.push(p);
+      if (missed) { state.lives -= 1; if (state.lives <= 0) endGame(); }
+    }
+
+    function endGame() { state.running = false; ui.finalScore.textContent = state.score.toString(); ui.gameOver.style.display = 'grid'; }
+
+    // ---- Input / shooting -----------------------------------------------------------
+    const raycaster = new THREE.Raycaster(); const mouse = new THREE.Vector2();
+    function screenToNDC(evt) { const rect = renderer.domElement.getBoundingClientRect(); const x = ( (evt.clientX - rect.left) / rect.width ) * 2 - 1; const y = - ( (evt.clientY - rect.top) / rect.height ) * 2 + 1; mouse.set(x, y); }
+    function muzzleFlash() { ui.flash.classList.add('on'); setTimeout(() => ui.flash.classList.remove('on'), 60); }
+
+    function shoot(evt) {
+      if (!state.running) return; if (state.ammo <= 0) return;
+      muzzleFlash(); if (ui.crosshair) { ui.crosshair.classList.add('boom'); setTimeout(() => ui.crosshair.classList.remove('boom'), 160); }
+      state.ammo -= 1; updateHUD();
+      screenToNDC(evt.touches ? evt.touches[0] : evt); raycaster.setFromCamera(mouse, camera);
+      const hits = raycaster.intersectObjects([...ACTIVE], true);
+      if (hits.length) { let obj = hits[0].object; while (obj && !obj.userData?.kind) obj = obj.parent; if (obj && ACTIVE.has(obj)) { state.score += 100; burstAt(hits[0].point); despawnPenny(obj, false); } }
+      if (state.ammo === 0) { waitForWaveClear(); }
+    }
+
+    renderer.domElement.addEventListener('pointerdown', shoot);
+    renderer.domElement.addEventListener('touchstart', shoot, { passive: true });
+
+    // Crosshair follows the mouse cursor
+    document.addEventListener('pointermove', (e) => {
+      if (!ui.crosshair) return; ui.crosshair.style.left = e.clientX + 'px'; ui.crosshair.style.top = e.clientY + 'px';
+      ui.crosshair.classList.add('pulse'); clearTimeout(window.__xh_t); window.__xh_t = setTimeout(() => ui.crosshair.classList.remove('pulse'), 200);
+    });
+
+    function waitForWaveClear() {
+      const check = () => {
+        if (!state.running) return;
+        if (ACTIVE.size === 0) {
+          state.wave += 1;
+          if (state.wave > 1 && (state.wave - 1) % 4 === 0) { state.level += 1; applyLevelTuning(); }
+          state.ammo = Math.max(3, 3 + Math.floor((state.wave-1)/4)); updateHUD();
+        } else { setTimeout(check, 200); }
+      };
+      setTimeout(check, 200);
+    }
+
+    // ---- Game loop -----------------------------------------------------------------
+    let last = performance.now();
+    function tick(now = performance.now()) {
+      const dt = Math.min(0.033, (now - last) / 1000); last = now;
+      updateScenery(dt);
+      if (state.running) {
+        state.time += dt; state.spawnCooldown -= dt;
+        if (state.spawnCooldown <= 0 && state.ammo > 0 && ACTIVE.size < state.maxConcurrent) { spawnPenny(); state.spawnCooldown = state.spawnEvery; }
+        ACTIVE.forEach(p => advancePenny(p, dt));
+        shardsPool.forEach(s => { if (!s.visible) return; s.userData.life -= dt; s.position.x += s.userData.vx * dt; s.position.y += s.userData.vy * dt; s.position.z += s.userData.vz * dt; s.userData.vy += state.gravity * 0.6 * dt; s.rotation.x += 3*dt; s.rotation.y += 2*dt; if (s.userData.life <= 0 || s.position.y < -2.6) s.visible = false; });
+      }
+      composer.render(); requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+
+    // ---- Resize --------------------------------------------------------------------
+    addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); composer.setSize(innerWidth, innerHeight); bloomPass.setSize(innerWidth, innerHeight); });
+
+    // ---- UI actions ----------------------------------------------------------------
+    ui.startBtn.addEventListener('click', () => { ui.overlay.style.display = 'none'; startGame(); });
+    ui.restartBtn.addEventListener('click', () => { ui.gameOver.style.display = 'none'; startGame(); });
+    function startGame() { resetGame(); state.running = true; state.spawnCooldown = 0.1; applyLevelTuning(); updateHUD(); }
+
+    // ---- Minimal Sanity Tests (kept) -----------------------------------------------
+    function runSanityTests() {
+      console.assert(renderer != null, 'Renderer exists');
+      console.assert(scene.isScene === true, 'Scene is a THREE.Scene');
+      console.assert(camera.isCamera === true, 'Camera is a THREE.Camera');
+      console.assert(typeof THREE.Revision !== 'undefined', 'THREE imported');
+      console.assert(typeof EffectComposer === 'function', 'EffectComposer imported');
+      console.assert(rimGeo.parameters.radialSegments === 48, 'Rim segments = 48');
+      console.assert(faceGeo.parameters.height === PENNY_THICK, 'Face thickness matches');
+      const test = makePenny();
+      console.assert(test.userData.kind === 'penny', 'Penny has kind');
+      console.assert(test.children.length === 2, 'Penny has 2 meshes');
+      console.assert(ui.crosshair instanceof HTMLElement, 'Crosshair element exists');
+      const prevLeft = ui.crosshair.style.left; ui.crosshair.style.left = '123px'; console.assert(ui.crosshair.style.left === '123px', 'Crosshair style.left is settable'); ui.crosshair.style.left = prevLeft;
+      const chStyles = getComputedStyle(ui.crosshair); console.assert(chStyles.pointerEvents === 'none', 'Crosshair does not block input');
+    }
+
+    // Additional lightweight game tests ---------------------------------------------
+    function runMoreTests() {
+      const prevLives = state.lives; const dummy = makePenny(); dummy.userData.vel = new THREE.Vector3(0, 0, 0); dummy.userData.acc = new THREE.Vector3(0.1, 0, 0); ACTIVE.add(dummy); scene.add(dummy);
+      despawnPenny(dummy, true); console.assert(state.lives === prevLives - 1, 'despawnPenny(missed) decrements lives'); state.lives = prevLives; if (ACTIVE.has(dummy)) ACTIVE.delete(dummy); scene.remove(dummy);
+      const c1 = levelConfig(1), c3 = levelConfig(3); console.assert(c3.spawnEvery <= c1.spawnEvery, 'spawnEvery becomes faster with level'); console.assert(c3.maxConcurrent >= c1.maxConcurrent, 'maxConcurrent increases with level');
+      spawnPenny(); const spawned = [...ACTIVE].find(o => o.userData && o.userData.kind === 'penny' && o.userData.active);
+      if (spawned) { console.assert(spawned.userData.vel.x > 0, 'spawnPenny() sets vx > 0 (left→right)'); const bb = frustumBoundsAtZ(spawned.position.z); console.assert(spawned.position.x >= bb.minX && spawned.position.x <= bb.maxX, 'spawnPenny() X within visible bounds'); console.assert(spawned.position.y >= bb.minY && spawned.position.y <= bb.maxY, 'spawnPenny() Y within visible bounds'); const px = spawned.position.x; advancePenny(spawned, 0.25); console.assert(spawned.position.x > px, 'advancePenny moves the penny to the right'); despawnPenny(spawned, false); }
+    }
+
+    runSanityTests(); runMoreTests();
+
+    // Accessibility: keyboard shoot (space/enter)
+    addEventListener('keydown', (e) => { if (!state.running) return; if (e.code === 'Space' || e.code === 'Enter') { const fake = { clientX: innerWidth/2, clientY: innerHeight/2 }; shoot(fake); } });
+  </script>
+</body>
+</html>
