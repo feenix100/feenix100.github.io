@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teleprompter</title>
+  <style>
+    :root {
+      --bg: #000000;
+      --fg: #ffffff;
+      --border: #2a2a2a;
+      --muted: #bdbdbd;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
+
+    .app {
+      position: relative;
+      min-height: 100vh;
+    }
+
+    .controls {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(10px);
+      flex-wrap: wrap;
+      max-width: min(720px, calc(100vw - 48px));
+    }
+
+    textarea {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100vh;
+      resize: none;
+      padding: 48px;
+      border: 0;
+      outline: none;
+      background: var(--bg);
+      color: var(--fg);
+      font: inherit;
+      font-size: clamp(1.6rem, 3vw, 3rem);
+      line-height: 1.6;
+      overflow-y: auto;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    button {
+      min-width: 88px;
+      padding: 10px 14px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 999px;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.7);
+      font: inherit;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    button:hover {
+      color: rgba(255, 255, 255, 0.95);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    button.secondary {
+      color: rgba(255, 255, 255, 0.45);
+      border-color: rgba(255, 255, 255, 0.06);
+    }
+
+    .speed-wrap {
+      min-width: 180px;
+    }
+
+    .control-wrap {
+      min-width: 160px;
+    }
+
+    label,
+    .speed-readout {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .speed-readout {
+      margin-top: 4px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: rgba(255, 255, 255, 0.8);
+    }
+
+    .stage {
+      position: relative;
+      overflow-y: auto;
+      overflow-x: hidden;
+      height: 100vh;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+    }
+
+    .stage.editing .script-view,
+    .stage.playing textarea {
+      display: none;
+    }
+
+    .script-view {
+      box-sizing: border-box;
+      width: 100%;
+      max-width: none;
+      margin: 100vh auto 100vh;
+      white-space: pre-wrap;
+      line-height: 1.6;
+      font-size: clamp(1.8rem, 3vw, 3.2rem);
+      word-break: break-word;
+    }
+
+    .hint {
+      position: fixed;
+      left: 24px;
+      right: 24px;
+      bottom: 24px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.95rem;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    @media (max-width: 800px) {
+      textarea {
+        padding: 28px 20px 120px;
+        font-size: clamp(1.2rem, 5vw, 2rem);
+      }
+
+      .controls {
+        left: 12px;
+        right: 12px;
+        bottom: 12px;
+        justify-content: space-between;
+        border-radius: 22px;
+      }
+
+      .script-view {
+        width: calc(100% - 32px);
+        font-size: clamp(1.4rem, 5vw, 2.4rem);
+      }
+
+      .speed-wrap {
+        min-width: 120px;
+      }
+
+      .control-wrap {
+        min-width: 120px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="controls">
+      <div class="button-group">
+        <button id="playPauseBtn" type="button">Play</button>
+        <button id="resetBtn" class="secondary" type="button">Reset</button>
+      </div>
+
+      <div class="speed-wrap">
+        <label for="speedInput">Scroll Speed</label>
+        <input id="speedInput" type="range" min="20" max="400" value="90">
+        <div id="speedReadout" class="speed-readout">90 px/s</div>
+      </div>
+
+      <div class="control-wrap">
+        <label for="textSizeInput">Text Size</label>
+        <input id="textSizeInput" type="range" min="24" max="200" value="48">
+        <div id="textSizeReadout" class="speed-readout">48 px</div>
+      </div>
+
+      <div class="control-wrap">
+        <label for="marginInput">Text Margin</label>
+        <input id="marginInput" type="range" min="0" max="30" value="4">
+        <div id="marginReadout" class="speed-readout">4%</div>
+      </div>
+    </div>
+
+    <div id="stage" class="stage">
+      <textarea id="scriptInput" placeholder="paste script here"></textarea>
+      <div id="scriptView" class="script-view"></div>
+      <div id="hint" class="hint">Edit directly on screen, then press Play.</div>
+    </div>
+  </div>
+
+  <script>
+    const scriptInput = document.getElementById("scriptInput");
+    const scriptView = document.getElementById("scriptView");
+    const playPauseBtn = document.getElementById("playPauseBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const speedInput = document.getElementById("speedInput");
+    const speedReadout = document.getElementById("speedReadout");
+    const textSizeInput = document.getElementById("textSizeInput");
+    const textSizeReadout = document.getElementById("textSizeReadout");
+    const marginInput = document.getElementById("marginInput");
+    const marginReadout = document.getElementById("marginReadout");
+    const stage = document.getElementById("stage");
+    const hint = document.getElementById("hint");
+
+    let isPlaying = false;
+    let animationFrameId = null;
+    let lastTimestamp = 0;
+    let pausedScrollTop = 0;
+
+    function syncScript() {
+      scriptView.textContent = scriptInput.value || " ";
+      if (!isPlaying) {
+        placeAtStart();
+      }
+    }
+
+    function getSpeed() {
+      return Number(speedInput.value);
+    }
+
+    function updateSpeedReadout() {
+      speedReadout.textContent = `${getSpeed()} px/s`;
+    }
+
+    function getTextSize() {
+      return Number(textSizeInput.value);
+    }
+
+    function updateTextSize() {
+      const size = getTextSize();
+      scriptInput.style.fontSize = `${size}px`;
+      scriptView.style.fontSize = `${size}px`;
+      textSizeReadout.textContent = `${size} px`;
+    }
+
+    function getTextMargin() {
+      return Number(marginInput.value);
+    }
+
+    function updateTextMargin() {
+      const margin = getTextMargin();
+      let appliedMargin = margin;
+
+      if (window.innerWidth <= 800) {
+        appliedMargin = Math.max(2, Math.round(margin * 0.75));
+      }
+
+      scriptInput.style.paddingLeft = `${appliedMargin}vw`;
+      scriptInput.style.paddingRight = `${appliedMargin}vw`;
+      scriptView.style.paddingLeft = `${appliedMargin}vw`;
+      scriptView.style.paddingRight = `${appliedMargin}vw`;
+      marginReadout.textContent = `${margin}%`;
+    }
+
+    function placeAtStart() {
+      pausedScrollTop = 0;
+      stage.scrollTop = 0;
+      scriptInput.scrollTop = 0;
+    }
+
+    function stopScrolling() {
+      isPlaying = false;
+      stage.classList.remove("playing");
+      stage.classList.add("editing");
+      playPauseBtn.textContent = "Play";
+      lastTimestamp = 0;
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+      }
+    }
+
+    function tick(timestamp) {
+      if (!isPlaying) {
+        return;
+      }
+
+      if (!lastTimestamp) {
+        lastTimestamp = timestamp;
+      }
+
+      const deltaSeconds = (timestamp - lastTimestamp) / 1000;
+      lastTimestamp = timestamp;
+      stage.scrollTop += getSpeed() * deltaSeconds;
+
+      animationFrameId = requestAnimationFrame(tick);
+    }
+
+    function togglePlayPause() {
+      if (!scriptInput.value.trim()) {
+        syncScript();
+      }
+
+      isPlaying = !isPlaying;
+      playPauseBtn.textContent = isPlaying ? "Pause" : "Play";
+      hint.textContent = isPlaying ? "" : "Paused.";
+
+      if (isPlaying) {
+        syncScript();
+        stage.classList.remove("editing");
+        stage.classList.add("playing");
+        if (pausedScrollTop > 0) {
+          stage.scrollTop = pausedScrollTop;
+        } else if (stage.scrollTop + stage.clientHeight >= stage.scrollHeight - 2) {
+          stage.scrollTop = 0;
+        }
+        lastTimestamp = 0;
+        animationFrameId = requestAnimationFrame(tick);
+      } else if (animationFrameId) {
+        pausedScrollTop = stage.scrollTop;
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+        stage.classList.remove("playing");
+        stage.classList.add("editing");
+        scriptInput.scrollTop = Math.max(pausedScrollTop - stage.clientHeight, 0);
+      }
+    }
+
+    function resetTeleprompter() {
+      stopScrolling();
+      syncScript();
+      placeAtStart();
+      hint.textContent = "Edit directly on screen, then press Play.";
+    }
+
+    scriptInput.addEventListener("input", syncScript);
+    speedInput.addEventListener("input", updateSpeedReadout);
+    textSizeInput.addEventListener("input", updateTextSize);
+    marginInput.addEventListener("input", updateTextMargin);
+    playPauseBtn.addEventListener("click", togglePlayPause);
+    resetBtn.addEventListener("click", resetTeleprompter);
+
+    window.addEventListener("resize", () => {
+      updateTextMargin();
+      if (!isPlaying) {
+        placeAtStart();
+      }
+    });
+
+    updateSpeedReadout();
+    updateTextSize();
+    updateTextMargin();
+    stage.classList.add("editing");
+    syncScript();
+    placeAtStart();
+  </script>
+</body>
+</html>
