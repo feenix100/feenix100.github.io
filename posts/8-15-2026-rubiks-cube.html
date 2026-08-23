@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rubik's Cube Easy Animator</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #080b12;
+      --panel: rgba(20, 25, 37, .86);
+      --panel-2: #181e2b;
+      --line: rgba(255,255,255,.1);
+      --text: #f6f7fb;
+      --muted: #9ba5b8;
+      --accent: #8b7cff;
+      --accent-2: #55d6be;
+      --danger: #ff7187;
+      --turn-ms: 170ms;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font: 15px/1.45 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 18% 0%, rgba(103, 85, 255, .2), transparent 30rem),
+        radial-gradient(circle at 100% 70%, rgba(24, 181, 153, .12), transparent 32rem),
+        var(--bg);
+    }
+    button, input { font: inherit; }
+    button { color: inherit; }
+    .app { min-height: 100vh; display: grid; grid-template-columns: minmax(420px, 1fr) 390px; }
+    .stage { position: relative; min-height: 100vh; overflow: hidden; display: grid; grid-template-rows: auto 1fr auto; }
+    .topbar { padding: 24px 28px; display: flex; align-items: center; justify-content: space-between; gap: 20px; z-index: 2; }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-mark { width: 36px; height: 36px; display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; transform: rotate(-7deg); }
+    .brand-mark i { border-radius: 2px; background: var(--accent); }
+    .brand-mark i:nth-child(2n) { background: var(--accent-2); }
+    h1 { font-size: 17px; margin: 0; letter-spacing: -.02em; }
+    .eyebrow { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .14em; }
+    .status-pill { border: 1px solid var(--line); background: rgba(0,0,0,.28); border-radius: 999px; padding: 8px 12px; color: var(--muted); white-space: nowrap; }
+    .status-pill.busy::before { background: #ffcc66; animation: blink 1s infinite; }
+    .status-pill::before { content:""; width: 7px; height: 7px; display: inline-block; border-radius: 50%; background: var(--accent-2); margin-right: 8px; }
+    @keyframes blink { 50% { opacity: .3; } }
+
+    .viewport { min-height: 520px; display: grid; place-items: center; perspective: 950px; user-select: none; touch-action: none; cursor: grab; }
+    .viewport:active { cursor: grabbing; }
+    .cube-wrap { width: 250px; height: 250px; position: relative; transform-style: preserve-3d; }
+    .cube { width: 250px; height: 250px; position: relative; transform-style: preserve-3d; transform: rotateX(-26deg) rotateY(38deg); transition: transform .08s linear; }
+    .cubie { position:absolute; left:88px; top:88px; width:74px; height:74px; transform-style:preserve-3d; will-change:transform; }
+    .turn-layer { position:absolute; inset:0; transform-style:preserve-3d; will-change:transform; }
+    .cubie-side { position:absolute; inset:0; display:grid; place-items:center; background:#07080b; border:1px solid #010103; border-radius:7px; backface-visibility:hidden; box-shadow:inset 0 0 9px rgba(255,255,255,.045); }
+    .cubie-side[data-face="F"] { transform:translateZ(37px); }
+    .cubie-side[data-face="B"] { transform:rotateY(180deg) translateZ(37px); }
+    .cubie-side[data-face="R"] { transform:rotateY(90deg) translateZ(37px); }
+    .cubie-side[data-face="L"] { transform:rotateY(-90deg) translateZ(37px); }
+    .cubie-side[data-face="U"] { transform:rotateX(90deg) translateZ(37px); }
+    .cubie-side[data-face="D"] { transform:rotateX(-90deg) translateZ(37px); }
+    .cubie-sticker { position:absolute; inset:5px; border-radius:6px; border:1px solid rgba(255,255,255,.23); box-shadow:inset 0 2px 5px rgba(255,255,255,.2), inset 0 -4px 8px rgba(0,0,0,.22); }
+    .cubie-label { position:relative; z-index:2; color:rgba(0,0,0,.68); font-weight:900; font-size:20px; text-shadow:0 1px rgba(255,255,255,.25); pointer-events:none; }
+    .cubie.turning .cubie-sticker { filter:brightness(1.08); }
+    .cube.assembling .cubie { animation:assembleCubie var(--build-ms, 300ms) both; animation-delay:var(--assembly-delay, 0ms); }
+    @keyframes assembleCubie { from { opacity:0; margin-top:110px; } to { opacity:1; margin-top:0; } }
+    .shadow { position:absolute; width: 330px; height: 100px; border-radius:50%; background:rgba(0,0,0,.65); filter:blur(30px); transform: translate3d(-40px, 220px, -100px) rotateX(90deg); }
+
+    .legend { padding: 12px 28px 24px; text-align: center; color: var(--muted); font-size: 12px; }
+    kbd { border: 1px solid var(--line); border-bottom-color: rgba(255,255,255,.25); background: #151a25; padding: 2px 6px; border-radius: 5px; color: #dfe3ec; font-size: 11px; }
+
+    .mobile-controls { display: none; }
+
+    aside { height: 100vh; overflow-y: auto; border-left: 1px solid var(--line); background: rgba(8,11,18,.78); backdrop-filter: blur(22px); padding: 18px; }
+    .section { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px; margin-bottom: 12px; box-shadow: 0 12px 35px rgba(0,0,0,.15); }
+    .section h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .1em; margin: 0 0 11px; color: #cdd3df; display: flex; align-items:center; gap:8px; }
+    .number { width: 21px; height: 21px; display:grid; place-items:center; border-radius: 6px; background: rgba(139,124,255,.18); color:#bdb3ff; }
+    .row { display: flex; gap: 8px; align-items: center; }
+    .row + .row { margin-top: 8px; }
+    .grow { flex: 1; }
+    button { border: 1px solid var(--line); background: #202737; border-radius: 8px; min-height: 35px; padding: 7px 10px; cursor: pointer; transition: .15s ease; }
+    button:hover:not(:disabled) { transform: translateY(-1px); border-color: rgba(255,255,255,.22); background: #283146; }
+    button:active:not(:disabled) { transform: translateY(0); }
+    button:disabled { opacity: .4; cursor: not-allowed; }
+    button.primary { background: linear-gradient(135deg, #7665f5, #6555d8); border-color: #958aff; }
+    button.primary:hover:not(:disabled) { background: linear-gradient(135deg, #8879ff, #7161e6); }
+    button.ghost { background: transparent; }
+    .turn-grid { display: grid; grid-template-columns: repeat(6,1fr); gap: 5px; }
+    .turn-grid button { padding: 6px 3px; font-weight: 750; }
+    label.setting { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 13px; }
+    label.setting + label.setting { margin-top: 9px; }
+    .section > button + label.setting { margin-top: 10px; }
+    input[type="number"] { width: 72px; color: var(--text); border:1px solid var(--line); background:#0d111a; border-radius:7px; padding:6px 8px; }
+    input[type="checkbox"] { accent-color: var(--accent); width: 16px; height: 16px; }
+    .small { color: var(--muted); font-size: 12px; }
+    .message { min-height: 20px; margin-top: 9px; color: var(--muted); font-size: 12px; overflow-wrap:anywhere; }
+    .message.good { color: var(--accent-2); }
+    .message.warn { color: #ffcc66; }
+    .tutorial { margin-top: 10px; border-radius: 10px; padding: 11px; background: linear-gradient(135deg, rgba(139,124,255,.13), rgba(85,214,190,.07)); border: 1px solid rgba(139,124,255,.25); }
+    .tutorial strong { display:block; margin-bottom:4px; }
+    .algorithm { color:#d8d3ff; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; margin:5px 0; }
+    .history { max-height: 74px; overflow:auto; word-spacing: 4px; font-family: ui-monospace, monospace; color:#c8cfdb; background:#0d111a; padding:8px; border-radius:8px; margin-top:8px; }
+    details { border-top: 1px solid var(--line); margin-top: 10px; padding-top: 8px; }
+    summary { cursor:pointer; color:var(--muted); font-size:12px; }
+    .net { display:grid; grid-template-columns:repeat(4, 54px); grid-template-rows:repeat(3,54px); gap:4px; justify-content:center; margin-top:10px; }
+    .net-face { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:#050608; padding:2px; border-radius:3px; }
+    .net-face[data-face="U"] { grid-area:1/2; } .net-face[data-face="L"] { grid-area:2/1; }
+    .net-face[data-face="F"] { grid-area:2/2; } .net-face[data-face="R"] { grid-area:2/3; }
+    .net-face[data-face="B"] { grid-area:2/4; } .net-face[data-face="D"] { grid-area:3/2; }
+    .net-face i { border-radius:1px; }
+
+    dialog { width:min(860px, calc(100vw - 28px)); max-height: min(820px, calc(100vh - 28px)); overflow:auto; color:var(--text); border:1px solid var(--line); border-radius:17px; background:#111722; padding:0; box-shadow:0 30px 100px rgba(0,0,0,.7); }
+    dialog::backdrop { background:rgba(2,4,8,.76); backdrop-filter:blur(7px); }
+    .modal-head { position:sticky; top:0; z-index:2; display:flex; align-items:center; justify-content:space-between; padding:18px 20px; background:rgba(17,23,34,.94); border-bottom:1px solid var(--line); backdrop-filter:blur(12px); }
+    .modal-head h2 { margin:0; font-size:19px; }
+    .modal-body { padding:20px; }
+    .guide-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+    .guide-card { border:1px solid var(--line); background:#171e2b; border-radius:12px; padding:15px; }
+    .guide-card h3 { margin:0 0 8px; font-size:15px; color:#d8d3ff; }
+    .guide-card p { margin:0; color:#b0b9c9; }
+    .tabs { display:flex; flex-wrap:wrap; gap:7px; margin-bottom:14px; }
+    .tabs button.active { background:#6d5de3; border-color:#9185ff; }
+    .alg-list { display:grid; grid-template-columns:repeat(2,1fr); gap:9px; }
+    .alg-card { border:1px solid var(--line); background:#171e2b; border-radius:10px; padding:12px; }
+    .alg-card strong { display:block; }
+    .alg-card code { display:block; margin-top:5px; color:#b9afff; white-space:normal; }
+    .toast { position:fixed; left:24px; bottom:24px; z-index:10; background:#1d2534; border:1px solid var(--line); border-radius:10px; padding:10px 14px; box-shadow:0 15px 50px rgba(0,0,0,.4); transform:translateY(20px); opacity:0; pointer-events:none; transition:.2s; }
+    .toast.show { transform:none; opacity:1; }
+    @media (max-width: 900px) {
+      .app { grid-template-columns:1fr; }
+      .stage { min-height: 650px; }
+      aside { height:auto; border-left:0; border-top:1px solid var(--line); }
+    }
+    @media (max-width: 700px), (max-width: 900px) and (max-height: 500px) {
+      .stage { height: 100svh; min-height: 560px; grid-template-rows: auto 1fr auto; }
+      .viewport { min-height: 0; padding-bottom: 150px; }
+      .cube-wrap { transform: scale(.78) translateY(-24px); }
+      .legend { padding: 8px 16px 14px; font-size: 11px; }
+      .mobile-controls {
+        position: absolute;
+        z-index: 5;
+        left: max(10px, env(safe-area-inset-left));
+        right: max(10px, env(safe-area-inset-right));
+        bottom: 48px;
+        display: block;
+        padding: 9px;
+        border: 1px solid rgba(255,255,255,.16);
+        border-radius: 13px;
+        background: rgba(18, 23, 34, .42);
+        box-shadow: 0 12px 35px rgba(0,0,0,.26);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+      }
+      .mobile-action-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-bottom: 6px; }
+      .mobile-controls button { min-height: 31px; padding: 4px 5px; background: rgba(32,39,55,.76); }
+      .mobile-controls button.primary { background: linear-gradient(135deg, rgba(118,101,245,.9), rgba(101,85,216,.9)); }
+      .mobile-turn-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; }
+      .mobile-turn-grid button {
+        min-width: 0;
+        font-weight: 750;
+        background: rgba(32,39,55,.44);
+        border-color: rgba(255,255,255,.13);
+        text-shadow: 0 1px 3px rgba(0,0,0,.9);
+      }
+      .mobile-turn-grid button:hover:not(:disabled),
+      .mobile-turn-grid button:active:not(:disabled) {
+        background: rgba(40,49,70,.58);
+      }
+      .mobile-queue { margin-top: 5px; color: rgba(226,230,239,.78); font-size: 10px; text-align: center; }
+      .guide-grid,.alg-list { grid-template-columns:1fr; }
+      .topbar { padding:18px; }
+      .status-pill { display:none; }
+    }
+    @media (max-width: 700px) and (max-height: 650px), (max-width: 900px) and (max-height: 500px) {
+      .stage { min-height: 520px; }
+      .viewport { padding-top: 158px; padding-bottom: 0; }
+      .cube-wrap { transform: scale(.68) translateY(20px); }
+      .mobile-controls { top: 82px; bottom: auto; }
+      .legend { display: none; }
+    }
+    @media (max-width: 380px) {
+      .topbar { padding: 14px; }
+      .brand { gap: 9px; }
+      .brand-mark { width: 31px; height: 31px; }
+      h1 { font-size: 15px; }
+      .mobile-controls { left: 7px; right: 7px; }
+      .mobile-controls button { font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="stage">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+          <div><div class="eyebrow">Browser edition</div><h1>Rubik's Cube Easy Animator</h1></div>
+        </div>
+        <div class="status-pill" id="statusPill">Ready</div>
+      </header>
+      <div class="viewport" id="viewport" aria-label="Interactive 3D Rubik's cube. Drag to rotate the view.">
+        <div class="cube-wrap"><div class="shadow"></div><div class="cube" id="cube"></div></div>
+      </div>
+      <div class="mobile-controls" aria-label="Mobile cube controls">
+        <div class="mobile-action-row">
+          <button id="mobileResetBtn">Reset</button>
+          <button id="mobileScrambleBtn">Scramble</button>
+          <button class="primary" id="mobileSolveBtn">Solve</button>
+        </div>
+        <div class="mobile-turn-grid" id="mobileTurnGrid"></div>
+        <div class="mobile-queue" id="mobileQueueMessage" aria-live="polite">Turn queue: 0</div>
+      </div>
+      <div class="legend">Drag to orbit · <kbd>U D R L F B</kbd> turn · hold <kbd>Shift</kbd> for prime · <kbd>Space</kbd> pauses a tutorial</div>
+    </section>
+
+    <aside>
+      <section class="section">
+        <h2><span class="number">1</span> Cube</h2>
+        <button class="primary grow" id="resetBtn">Create / Reset Cube</button>
+        <label class="setting">Gap between sections <input id="buildGap" type="number" min="0" max="60" value="4"></label>
+        <details><summary>Flat cube state</summary><div class="net" id="net"></div></details>
+      </section>
+
+      <section class="section">
+        <h2><span class="number">2</span> Manual turns</h2>
+        <div class="turn-grid" id="turnGrid"></div>
+        <div class="message" id="queueMessage">Turn queue: 0</div>
+      </section>
+
+      <section class="section">
+        <h2><span class="number">3</span> Scramble / solve</h2>
+        <label class="setting">Scramble moves <input id="scrambleCount" type="number" min="1" max="100" value="20"></label>
+        <div class="row"><button class="grow" id="scrambleBtn">↻ Scramble</button><button class="grow primary" id="solveBtn">▶ Solve</button></div>
+        <div class="message" id="recorded">Recorded: 0 moves</div>
+        <div class="history" id="history">No moves yet</div>
+      </section>
+
+      <section class="section">
+        <h2><span class="number">4</span> Speed solving methods</h2>
+        <button class="grow" id="methodScrambleBtn">↻ Random training scramble</button>
+        <label class="setting">Tutorial mode <input id="tutorialMode" type="checkbox" checked></label>
+        <label class="setting">Viewport face labels <input id="faceLabels" type="checkbox" checked></label>
+        <label class="setting tutorial-setting">Tutorial pause frames <input id="tutorialPause" type="number" min="0" max="240" value="12"></label>
+        <div class="row"><button class="grow" id="cfopBtn" disabled>CFOP (Human)</button><button class="grow primary" id="computerBtn">Computer solve</button></div>
+        <div class="message" id="methodStatus">Create a training scramble to enable CFOP.</div>
+        <div class="tutorial" id="tutorial" hidden>
+          <strong id="tutorialStage">Tutorial</strong>
+          <div class="algorithm" id="tutorialAlg"></div>
+          <div class="small" id="tutorialText"></div>
+          <button class="ghost" id="pauseBtn">Pause</button>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>Animation</h2>
+        <label class="setting">Frames per 90° <input id="turnFrames" type="number" min="1" max="120" value="10"></label>
+        <p class="small">Controls turn speed: fewer frames are faster. At 60 FPS, 10 frames is about 0.17 seconds.</p>
+        <label class="setting">Pause between moves <input id="pauseFrames" type="number" min="0" max="120" value="3"></label>
+      </section>
+
+      <section class="section">
+        <h2><span class="number">5</span> Human solving instructions</h2>
+        <p class="small">Learn the CFOP path from Cross through PLL, then keep the algorithm reference open while practicing.</p>
+        <div class="row"><button class="grow" data-open="guideDialog">Open solve guide</button><button class="grow" data-open="referenceDialog">Algorithm reference</button></div>
+      </section>
+    </aside>
+  </main>
+
+  <dialog id="guideDialog"><div class="modal-head"><h2>Human CFOP Solve Guide</h2><button data-close>Close</button></div><div class="modal-body"><div class="guide-grid">
+    <article class="guide-card"><h3>1. Cross</h3><p>Build the four bottom cross edges and match their side colors to the center stickers. Try to plan most or all of the cross before your first move.</p></article>
+    <article class="guide-card"><h3>2. F2L — First Two Layers</h3><p>Pair each bottom-layer corner with its matching middle-layer edge, then insert the pair. Learn how the right and left triggers affect pieces instead of memorizing every case.</p></article>
+    <article class="guide-card"><h3>3. OLL — Orient Last Layer</h3><p>Use two looks: first orient the top edges to form a cross, then orient the four top corners. Sune and Anti-Sune cover core corner patterns.</p></article>
+    <article class="guide-card"><h3>4. PLL — Permute Last Layer</h3><p>Keep the top face oriented while moving last-layer pieces to their correct locations. Use U setup turns, execute the case, then align the final layer.</p></article>
+    <article class="guide-card" style="grid-column:1/-1"><h3>How to practice for speed</h3><p>Become consistent with Cross → learn intuitive F2L → learn two-look OLL and PLL → add full PLL → add full OLL. Prioritize look-ahead and smooth turning before raw speed.</p></article>
+  </div></div></dialog>
+
+  <dialog id="referenceDialog"><div class="modal-head"><h2>CFOP Algorithm Reference</h2><button data-close>Close</button></div><div class="modal-body">
+    <p class="small">Prime (′) means counter-clockwise; 2 means 180°. Lowercase letters are wide turns, M is the middle slice, and x/y rotate the whole cube.</p>
+    <div class="tabs" id="tabs"></div><div class="alg-list" id="algList"></div>
+  </div></dialog>
+  <div class="toast" id="toast"></div>
+
+  <script>
+  (() => {
+    'use strict';
+    const COLORS = { U:'#f2f3f1', D:'#ffd02e', R:'#e72e37', L:'#ff701f', F:'#159447', B:'#245dd8' };
+    const NORMALS = { U:[0,0,1], D:[0,0,-1], R:[1,0,0], L:[-1,0,0], F:[0,-1,0], B:[0,1,0] };
+    const MOVE_DEFS = { U:['z',1,-1], D:['z',-1,1], R:['x',1,-1], L:['x',-1,1], F:['y',-1,1], B:['y',1,-1] };
+    const BUILD_SECTION_FRAMES = 18;
+    const $ = s => document.querySelector(s);
+    const $$ = s => [...document.querySelectorAll(s)];
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    const faces = ['U','D','R','L','F','B'];
+    let stickers = [], history = [], queue = [], busy = false, paused = false, resetToken = 0;
+    let cfopPlan = null, cfopSignature = '', viewX = -26, viewY = 38;
+
+    function stickerPos(face, row, col) {
+      if (face==='F') return [col-1,-1,1-row];
+      if (face==='B') return [1-col,1,1-row];
+      if (face==='R') return [1,col-1,1-row];
+      if (face==='L') return [-1,1-col,1-row];
+      if (face==='U') return [col-1,1-row,1];
+      return [col-1,row-1,-1];
+    }
+    function initState() {
+      stickers = [];
+      faces.forEach(face => { for(let r=0;r<3;r++) for(let c=0;c<3;c++) stickers.push({color:face,pos:stickerPos(face,r,c),n:[...NORMALS[face]]}); });
+    }
+    function normalFace(n) { return n[2]===1?'U':n[2]===-1?'D':n[0]===1?'R':n[0]===-1?'L':n[1]===-1?'F':'B'; }
+    function faceRC(face,p) {
+      if(face==='F') return [1-p[2],p[0]+1]; if(face==='B') return [1-p[2],1-p[0]];
+      if(face==='R') return [1-p[2],p[1]+1]; if(face==='L') return [1-p[2],1-p[1]];
+      if(face==='U') return [1-p[1],p[0]+1]; return [p[1]+1,p[0]+1];
+    }
+    function faceColors(face) {
+      const out=Array(9); stickers.filter(s=>normalFace(s.n)===face).forEach(s=>{const [r,c]=faceRC(face,s.pos);out[r*3+c]=COLORS[s.color];}); return out;
+    }
+    function rotate(v,axis,q) {
+      let [x,y,z]=v; q=((q%4)+4)%4;
+      while(q--) { if(axis==='x') [y,z]=[-z,y]; else if(axis==='y') [x,z]=[z,-x]; else [x,y]=[-y,x]; }
+      return [x,y,z];
+    }
+    function parseMove(move) { const face=move[0]?.toUpperCase(), suffix=move.slice(1); if(!MOVE_DEFS[face]||!['',"'",'2'].includes(suffix)) throw Error('Unsupported move: '+move); return [face,suffix==='2'?2:suffix==="'"?-1:1]; }
+    function applyMove(move) { const [face,amount]=parseMove(move), [axis,layer,sign]=MOVE_DEFS[face], ai={x:0,y:1,z:2}[axis], q=sign*amount; stickers.forEach(s=>{if(s.pos[ai]===layer){s.pos=rotate(s.pos,axis,q);s.n=rotate(s.n,axis,q);}}); }
+    function inverse(move) { const [f,a]=parseMove(move); return f+(Math.abs(a)===2?'2':a===1?"'":''); }
+    function simplify(moves) { const st=[]; moves.forEach(m=>{const [f,a]=parseMove(m),q=(a+4)%4;if(st.length&&st.at(-1)[0]===f){const old=st.pop();const sum=(old[1]+q)%4;if(sum)st.push([f,sum]);}else st.push([f,q]);});return st.map(([f,q])=>f+(q===2?'2':q===3?"'":'')); }
+    function signature(){return history.join(' ')}
+
+    const sameVector=(a,b)=>a[0]===b[0]&&a[1]===b[1]&&a[2]===b[2];
+    const baseTransform=([x,y,z])=>`translate3d(${x*80}px,${-z*80}px,${-y*80}px)`;
+    function stickerAt(pos,face){const normal=NORMALS[face];return stickers.find(s=>sameVector(s.pos,pos)&&sameVector(s.n,normal));}
+    function renderCubeState() {
+      const cube=$('#cube'); cube.innerHTML='';
+      for(let z=-1;z<=1;z++) for(let y=-1;y<=1;y++) for(let x=-1;x<=1;x++) {
+        const pos=[x,y,z], cubie=document.createElement('div');
+        cubie.className='cubie'; cubie.dataset.x=x; cubie.dataset.y=y; cubie.dataset.z=z;
+        cubie.dataset.base=baseTransform(pos); cubie.style.transform=cubie.dataset.base;
+        cubie.style.setProperty('--assembly-delay',((z+1)*(frameMs(BUILD_SECTION_FRAMES)+frameMs($('#buildGap')?.value||4)))+'ms');
+        faces.forEach(face=>{
+          const side=document.createElement('div');side.className='cubie-side';side.dataset.face=face;
+          const sticker=stickerAt(pos,face);
+          if(sticker){const tile=document.createElement('i');tile.className='cubie-sticker';tile.style.background=COLORS[sticker.color];side.append(tile);const [r,c]=faceRC(face,pos);if(r===1&&c===1){const label=document.createElement('b');label.className='cubie-label';label.textContent=face;side.append(label);}}
+          cubie.append(side);
+        });
+        cube.append(cubie);
+      }
+      faces.forEach(face=>{const colors=faceColors(face);document.querySelectorAll(`.net-face[data-face="${face}"] i`).forEach((e,i)=>e.style.background=colors[i]);});
+    }
+    function buildCubeDOM() {
+      const net=$('#net'); net.innerHTML='';
+      ['F','B','R','L','U','D'].forEach(face=>{const nf=document.createElement('div');nf.className='net-face';nf.dataset.face=face;for(let i=0;i<9;i++)nf.append(document.createElement('i'));net.append(nf);});
+      renderCubeState();render();
+    }
+    function render() {
+      $$('.cubie-label').forEach(e=>e.hidden=!$('#faceLabels').checked);
+      $('#recorded').textContent=`Recorded: ${history.length} move${history.length===1?'':'s'}`;
+      $('#history').textContent=history.length?history.join(' '):'No moves yet';
+      $('#queueMessage').textContent=`Turn queue: ${queue.length+(busy?1:0)}`;
+      $('#mobileQueueMessage').textContent=`Turn queue: ${queue.length+(busy?1:0)}`;
+      $('#cfopBtn').disabled=busy||!cfopPlan||cfopSignature!==signature();
+      $$('#scrambleBtn,#solveBtn,#methodScrambleBtn,#computerBtn,#resetBtn').forEach(b=>b.disabled=busy && b.id!=='resetBtn');
+      $('#mobileScrambleBtn').disabled=busy;
+      $('#mobileSolveBtn').disabled=busy;
+      $('#statusPill').classList.toggle('busy',busy); $('#statusPill').textContent=busy?(paused?'Paused':'Animating'):'Ready';
+      document.documentElement.style.setProperty('--turn-ms',turnMs()+'ms');
+    }
+    const frameMs = f => Math.max(0, Number(f)||0) * 1000/60;
+    const turnMs = () => Math.max(35,frameMs($('#turnFrames').value));
+    function invalidateLesson(){cfopPlan=null;cfopSignature='';$('#methodStatus').textContent='Create a training scramble to enable CFOP.';}
+    function toast(text){const el=$('#toast');el.textContent=text;el.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('show'),2600);}
+
+    async function waitWhilePaused(token){while(paused&&token===resetToken)await sleep(50);}
+    function layerRotation(axis,q){const degrees=q*90;if(axis==='x')return `rotateX(${-degrees}deg)`;if(axis==='y')return `rotateZ(${degrees}deg)`;return `rotateY(${degrees}deg)`;}
+    // Every move source uses this one physical twist primitive. Scrambles and
+    // solutions must never take a state-only shortcut: the selected nine
+    // cubelets rotate exactly as they do for a manual button or keyboard turn.
+    async function twistLayer(move,{record=true,tutorialPause=0,token=resetToken}={}) {
+      await waitWhilePaused(token); if(token!==resetToken)return;
+      const [face,amount]=parseMove(move),[axis,layer,sign]=MOVE_DEFS[face],q=sign*amount,duration=turnMs()*Math.abs(amount);
+      const moving=$$('.cubie').filter(el=>Number(el.dataset[axis])===layer);
+      const turnLayer=document.createElement('div');turnLayer.className='turn-layer';turnLayer.style.transform='none';turnLayer.style.transition='none';
+      moving.forEach(el=>{el.classList.add('turning');turnLayer.append(el);});
+      $('#cube').append(turnLayer);
+      void turnLayer.offsetWidth;
+      turnLayer.style.transition=`transform ${duration}ms cubic-bezier(.45,.02,.22,1)`;
+      turnLayer.style.transform=layerRotation(axis,q);
+      await new Promise(resolve=>{const fallback=setTimeout(resolve,duration+80);turnLayer.addEventListener('transitionend',()=>{clearTimeout(fallback);resolve();},{once:true});});
+      if(token!==resetToken)return; applyMove(move); if(record)history.push(move);renderCubeState();render();
+      await sleep(frameMs($('#pauseFrames').value)+tutorialPause); await waitWhilePaused(token);
+    }
+    async function runMoves(moves,opts={}) {
+      if(busy)return false; busy=true; const token=resetToken;render();
+      try { for(const [moveIndex,move] of moves.entries()){if(token!==resetToken)return false; if(opts.onMove)opts.onMove(move,moveIndex);await twistLayer(move,{...opts,token});} return true; }
+      finally {if(token===resetToken){busy=false;paused=false;render();if(queue.length)setTimeout(drainQueue,0);}}
+    }
+    async function drainQueue(){if(busy||!queue.length)return;busy=true;const token=resetToken;render();try{while(queue.length&&token===resetToken){const m=queue.shift();await twistLayer(m,{record:true,token});}}finally{if(token===resetToken){busy=false;render();if(queue.length)drainQueue();}}}
+    function enqueue(move){invalidateLesson();hideTutorial();queue.push(move);render();drainQueue();}
+    function randomMoves(count){const suffix=['',"'",'2'],out=[];let prev='';for(let i=0;i<count;i++){const choices=faces.filter(f=>f!==prev);prev=choices[Math.floor(Math.random()*choices.length)];out.push(prev+suffix[Math.floor(Math.random()*3)]);}return out;}
+
+    const f2l=[
+      ['F2L — Front Right','Right trigger: pair and insert the front-right corner and edge.',['U','R',"U'","R'"]],
+      ['F2L — Front Left','Left trigger: pair and insert the front-left corner and edge.',["U'","L'",'U','L']],
+      ['F2L — Back Left','Solve the back-left pair while preserving the cross.',["U'","B'",'U','B']],
+      ['F2L — Back Right','Solve the back-right pair while preserving the cross.',['U','B',"U'","B'"]]
+    ];
+    const ollCorners=[
+      ['OLL — Orient Corners','Sune: orient the last-layer corners.',['R','U',"R'",'U','R','U2',"R'"]],
+      ['OLL — Orient Corners','Anti-Sune: orient the last-layer corners.',['R','U2',"R'","U'",'R',"U'","R'"]]
+    ];
+    const pll=[
+      ['PLL — T Perm','Permute the final layer with a T-perm.',['R','U',"R'","U'","R'",'F','R2',"U'","R'","U'",'R','U',"R'","F'"]],
+      ['PLL — Ua Perm','Cycle three last-layer edges.',['R',"U'",'R','U','R','U','R',"U'","R'","U'",'R2']],
+      ['PLL — Ub Perm','Cycle three last-layer edges in the opposite direction.',['R2','U','R','U',"R'","U'","R'","U'","R'",'U',"R'"]],
+      ['PLL — Jb Perm','Permute a corner pair and edge pair.',['R','U',"R'","F'",'R','U',"R'","U'","R'",'F','R2',"U'","R'"]]
+    ];
+    const pick=a=>a[Math.floor(Math.random()*a.length)];
+    function trainingPlan(){const cross=randomMoves(5+Math.floor(Math.random()*3));const shuffled=[...f2l].sort(()=>Math.random()-.5);return [
+      ['Cross','Build the four bottom cross edges. Plan as much as possible before turning.',cross],...shuffled,
+      ['OLL — Orient Edges','First look of two-look OLL: orient the last-layer edges.',['F','R','U',"R'","U'","F'"]],pick(ollCorners),pick(pll)
+    ].map(([stage,text,moves])=>({stage,text,moves:[...moves]}));}
+    const flatten=plan=>plan.flatMap(s=>s.moves);
+    async function runTutorialSegments(segments,method) {
+      const tutorial=$('#tutorialMode').checked, tp=tutorial?frameMs($('#tutorialPause').value):0; if(tutorial)$('#tutorial').hidden=false;
+      const moves=flatten(segments), entries=segments.flatMap(seg=>seg.moves.map(move=>({seg,move})));
+      const ok=await runMoves(moves,{record:false,tutorialPause:tp,onMove:(move,i)=>{if(!tutorial)return;const seg=entries[i].seg;$('#tutorialStage').textContent=`${method}: ${seg.stage} · Move ${move}`;$('#tutorialAlg').textContent=seg.moves.join(' ');$('#tutorialText').textContent=seg.text;}});
+      if(ok){history=[];cfopSignature='';render();$('#methodStatus').textContent=`${method}: ${moves.length} moves`;if(tutorial){$('#tutorialStage').textContent=`${method} complete`;$('#tutorialText').textContent='The cube is solved. Reset or create another scramble to practice again.';$('#tutorialAlg').textContent='';}}
+    }
+    function hideTutorial(){paused=false;$('#tutorial').hidden=true;}
+
+    function animateAssembly(){const cube=$('#cube'),duration=frameMs(BUILD_SECTION_FRAMES),step=duration+frameMs($('#buildGap').value);cube.style.setProperty('--build-ms',duration+'ms');cube.style.setProperty('--build-step',step+'ms');cube.classList.remove('assembling');void cube.offsetWidth;cube.classList.add('assembling');setTimeout(()=>cube.classList.remove('assembling'),duration+step*2+60);}
+    function reset(){resetToken++;busy=false;paused=false;queue=[];history=[];initState();invalidateLesson();hideTutorial();buildCubeDOM();animateAssembly();toast('Cube reset to solved state');}
+    $('#resetBtn').onclick=reset;
+    $('#scrambleBtn').onclick=async()=>{if(busy)return;invalidateLesson();hideTutorial();const moves=randomMoves(Math.min(100,Math.max(1,+$('#scrambleCount').value||20)));toast('Scramble: '+moves.join(' '));await runMoves(moves,{record:true});};
+    $('#solveBtn').onclick=async()=>{if(!history.length)return toast('There are no recorded moves to solve.');invalidateLesson();hideTutorial();const solution=simplify([...history].reverse().map(inverse));toast('Solution: '+(solution.join(' ')||'already solved'));const ok=await runMoves(solution,{record:false});if(ok){history=[];render();}};
+    $('#methodScrambleBtn').onclick=async()=>{if(busy)return;hideTutorial();resetToken++;busy=false;queue=[];history=[];initState();buildCubeDOM();cfopPlan=trainingPlan();const scramble=[...flatten(cfopPlan)].reverse().map(inverse);const ok=await runMoves(scramble,{record:true});if(ok){cfopSignature=signature();$('#methodStatus').textContent=`CFOP training scramble ready (${scramble.length} moves)`;render();}};
+    $('#cfopBtn').onclick=()=>{if(cfopPlan&&cfopSignature===signature())runTutorialSegments(cfopPlan,'CFOP');};
+    $('#computerBtn').onclick=()=>{if(!history.length){$('#methodStatus').textContent='Cube is already solved';return toast('Cube is already solved.');}invalidateLesson();const solution=simplify([...history].reverse().map(inverse));const seg=[{stage:'Computed solution',text:'The browser has computed an exact solution from its tracked logical cube state.',moves:solution}];runTutorialSegments(seg,'Computer solve');};
+    $('#mobileResetBtn').onclick=()=>$('#resetBtn').click();
+    $('#mobileScrambleBtn').onclick=()=>$('#scrambleBtn').click();
+    $('#mobileSolveBtn').onclick=()=>$('#solveBtn').click();
+    $('#pauseBtn').onclick=()=>{paused=!paused;$('#pauseBtn').textContent=paused?'Resume':'Pause';render();};
+    $('#faceLabels').onchange=render; $('#tutorialMode').onchange=()=>{$$('.tutorial-setting').forEach(e=>e.style.display=$('#tutorialMode').checked?'flex':'none')};
+    ['turnFrames','pauseFrames'].forEach(id=>$('#'+id).onchange=render);
+
+    const turnButtons=[['U','U'],["U'",'U′'],['U2','U2'],['D','D'],["D'",'D′'],['D2','D2'],['R','R'],["R'",'R′'],['R2','R2'],['L','L'],["L'",'L′'],['L2','L2'],['F','F'],["F'",'F′'],['F2','F2'],['B','B'],["B'",'B′'],['B2','B2']];
+    [$('#turnGrid'),$('#mobileTurnGrid')].forEach(grid=>turnButtons.forEach(([move,label])=>{const button=document.createElement('button');button.textContent=label;button.setAttribute('aria-label',`Turn ${move}`);button.onclick=()=>enqueue(move);grid.append(button);}));
+
+    let dragging=false,lastX=0,lastY=0; const viewport=$('#viewport');
+    viewport.onpointerdown=e=>{dragging=true;lastX=e.clientX;lastY=e.clientY;viewport.setPointerCapture(e.pointerId)};
+    viewport.onpointermove=e=>{if(!dragging)return;viewY+=(e.clientX-lastX)*.42;viewX-=(e.clientY-lastY)*.42;viewX=Math.max(-80,Math.min(80,viewX));lastX=e.clientX;lastY=e.clientY;$('#cube').style.transform=`rotateX(${viewX}deg) rotateY(${viewY}deg)`};
+    viewport.onpointerup=()=>dragging=false;
+    addEventListener('keydown',e=>{if(e.target.matches('input')||e.target.closest('dialog'))return;const key=e.key.toUpperCase();if(faces.includes(key)){e.preventDefault();enqueue(key+(e.shiftKey?"'":''));}else if(e.code==='Space'&&!$('#tutorial').hidden){e.preventDefault();$('#pauseBtn').click();}});
+
+    $$('[data-open]').forEach(b=>b.onclick=()=>$('#'+b.dataset.open).showModal()); $$('[data-close]').forEach(b=>b.onclick=()=>b.closest('dialog').close());
+    const refs={
+      'F2L Triggers':[['Sexy Move / Right Trigger',"R U R' U'"],['Reverse Sexy',"R' U' R U"],['Right Insert',"R U R'"],['Left Insert',"L' U' L"],['Sledgehammer',"R' F R F'"],['Hedgehammer',"F R' F' R"]],
+      '2-Look OLL':[['Edges — Line',"F R U R' U' F'"],['Edges — L Shape',"f R U R' U' f'"],['Edges — Dot',"F R U R' U' F' f R U R' U' f'"],['Corners — Sune',"R U R' U R U2 R'"],['Corners — Anti-Sune',"R U2 R' U' R U' R'"],['Corners — H',"R U2 R' U' R U R' U' R U' R'"],['Corners — Pi',"R U2 R2 U' R2 U' R2 U2 R"]],
+      '2-Look PLL':[['Corners — Headlights',"R U R' U' R' F R2 U' R' U' R U R' F'"],['Corners — Diagonal',"F R U' R' U' R U R' F' R U R' U' R' F R F'"],['Edges — H Perm',"M2 U M2 U2 M2 U M2"],['Edges — Ua Perm',"R U' R U R U R U' R' U' R2"],['Edges — Ub Perm',"R2 U R U R' U' R' U' R' U R'"],['Edges — Z Perm',"M' U M2 U M2 U M' U2 M2"]],
+      'Full PLL':[['Aa',"x R' U R' D2 R U' R' D2 R2 x'"],['Ab',"x R2 D2 R U R' D2 R U' R x'"],['E',"y x' R U' R' D R U R' D' R U R' D R U' R' D' x"],['F',"y R' U' F' R U R' U' R' F R2 U' R' U' R U R' U R"],['Ga',"R2 U R' U R' U' R U' R2 D U' R' U R D'"],['Gb',"R' U' R U D' R2 U R' U R U' R U' R2 D"],['Gc',"R2 U' R U' R U R' U R2 D' U R U' R' D"],['Gd',"R U R' U' D R2 U' R U' R' U R' U R2 D'"],['H',"M2 U' M2 U2 M2 U' M2"],['Ja',"y R' U L' U2 R U' R' U2 R L"],['Jb',"R U R' F' R U R' U' R' F R2 U' R'"],['Na',"R U R' U R U R' F' R U R' U' R' F R2 U' R' U2 R U' R'"],['Nb',"R' U R U' R' F' U' F R U R' F R' F' R U' R"],['Ra',"y R U' R' U' R U R D R' U' R D' R' U2 R'"],['Rb',"R' U2 R U2 R' F R U R' U' R' F' R2"],['T',"R U R' U' R' F R2 U' R' U' R U R' F'"],['Ua',"R U R' U R' U' R2 U' R' U R' U R"],['Ub',"R' U R' U' R' U' R' U R U R2"],['V',"R' U R' U' R D' R' D R' U D' R2 U' R2 D R2"],['Y',"F R U' R' U' R U R' F' R U R' U' R' F R F'"],['Z',"M' U' M2 U' M2 U' M' U2 M2"]]
+    };
+    function showRef(name){$$('#tabs button').forEach(b=>b.classList.toggle('active',b.textContent===name));$('#algList').innerHTML=refs[name].map(([n,a])=>`<div class="alg-card"><strong>${n}${name==='Full PLL'?' Perm':''}</strong><code>${a}</code></div>`).join('');}
+    Object.keys(refs).forEach((name,i)=>{const b=document.createElement('button');b.textContent=name;b.onclick=()=>showRef(name);$('#tabs').append(b);if(!i)showRef(name)});
+
+    initState(); buildCubeDOM(); animateAssembly();
+  })();
+  </script>
+</body>
+</html>
