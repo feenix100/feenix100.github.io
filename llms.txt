@@ -1,0 +1,35 @@
+# Rain Dust Blog
+
+> Personal blog by Justin Stewart about coding, technology, experiments, projects, creative ideas, and related technical topics.
+
+Canonical site: https://feenix100.github.io/
+
+## Main
+
+- [Rain Dust Blog home](https://feenix100.github.io/): Homepage and index of recent posts.
+- [Contact / About](https://feenix100.github.io/posts/about-me.html): Information about the author and contact details.
+
+## Posts
+
+- [Rubik's Cube](https://feenix100.github.io/posts/8-15-2026-rubiks-cube.html): Blog post published 2026-08-15.
+- [Free Teleprompter](https://feenix100.github.io/posts/5-5-2026-free-teleprompter.html): Blog post published 2026-05-05.
+- [CSS Styles Demonstration](https://feenix100.github.io/posts/12-2-2025-cssdemo.html): CSS demonstration and web styling post.
+- [Block Burner the game](https://feenix100.github.io/posts/10-25-2025-block-burner.html): Browser game project.
+- [This App Will Self Destruct in 20 Seconds](https://feenix100.github.io/posts/9-6-2025-this-app-will-self-destruct.html): Interactive web app experiment.
+- [Transform An Image Into A 3d Particle Cloud Sphere](https://feenix100.github.io/posts/9-2-2025-particle-visualization.html): 3D particle visualization project.
+- [Aptera - Solar Powered Car](https://feenix100.github.io/posts/2-21-2025-aptera-solar-powered-car.html): Post about the Aptera solar-powered vehicle.
+- [Punyo, A Soft Gripper For Robots](https://feenix100.github.io/posts/11-15-2024-punyo-soft-gripper-robot.html): Robotics post about a soft gripper.
+- [A Road Trip, On Math](https://feenix100.github.io/posts/11-14-2024-road-trip-on-math.html): Mathematics-related post.
+- [Automated Trimming Robot With Python](https://feenix100.github.io/posts/11-2-2024-automated-trimming-solution.html): Python and robotics automation project.
+- [Communication With Artificial Intelligence](https://feenix100.github.io/posts/10-25-2024-communicating-with-ai.html): Post about communicating with AI systems.
+- [Electric Vehicle Charging Station Map](https://feenix100.github.io/posts/10-24-2024-open-charge-map.html): EV charging map project.
+- [Waveshare Stepper Motor Hat](https://feenix100.github.io/posts/10-15-2024-stepper-motor-hat.html): Hardware and stepper-motor project.
+- [Javascript Warehouse](https://feenix100.github.io/posts/10-11-2024-javascript-warehouse.html): JavaScript project.
+- [Feed Your To Do List To A Person](https://feenix100.github.io/posts/10-10-2024-todolist-feed.html): Interactive to-do list project.
+- [Crafting The Anti-User Button](https://feenix100.github.io/posts/10-7-2024-anti-user-button.html): Experimental web UI project.
+
+## Usage notes
+
+- Prefer the canonical URLs above when citing or linking to this site.
+- Individual posts may contain source code, interactive demos, images, and external references.
+- The site is intended to be publicly indexable; respect applicable robots directives and normal HTTP access controls.
