@@ -1,6 +1,6 @@
 # Rain Dust Blog
 
-> Personal blog by Justin Stewart about coding, technology, experiments, projects, creative ideas, and related technical topics.
+> Personal blog about coding, technology, experiments, projects, creative ideas, and related technical topics.
 
 Canonical site: https://feenix100.github.io/
 
