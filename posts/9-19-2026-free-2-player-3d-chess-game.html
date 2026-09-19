@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#8faabd" />
   <title>Free 2 Player 3D Chess Game | Rain Dust</title>
-  <meta name="description" content="Play a free two-player 3D chess game in your browser. Local chess for two players with legal move enforcement, move history, undo, board flip, mouse, keyboard, and gamepad controls." />
+  <meta name="description" content="Play a free two-player 3D chess game in your browser. Use a USB game controller, keyboard, or mouse with legal move enforcement, move history, undo, and board flip." />
   <meta name="keywords" content="free chess game, 2 player chess, two player chess, free two player chess game, 3D chess, browser chess, local multiplayer chess, chess game online, chess gamepad" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta name="author" content="Justin Stewart" />
@@ -15,14 +15,14 @@
 
   <meta property="og:type" content="website" />
   <meta property="og:title" content="Free 2 Player 3D Chess Game" />
-  <meta property="og:description" content="Play free local two-player 3D chess in your browser with full legal move handling, mouse, keyboard, and gamepad controls." />
+  <meta property="og:description" content="Play free local two-player 3D chess in your browser with a USB game controller, keyboard, or mouse and full legal move handling." />
   <meta property="og:url" content="https://feenix100.github.io/posts/9-19-2026-free-2-player-3d-chess-game.html" />
   <meta property="og:site_name" content="Rain Dust Blog" />
   <meta property="og:locale" content="en_US" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Free 2 Player 3D Chess Game" />
-  <meta name="twitter:description" content="A free local two-player 3D chess game for the browser with mouse, keyboard, and gamepad controls." />
+  <meta name="twitter:description" content="A free local two-player 3D chess game for the browser. Play with a USB game controller, keyboard, or mouse." />
 
   <script type="application/ld+json">
   {
@@ -55,11 +55,12 @@
     <header class="topbar">
       <div class="brand-block">
         <a class="back-link" href="../" aria-label="Back to main site">← Main site</a>
-        <p class="eyebrow">Local two-player · 3D</p>
+        <p class="eyebrow">Local two-player · 3D · USB controller ready</p>
         <div class="title-row">
           <h1>Chess</h1>
           <span id="turnBadge" class="turn-badge">White to move</span>
         </div>
+        <p class="control-note"><strong>Play your way:</strong> USB game controller, keyboard, or mouse.</p>
         <p id="status" class="status" aria-live="polite">Loading board…</p>
       </div>
 
@@ -74,9 +75,9 @@
     <section class="game-layout">
       <div class="board-column">
         <section class="board-card" aria-label="Chess board">
-          <div id="scene" class="scene" tabindex="0" role="application" aria-label="3D chess board. Arrow keys or WASD move the highlighted cursor relative to the camera. Enter selects. Escape cancels. Q and E rotate the camera.">
+          <div id="scene" class="scene" tabindex="0" role="application" aria-label="3D chess board. Play with a mouse, keyboard, or USB game controller. Arrow keys or WASD move the highlighted cursor relative to the camera. Enter selects. Escape cancels. Q and E rotate the camera.">
             <div class="scene-label scene-label-top"><span id="modelStatus">Piece set: built-in geometry</span></div>
-            <div class="scene-label scene-label-bottom"><span id="controllerStatus">Controller: not connected</span></div>
+            <div class="scene-label scene-label-bottom"><span id="controllerStatus">USB game controller: not connected</span></div>
           </div>
 
           <div id="promotionDialog" class="promotion-dialog" hidden role="dialog" aria-modal="true" aria-labelledby="promotionTitle">
@@ -110,7 +111,7 @@
         <div class="input-help" aria-label="Controls">
           <span><kbd>Mouse</kbd> click · drag to orbit · wheel to zoom</span>
           <span><kbd>Keyboard</kbd> arrows/WASD follow camera · Enter select · Q/E orbit</span>
-          <span><kbd>Gamepad</kbd> D-pad + A · right stick camera</span>
+          <span><kbd>USB controller</kbd> D-pad + A · right stick camera</span>
         </div>
       </div>
 
@@ -223,7 +224,7 @@
         </section>
 
         <section class="controller-panel">
-          <p class="eyebrow">Controller shortcuts</p>
+          <p class="eyebrow">USB game controller shortcuts</p>
           <div class="shortcut-grid">
             <span><b>A</b>Select</span>
             <span><b>B</b>Cancel</span>
