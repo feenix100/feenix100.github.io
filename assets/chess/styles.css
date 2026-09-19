@@ -195,6 +195,11 @@ h2 { margin: 0; font-size: 1rem; letter-spacing: -0.01em; }
 .scene-label-top { top: clamp(92px, 12vh, 128px); }
 .scene-label-bottom { bottom: 18px; }
 
+.axis-gizmo[hidden],
+.time-panel[hidden] {
+  display: none !important;
+}
+
 .axis-gizmo {
   position: absolute;
   z-index: 18;
