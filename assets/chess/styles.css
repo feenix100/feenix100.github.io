@@ -143,6 +143,17 @@ button:focus-visible, select:focus-visible, input:focus-visible, #scene:focus-vi
 h1 { margin: 0; font-size: clamp(1.55rem, 3vw, 2.25rem); line-height: 0.98; letter-spacing: -0.04em; }
 h2 { margin: 0; font-size: 1rem; letter-spacing: -0.01em; }
 .status { margin: 0.38rem 0 0; color: var(--muted); min-height: 1.25em; font-size: 0.78rem; }
+.control-note {
+  margin: 0.55rem 0 0;
+  padding: 0.48rem 0.62rem;
+  border: 1px solid rgba(143, 185, 255, 0.24);
+  border-radius: 9px;
+  background: rgba(34, 60, 96, 0.34);
+  color: #e5efff;
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+.control-note strong { color: #ffffff; }
 .turn-badge, .count-pill {
   display: inline-flex;
   align-items: center;
