@@ -39,6 +39,8 @@ const checkmateSummary = $('checkmateSummary');
 const checkmateNewGameBtn = $('checkmateNewGameBtn');
 const checkmateViewBoardBtn = $('checkmateViewBoardBtn');
 const timedModeBtn = $('timedModeBtn');
+const axisVisibilityBtn = $('axisVisibilityBtn');
+const axisGizmo = $('axisGizmo');
 const timePanel = $('timePanel');
 const timerVisibilityBtn = $('timerVisibilityBtn');
 const whiteClockEl = $('whiteClock');
@@ -668,6 +670,7 @@ function formatClock(ms) {
 }
 
 function renderClock() {
+  timePanel.hidden = !timedMode;
   whiteClockEl.textContent = formatClock(clockMs.w);
   blackClockEl.textContent = formatClock(clockMs.b);
 
@@ -1080,6 +1083,18 @@ function moveCursor(screenX, screenY) {
   updateOverlays();
 }
 
+function setAxisGizmoVisible(visible) {
+  const show = Boolean(visible);
+  axisGizmo.hidden = !show;
+  axisVisibilityBtn.textContent = show ? 'Hide axis' : 'Show axis';
+  axisVisibilityBtn.setAttribute('aria-expanded', String(show));
+  if (!show) clearAxisSelection();
+}
+
+axisVisibilityBtn.addEventListener('click', () => {
+  setAxisGizmoVisible(axisGizmo.hidden);
+});
+
 function orientCameraToAxis(axis) {
   cameraUserAdjusted = true;
 
@@ -1441,6 +1456,7 @@ function animate(now = 0) {
   requestAnimationFrame(animate);
 }
 
+setAxisGizmoVisible(false);
 syncSettingsUI();
 applyBackgroundColor();
 createBoard();
