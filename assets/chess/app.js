@@ -39,6 +39,8 @@ const checkmateSummary = $('checkmateSummary');
 const checkmateNewGameBtn = $('checkmateNewGameBtn');
 const checkmateViewBoardBtn = $('checkmateViewBoardBtn');
 const timedModeBtn = $('timedModeBtn');
+const timePanel = $('timePanel');
+const timerVisibilityBtn = $('timerVisibilityBtn');
 const whiteClockEl = $('whiteClock');
 const blackClockEl = $('blackClock');
 const whiteClockCard = $('whiteClockCard');
@@ -646,6 +648,17 @@ function updateOverlays() {
   if (settings.showLegalMoves) legalTargets.forEach(addTargetMarker);
   addCursorMarker(cursorSquare);
 }
+
+function setTimerPanelCollapsed(collapsed) {
+  const isCollapsed = Boolean(collapsed);
+  timePanel.classList.toggle('collapsed', isCollapsed);
+  timerVisibilityBtn.textContent = isCollapsed ? 'Show timer' : 'Hide timer';
+  timerVisibilityBtn.setAttribute('aria-expanded', String(!isCollapsed));
+}
+
+timerVisibilityBtn.addEventListener('click', () => {
+  setTimerPanelCollapsed(!timePanel.classList.contains('collapsed'));
+});
 
 function formatClock(ms) {
   const totalSeconds = Math.max(0, Math.ceil(ms / 1000));
