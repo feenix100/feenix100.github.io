@@ -195,6 +195,77 @@ h2 { margin: 0; font-size: 1rem; letter-spacing: -0.01em; }
 .scene-label-top { top: clamp(92px, 12vh, 128px); }
 .scene-label-bottom { bottom: 18px; }
 
+.axis-gizmo {
+  position: absolute;
+  z-index: 18;
+  top: clamp(10px, 2vw, 20px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 126px;
+  padding: 0.44rem 0.48rem 0.4rem;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  background: rgba(10, 13, 17, 0.58);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 10px 32px rgba(0,0,0,0.16);
+  text-align: center;
+}
+.axis-gizmo-title,
+.axis-gizmo-hint {
+  display: block;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  font-size: 0.56rem;
+  font-weight: 750;
+}
+.axis-gizmo-hint {
+  margin-top: 0.18rem;
+  text-transform: none;
+  letter-spacing: 0.02em;
+  font-weight: 600;
+  opacity: 0.82;
+}
+.axis-pad {
+  display: grid;
+  grid-template-columns: repeat(3, 30px);
+  grid-template-rows: repeat(3, 30px);
+  justify-content: center;
+  gap: 3px;
+  margin-top: 0.3rem;
+}
+.axis-btn {
+  min-height: 30px;
+  width: 30px;
+  padding: 0;
+  border-radius: 8px;
+  font-size: 0.64rem;
+  font-weight: 800;
+  line-height: 1;
+  background: rgba(27, 34, 42, 0.76);
+}
+.axis-btn:hover:not(:disabled) {
+  border-color: rgba(143, 185, 255, 0.48);
+  background: rgba(42, 58, 76, 0.88);
+}
+.axis-btn.active,
+.axis-btn[aria-pressed="true"] {
+  border-color: rgba(143, 185, 255, 0.72);
+  background: rgba(55, 92, 142, 0.82);
+  color: #fff;
+}
+.axis-pos-z { grid-column: 2; grid-row: 1; }
+.axis-neg-x { grid-column: 1; grid-row: 2; }
+.axis-top {
+  grid-column: 2;
+  grid-row: 2;
+  border-radius: 50%;
+  background: rgba(86, 105, 126, 0.72);
+}
+.axis-pos-x { grid-column: 3; grid-row: 2; }
+.axis-neg-z { grid-column: 2; grid-row: 3; }
+
 .input-help {
   position: absolute;
   z-index: 12;
@@ -459,6 +530,7 @@ code { color: #d6e8ff; }
 
 @media (max-width: 900px) {
   .topbar { align-items: flex-start; }
+  .axis-gizmo { top: 12px; transform: translateX(-50%) scale(0.9); transform-origin: top center; }
   .brand-block { max-width: min(350px, 52vw); }
   .side-column { width: min(285px, calc(100vw - 20px)); top: 118px; }
   .info-panel { max-height: 190px; }
@@ -469,6 +541,13 @@ code { color: #d6e8ff; }
 
 @media (max-width: 680px) {
   .topbar { display: block; right: auto; max-width: calc(100vw - 20px); }
+  .axis-gizmo {
+    top: 154px;
+    left: auto;
+    right: 10px;
+    transform: scale(0.86);
+    transform-origin: top right;
+  }
   .brand-block { max-width: 100%; padding: 0.62rem 0.72rem; }
   .brand-block .back-link, .brand-block > .eyebrow { display: none; }
   h1 { font-size: 1.45rem; }
