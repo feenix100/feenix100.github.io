@@ -48,6 +48,7 @@ const timePresetButtons = [...document.querySelectorAll('[data-time-minutes]')];
 const customTimeForm = $('customTimeForm');
 const customTimeInput = $('customTimeInput');
 const timeValidation = $('timeValidation');
+const axisButtons = [...document.querySelectorAll('[data-camera-axis]')];
 
 const game = new Chess();
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
@@ -71,12 +72,23 @@ controls.dampingFactor = 0.075;
 controls.enablePan = false;
 controls.minDistance = 7.6;
 controls.maxDistance = 30;
-controls.minPolarAngle = 0.48;
+controls.minPolarAngle = 0.12;
 controls.maxPolarAngle = 1.32;
 controls.target.set(0, 0.38, 0);
 
 let cameraUserAdjusted = false;
-controls.addEventListener('start', () => { cameraUserAdjusted = true; });
+
+function clearAxisSelection() {
+  axisButtons.forEach(button => {
+    button.classList.remove('active');
+    button.setAttribute('aria-pressed', 'false');
+  });
+}
+
+controls.addEventListener('start', () => {
+  cameraUserAdjusted = true;
+  clearAxisSelection();
+});
 
 scene.add(new THREE.HemisphereLight(0xe5efff, 0x1e2024, 1.6));
 const keyLight = new THREE.DirectionalLight(0xfff5e8, 3.2);
@@ -1055,8 +1067,54 @@ function moveCursor(screenX, screenY) {
   updateOverlays();
 }
 
+function orientCameraToAxis(axis) {
+  cameraUserAdjusted = true;
+
+  const target = new THREE.Vector3(0, 0.38, 0);
+  const offset = camera.position.clone().sub(controls.target);
+  const spherical = new THREE.Spherical().setFromVector3(offset);
+  const radius = THREE.MathUtils.clamp(spherical.radius, controls.minDistance, controls.maxDistance);
+
+  let theta = spherical.theta;
+  let phi = THREE.MathUtils.clamp(spherical.phi, controls.minPolarAngle, controls.maxPolarAngle);
+
+  if (axis === '+z') theta = 0;
+  else if (axis === '+x') theta = Math.PI / 2;
+  else if (axis === '-z') theta = Math.PI;
+  else if (axis === '-x') theta = -Math.PI / 2;
+  else if (axis === 'y') {
+    theta = 0;
+    phi = controls.minPolarAngle;
+  } else {
+    return;
+  }
+
+  const snappedOffset = new THREE.Vector3().setFromSpherical(
+    new THREE.Spherical(radius, phi, theta)
+  );
+
+  controls.target.copy(target);
+  camera.position.copy(target).add(snappedOffset);
+  camera.lookAt(target);
+  controls.update();
+
+  clearAxisSelection();
+  const activeButton = axisButtons.find(button => button.dataset.cameraAxis === axis);
+  if (activeButton) {
+    activeButton.classList.add('active');
+    activeButton.setAttribute('aria-pressed', 'true');
+  }
+
+  sceneHost.focus({ preventScroll: true });
+}
+
+axisButtons.forEach(button => {
+  button.addEventListener('click', () => orientCameraToAxis(button.dataset.cameraAxis));
+});
+
 function orbitCamera(deltaTheta, deltaPhi = 0, zoomDelta = 0) {
   cameraUserAdjusted = true;
+  clearAxisSelection();
   const offset = camera.position.clone().sub(controls.target);
   const spherical = new THREE.Spherical().setFromVector3(offset);
   spherical.theta += deltaTheta;
