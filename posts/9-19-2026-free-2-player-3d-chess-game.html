@@ -40,7 +40,7 @@
     "inLanguage": "en"
   }
   </script>
-  <link rel="stylesheet" href="../assets/chess/styles.css?v=20260919-4" />
+  <link rel="stylesheet" href="../assets/chess/styles.css?v=20260919-5" />
   <script type="importmap">
   {
     "imports": {
@@ -142,13 +142,16 @@
           </div>
         </section>
 
-        <section class="time-panel" aria-labelledby="timeControlTitle">
+        <section id="timePanel" class="time-panel" aria-labelledby="timeControlTitle">
           <div class="panel-heading">
             <div>
               <p class="eyebrow">Chess clock</p>
               <h2 id="timeControlTitle">Time control</h2>
             </div>
-            <span id="timeModeBadge" class="count-pill">Untimed</span>
+            <div class="time-panel-actions">
+              <span id="timeModeBadge" class="count-pill">Untimed</span>
+              <button id="timerVisibilityBtn" class="timer-visibility-btn" type="button" aria-expanded="true" aria-controls="timePanel">Hide timer</button>
+            </div>
           </div>
 
           <div class="clock-grid" aria-label="Player clocks">
@@ -289,6 +292,6 @@
     </section>
   </main>
 
-  <script type="module" src="../assets/chess/app.js?v=20260919-4"></script>
+  <script type="module" src="../assets/chess/app.js?v=20260919-5"></script>
 </body>
 </html>
