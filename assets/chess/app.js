@@ -33,10 +33,21 @@ const capturedFlipBtn = $('capturedFlipBtn');
 const promotionDialog = $('promotionDialog');
 const promotionButtons = [...document.querySelectorAll('#promotionChoices button')];
 const checkmateOverlay = $('checkmateOverlay');
+const checkmateKicker = $('checkmateKicker');
 const checkmateTitle = $('checkmateTitle');
 const checkmateSummary = $('checkmateSummary');
 const checkmateNewGameBtn = $('checkmateNewGameBtn');
 const checkmateViewBoardBtn = $('checkmateViewBoardBtn');
+const timedModeBtn = $('timedModeBtn');
+const whiteClockEl = $('whiteClock');
+const blackClockEl = $('blackClock');
+const whiteClockCard = $('whiteClockCard');
+const blackClockCard = $('blackClockCard');
+const timeModeBadge = $('timeModeBadge');
+const timePresetButtons = [...document.querySelectorAll('[data-time-minutes]')];
+const customTimeForm = $('customTimeForm');
+const customTimeInput = $('customTimeInput');
+const timeValidation = $('timeValidation');
 
 const game = new Chess();
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
@@ -168,6 +179,14 @@ let promotionIndex = 0;
 let checkmateOverlayDismissed = false;
 let checkmateActionIndex = 0;
 let pointerStart = null;
+
+const MIN_CUSTOM_MINUTES = 0.25;
+const MAX_CUSTOM_MINUTES = 180;
+let timedMode = false;
+let baseTimeMs = 5 * 60 * 1000;
+let clockMs = { w: baseTimeMs, b: baseTimeMs };
+let timedOutColor = null;
+let lastClockTick = null;
 
 function saveSettings() {
   try { localStorage.setItem('controllerChessAppearance', JSON.stringify(settings)); } catch {}
@@ -616,7 +635,165 @@ function updateOverlays() {
   addCursorMarker(cursorSquare);
 }
 
+function formatClock(ms) {
+  const totalSeconds = Math.max(0, Math.ceil(ms / 1000));
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${minutes}:${String(seconds).padStart(2, '0')}`;
+}
+
+function renderClock() {
+  whiteClockEl.textContent = formatClock(clockMs.w);
+  blackClockEl.textContent = formatClock(clockMs.b);
+
+  const activeColor = timedMode && !timedOutColor && !game.isGameOver() ? game.turn() : null;
+  whiteClockCard.classList.toggle('active', activeColor === 'w');
+  blackClockCard.classList.toggle('active', activeColor === 'b');
+  whiteClockCard.classList.toggle('expired', timedOutColor === 'w');
+  blackClockCard.classList.toggle('expired', timedOutColor === 'b');
+
+  timeModeBadge.textContent = timedMode ? 'Timed' : 'Untimed';
+  timedModeBtn.textContent = timedMode ? 'Timed: On' : 'Timed: Off';
+  timedModeBtn.setAttribute('aria-pressed', String(timedMode));
+
+  timePresetButtons.forEach(button => {
+    const buttonMs = Number(button.dataset.timeMinutes) * 60 * 1000;
+    const selected = Math.abs(buttonMs - baseTimeMs) < 1;
+    button.classList.toggle('active', selected);
+    button.setAttribute('aria-pressed', String(selected));
+  });
+}
+
+function resetClocks() {
+  clockMs = { w: baseTimeMs, b: baseTimeMs };
+  timedOutColor = null;
+  lastClockTick = performance.now();
+  renderClock();
+}
+
+function tickChessClock(now = performance.now()) {
+  if (lastClockTick == null) lastClockTick = now;
+
+  if (!timedMode || timedOutColor || game.isGameOver()) {
+    lastClockTick = now;
+    renderClock();
+    return;
+  }
+
+  const activeColor = game.turn();
+  const elapsed = Math.max(0, now - lastClockTick);
+  lastClockTick = now;
+  clockMs[activeColor] = Math.max(0, clockMs[activeColor] - elapsed);
+
+  if (clockMs[activeColor] <= 0 && !timedOutColor) {
+    clockMs[activeColor] = 0;
+    timedOutColor = activeColor;
+    selectedSquare = null;
+    legalTargets = [];
+    if (pendingPromotion) {
+      pendingPromotion = null;
+      promotionDialog.hidden = true;
+    }
+    updateOverlays();
+    updateStatus();
+  }
+
+  renderClock();
+}
+
+function setTimedMode(enabled) {
+  const next = Boolean(enabled);
+  if (timedMode === next) {
+    renderClock();
+    return;
+  }
+
+  if (!next) {
+    tickChessClock(performance.now());
+    timedMode = false;
+    lastClockTick = null;
+  } else {
+    if (timedOutColor || clockMs.w <= 0 || clockMs.b <= 0) resetClocks();
+    timedMode = true;
+    lastClockTick = performance.now();
+  }
+
+  renderClock();
+  updateStatus();
+}
+
+function setTimeControl(minutes) {
+  const numericMinutes = Number(minutes);
+  if (!Number.isFinite(numericMinutes) || numericMinutes < MIN_CUSTOM_MINUTES || numericMinutes > MAX_CUSTOM_MINUTES) return false;
+
+  baseTimeMs = Math.round(numericMinutes * 60 * 1000);
+  clockMs = { w: baseTimeMs, b: baseTimeMs };
+  timedOutColor = null;
+  checkmateOverlayDismissed = false;
+  timedMode = true;
+  lastClockTick = performance.now();
+  hideCheckmateOverlay();
+  renderClock();
+  updateStatus();
+
+  const label = Number.isInteger(numericMinutes)
+    ? `${numericMinutes} minute${numericMinutes === 1 ? '' : 's'}`
+    : `${numericMinutes} minutes`;
+  timeValidation.textContent = `${label} per player. Timed game is on.`;
+  return true;
+}
+
+function sanitizeCustomMinutes(value) {
+  let cleaned = String(value ?? '').trim().replace(/[^0-9.]/g, '');
+  const firstDot = cleaned.indexOf('.');
+  if (firstDot >= 0) {
+    cleaned = cleaned.slice(0, firstDot + 1) + cleaned.slice(firstDot + 1).replace(/\./g, '');
+  }
+  let [whole = '', fraction = ''] = cleaned.split('.');
+  whole = whole.slice(0, 3);
+  fraction = fraction.slice(0, 2);
+  if (firstDot >= 0) return `${whole || '0'}.${fraction}`;
+  return whole;
+}
+
+timedModeBtn.addEventListener('click', () => setTimedMode(!timedMode));
+
+timePresetButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    const minutes = Number(button.dataset.timeMinutes);
+    setTimeControl(minutes);
+  });
+});
+
+customTimeInput.addEventListener('input', () => {
+  const sanitized = sanitizeCustomMinutes(customTimeInput.value);
+  if (customTimeInput.value !== sanitized) customTimeInput.value = sanitized;
+  customTimeInput.removeAttribute('aria-invalid');
+  timeValidation.textContent = 'Custom time: 0.25–180 minutes per player.';
+});
+
+customTimeForm.addEventListener('submit', event => {
+  event.preventDefault();
+  const sanitized = sanitizeCustomMinutes(customTimeInput.value);
+  customTimeInput.value = sanitized;
+  const minutes = Number(sanitized);
+
+  if (!Number.isFinite(minutes) || minutes < MIN_CUSTOM_MINUTES || minutes > MAX_CUSTOM_MINUTES) {
+    customTimeInput.setAttribute('aria-invalid', 'true');
+    timeValidation.textContent = 'Enter a time from 0.25 to 180 minutes.';
+    return;
+  }
+
+  customTimeInput.removeAttribute('aria-invalid');
+  setTimeControl(minutes);
+});
+
 function gameStatus() {
+  if (timedOutColor) {
+    const loser = timedOutColor === 'w' ? 'White' : 'Black';
+    const winner = timedOutColor === 'w' ? 'Black' : 'White';
+    return `${winner} wins on time — ${loser}'s clock expired.`;
+  }
   if (game.isCheckmate()) return `Checkmate — ${game.turn() === 'w' ? 'Black' : 'White'} wins.`;
   if (game.isStalemate()) return 'Draw by stalemate.';
   if (game.isThreefoldRepetition()) return 'Draw by threefold repetition.';
@@ -646,14 +823,15 @@ function hideCheckmateOverlay() {
 }
 
 function viewFinalBoard() {
-  if (!game.isCheckmate()) return;
+  if (!game.isCheckmate() && !timedOutColor) return;
   checkmateOverlayDismissed = true;
   hideCheckmateOverlay();
   sceneHost.focus({ preventScroll: true });
 }
 
 function syncCheckmateOverlay() {
-  if (!game.isCheckmate()) {
+  const isTimeout = Boolean(timedOutColor);
+  if (!game.isCheckmate() && !isTimeout) {
     checkmateOverlayDismissed = false;
     hideCheckmateOverlay();
     return;
@@ -664,9 +842,18 @@ function syncCheckmateOverlay() {
     return;
   }
 
-  const winner = game.turn() === 'w' ? 'Black' : 'White';
-  checkmateTitle.textContent = `${winner} wins`;
-  checkmateSummary.textContent = `${winner} delivered checkmate on move ${Math.ceil(game.history().length / 2)}.`;
+  if (isTimeout) {
+    const loser = timedOutColor === 'w' ? 'White' : 'Black';
+    const winner = timedOutColor === 'w' ? 'Black' : 'White';
+    checkmateKicker.textContent = 'Time';
+    checkmateTitle.textContent = `${winner} wins on time`;
+    checkmateSummary.textContent = `${loser}'s clock reached 0:00.`;
+  } else {
+    const winner = game.turn() === 'w' ? 'Black' : 'White';
+    checkmateKicker.textContent = 'Checkmate';
+    checkmateTitle.textContent = `${winner} wins`;
+    checkmateSummary.textContent = `${winner} delivered checkmate on move ${Math.ceil(game.history().length / 2)}.`;
+  }
   checkmateOverlay.hidden = false;
   checkmateActionIndex = 0;
 
@@ -681,10 +868,11 @@ function updateStatus() {
   const text = gameStatus();
   statusEl.textContent = text;
   const side = game.turn() === 'w' ? 'White' : 'Black';
-  turnBadge.textContent = game.isGameOver() ? 'Game over' : `${side} to move`;
-  undoBtn.disabled = game.history().length === 0;
+  turnBadge.textContent = (game.isGameOver() || timedOutColor) ? 'Game over' : `${side} to move`;
+  undoBtn.disabled = game.history().length === 0 || Boolean(timedOutColor);
   updateCapturedControls();
   renderHistory();
+  renderClock();
   syncCheckmateOverlay();
 }
 
@@ -720,6 +908,11 @@ function updatePromotionFocus() {
 }
 
 function completeMove(from, to, promotion) {
+  if (timedMode) {
+    tickChessClock(performance.now());
+    if (timedOutColor) return false;
+  }
+
   let move = null;
   try { move = game.move({ from, to, promotion }); } catch {}
   if (!move) return false;
@@ -727,6 +920,7 @@ function completeMove(from, to, promotion) {
   selectedSquare = null;
   legalTargets = [];
   cursorSquare = move.to;
+  lastClockTick = performance.now();
   renderPieces();
   updateStatus();
   updateOverlays();
@@ -759,7 +953,7 @@ promotionDialog.addEventListener('keydown', event => {
 });
 
 function selectSquare(square) {
-  if (pendingPromotion || game.isGameOver()) return;
+  if (pendingPromotion || game.isGameOver() || timedOutColor) return;
   cursorSquare = square;
   const piece = game.get(square);
 
@@ -913,6 +1107,7 @@ function resetGame() {
   checkmateOverlayDismissed = false;
   hideCheckmateOverlay();
   game.reset();
+  resetClocks();
   selectedSquare = null;
   legalTargets = [];
   lastMove = null;
@@ -943,12 +1138,14 @@ checkmateOverlay.addEventListener('keydown', event => {
 });
 
 function undoMove() {
+  if (timedOutColor) return;
   if (pendingPromotion) { hidePromotion(); return; }
   const undone = game.undo();
   if (!undone) return;
   selectedSquare = null;
   legalTargets = [];
   refreshLastMoveFromHistory();
+  lastClockTick = performance.now();
   renderPieces();
   updateStatus();
   updateOverlays();
@@ -1166,6 +1363,7 @@ function animateCapturedPieces(now) {
 
 function animate(now = 0) {
   controls.update();
+  tickChessClock(now);
   pollGamepad(now);
   animateCapturedPieces(now);
   renderer.render(scene, camera);
