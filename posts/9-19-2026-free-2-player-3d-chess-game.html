@@ -40,7 +40,7 @@
     "inLanguage": "en"
   }
   </script>
-  <link rel="stylesheet" href="../assets/chess/styles.css" />
+  <link rel="stylesheet" href="../assets/chess/styles.css?v=20260919-3" />
   <script type="importmap">
   {
     "imports": {
@@ -68,6 +68,7 @@
         <button id="undoBtn" type="button" title="Undo (X on controller)">Undo</button>
         <button id="flipBtn" type="button" title="Flip board (Y on controller)">Flip</button>
         <button id="resetBtn" type="button">New game</button>
+        <button id="timedModeBtn" type="button" aria-pressed="false" title="Toggle timed chess">Timed: Off</button>
         <button id="optionsBtn" class="primary" type="button" aria-expanded="false" aria-controls="optionsPanel">Appearance</button>
       </nav>
     </header>
@@ -96,7 +97,7 @@
 
           <div id="checkmateOverlay" class="checkmate-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="checkmateTitle" aria-describedby="checkmateSummary">
             <div class="checkmate-card">
-              <p class="checkmate-kicker">Checkmate</p>
+              <p id="checkmateKicker" class="checkmate-kicker">Checkmate</p>
               <h2 id="checkmateTitle">White wins</h2>
               <p id="checkmateSummary">The game is over.</p>
               <div class="checkmate-actions" role="group" aria-label="Checkmate actions">
@@ -127,6 +128,44 @@
           <div id="moveList" class="move-list" aria-live="polite">
             <p class="empty-state">No moves yet.</p>
           </div>
+        </section>
+
+        <section class="time-panel" aria-labelledby="timeControlTitle">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Chess clock</p>
+              <h2 id="timeControlTitle">Time control</h2>
+            </div>
+            <span id="timeModeBadge" class="count-pill">Untimed</span>
+          </div>
+
+          <div class="clock-grid" aria-label="Player clocks">
+            <div id="whiteClockCard" class="clock-card">
+              <span class="clock-label">White</span>
+              <strong id="whiteClock" class="clock-value">5:00</strong>
+            </div>
+            <div id="blackClockCard" class="clock-card">
+              <span class="clock-label">Black</span>
+              <strong id="blackClock" class="clock-value">5:00</strong>
+            </div>
+          </div>
+
+          <p class="time-help">Choose a time per player. Selecting a preset or custom time starts timed play.</p>
+
+          <div class="time-presets" role="group" aria-label="Quick time controls">
+            <button type="button" data-time-minutes="1" aria-pressed="false">1 min</button>
+            <button type="button" data-time-minutes="5" aria-pressed="true">5 min</button>
+            <button type="button" data-time-minutes="10" aria-pressed="false">10 min</button>
+          </div>
+
+          <form id="customTimeForm" class="custom-time-form" novalidate>
+            <label for="customTimeInput">Custom minutes per player</label>
+            <div class="custom-time-row">
+              <input id="customTimeInput" type="text" inputmode="decimal" autocomplete="off" maxlength="6" placeholder="e.g. 3.5" aria-describedby="timeValidation" />
+              <button type="submit">Set &amp; start</button>
+            </div>
+          </form>
+          <p id="timeValidation" class="time-validation" aria-live="polite">Custom time: 0.25–180 minutes per player.</p>
         </section>
 
         <section id="optionsPanel" class="options-panel" hidden>
@@ -238,6 +277,6 @@
     </section>
   </main>
 
-  <script type="module" src="../assets/chess/app.js"></script>
+  <script type="module" src="../assets/chess/app.js?v=20260919-3"></script>
 </body>
 </html>
