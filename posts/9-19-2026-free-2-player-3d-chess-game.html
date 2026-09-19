@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#8faabd" />
+  <title>Free 2 Player 3D Chess Game | Rain Dust</title>
+  <meta name="description" content="Play a free two-player 3D chess game in your browser. Local chess for two players with legal move enforcement, move history, undo, board flip, mouse, keyboard, and gamepad controls." />
+  <meta name="keywords" content="free chess game, 2 player chess, two player chess, free two player chess game, 3D chess, browser chess, local multiplayer chess, chess game online, chess gamepad" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  <meta name="author" content="Justin Stewart" />
+  <meta name="application-name" content="Free 2 Player 3D Chess Game" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <link rel="canonical" href="https://feenix100.github.io/posts/9-19-2026-free-2-player-3d-chess-game.html" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Free 2 Player 3D Chess Game" />
+  <meta property="og:description" content="Play free local two-player 3D chess in your browser with full legal move handling, mouse, keyboard, and gamepad controls." />
+  <meta property="og:url" content="https://feenix100.github.io/posts/9-19-2026-free-2-player-3d-chess-game.html" />
+  <meta property="og:site_name" content="Rain Dust Blog" />
+  <meta property="og:locale" content="en_US" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Free 2 Player 3D Chess Game" />
+  <meta name="twitter:description" content="A free local two-player 3D chess game for the browser with mouse, keyboard, and gamepad controls." />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": ["VideoGame", "WebApplication"],
+    "name": "Free 2 Player 3D Chess Game",
+    "description": "A free local two-player 3D chess game that runs in a modern web browser.",
+    "url": "https://feenix100.github.io/posts/9-19-2026-free-2-player-3d-chess-game.html",
+    "applicationCategory": "GameApplication",
+    "operatingSystem": "Any",
+    "browserRequirements": "Requires JavaScript and WebGL in a modern browser",
+    "isAccessibleForFree": true,
+    "numberOfPlayers": 2,
+    "playMode": "MultiPlayer",
+    "inLanguage": "en"
+  }
+  </script>
+  <link rel="stylesheet" href="../assets/chess/styles.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.186.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <main class="app-shell" id="app">
+    <header class="topbar">
+      <div class="brand-block">
+        <a class="back-link" href="../" aria-label="Back to main site">← Main site</a>
+        <p class="eyebrow">Local two-player · 3D</p>
+        <div class="title-row">
+          <h1>Chess</h1>
+          <span id="turnBadge" class="turn-badge">White to move</span>
+        </div>
+        <p id="status" class="status" aria-live="polite">Loading board…</p>
+      </div>
+
+      <nav class="actions" aria-label="Game controls">
+        <button id="undoBtn" type="button" title="Undo (X on controller)">Undo</button>
+        <button id="flipBtn" type="button" title="Flip board (Y on controller)">Flip</button>
+        <button id="resetBtn" type="button">New game</button>
+        <button id="optionsBtn" class="primary" type="button" aria-expanded="false" aria-controls="optionsPanel">Appearance</button>
+      </nav>
+    </header>
+
+    <section class="game-layout">
+      <div class="board-column">
+        <section class="board-card" aria-label="Chess board">
+          <div id="scene" class="scene" tabindex="0" role="application" aria-label="3D chess board. Arrow keys or WASD move the highlighted cursor relative to the camera. Enter selects. Escape cancels. Q and E rotate the camera.">
+            <div class="scene-label scene-label-top"><span id="modelStatus">Piece set: built-in geometry</span></div>
+            <div class="scene-label scene-label-bottom"><span id="controllerStatus">Controller: not connected</span></div>
+          </div>
+
+          <div id="promotionDialog" class="promotion-dialog" hidden role="dialog" aria-modal="true" aria-labelledby="promotionTitle">
+            <div class="promotion-card">
+              <p class="eyebrow">Promotion</p>
+              <h2 id="promotionTitle">Choose a piece</h2>
+              <div id="promotionChoices" class="promotion-choices">
+                <button type="button" data-piece="q"><span aria-hidden="true">♛</span> Queen</button>
+                <button type="button" data-piece="r"><span aria-hidden="true">♜</span> Rook</button>
+                <button type="button" data-piece="b"><span aria-hidden="true">♝</span> Bishop</button>
+                <button type="button" data-piece="n"><span aria-hidden="true">♞</span> Knight</button>
+              </div>
+              <p class="promotion-help">Controller: ◀ ▶ then A · B cancels</p>
+            </div>
+          </div>
+
+          <div id="checkmateOverlay" class="checkmate-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="checkmateTitle" aria-describedby="checkmateSummary">
+            <div class="checkmate-card">
+              <p class="checkmate-kicker">Checkmate</p>
+              <h2 id="checkmateTitle">White wins</h2>
+              <p id="checkmateSummary">The game is over.</p>
+              <div class="checkmate-actions" role="group" aria-label="Checkmate actions">
+                <button id="checkmateNewGameBtn" class="checkmate-new-game" type="button">New game</button>
+                <button id="checkmateViewBoardBtn" class="checkmate-view-board" type="button">View final board</button>
+              </div>
+              <p class="checkmate-help">Keyboard: Tab to choose · Enter/Space activate · Esc views board<br />Controller: D-pad chooses · A activates · B views board</p>
+            </div>
+          </div>
+        </section>
+
+        <div class="input-help" aria-label="Controls">
+          <span><kbd>Mouse</kbd> click · drag to orbit · wheel to zoom</span>
+          <span><kbd>Keyboard</kbd> arrows/WASD follow camera · Enter select · Q/E orbit</span>
+          <span><kbd>Gamepad</kbd> D-pad + A · right stick camera</span>
+        </div>
+      </div>
+
+      <aside class="side-column">
+        <section class="info-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Game</p>
+              <h2>Move history</h2>
+            </div>
+            <span id="moveCount" class="count-pill">0</span>
+          </div>
+          <div id="moveList" class="move-list" aria-live="polite">
+            <p class="empty-state">No moves yet.</p>
+          </div>
+        </section>
+
+        <section id="optionsPanel" class="options-panel" hidden>
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Appearance</p>
+              <h2>Board & pieces</h2>
+            </div>
+            <button id="closeOptionsBtn" class="icon-btn" type="button" aria-label="Close appearance panel">×</button>
+          </div>
+
+          <label class="field">
+            <span>Board material</span>
+            <select id="boardMaterial">
+              <option value="walnut">Walnut</option>
+              <option value="marble">Marble</option>
+              <option value="tournament">Tournament</option>
+              <option value="slate">Slate</option>
+              <option value="obsidian">Obsidian</option>
+              <option value="neon">Neon</option>
+            </select>
+          </label>
+
+          <div class="color-grid">
+            <label class="field">
+              <span>Light squares</span>
+              <input id="lightColor" type="color" value="#d7bd96" />
+            </label>
+            <label class="field">
+              <span>Dark squares</span>
+              <input id="darkColor" type="color" value="#6d4327" />
+            </label>
+          </div>
+
+          <label class="field">
+            <span>Background color</span>
+            <input id="backgroundColor" class="full-color" type="color" value="#8faabd" />
+          </label>
+
+          <label class="field">
+            <span>Piece material</span>
+            <select id="pieceMaterial">
+              <option value="ivory">Ivory & ebony</option>
+              <option value="walnut">Carved wood</option>
+              <option value="brass">Brass & gunmetal</option>
+              <option value="chrome">Chrome</option>
+              <option value="glass">Glass</option>
+              <option value="neon">Neon</option>
+            </select>
+          </label>
+
+          <div class="color-grid">
+            <label class="field">
+              <span>White pieces</span>
+              <input id="whitePieceColor" type="color" value="#efe8d7" />
+            </label>
+            <label class="field">
+              <span>Black pieces</span>
+              <input id="blackPieceColor" type="color" value="#252525" />
+            </label>
+          </div>
+
+          <label class="field">
+            <span>Knight orientation</span>
+            <select id="knightOrientation">
+              <option value="0">0°</option>
+              <option value="90">90°</option>
+              <option value="180">180°</option>
+              <option value="270">270°</option>
+            </select>
+          </label>
+
+          <label class="toggle-row">
+            <input id="useStl" type="checkbox" />
+            <span><strong>Staunton STL set</strong><small>Use optional STL models when installed</small></span>
+          </label>
+
+          <label class="toggle-row">
+            <input id="showLegalMoves" type="checkbox" checked />
+            <span><strong>Legal move markers</strong><small>Highlight valid destinations</small></span>
+          </label>
+
+          <div class="captured-settings" aria-label="Captured piece display">
+            <div class="captured-settings-copy">
+              <strong>Captured pieces</strong>
+              <small>Captured models float behind the side that took them.</small>
+            </div>
+            <div class="captured-controls">
+              <button id="capturedVisibilityBtn" type="button" disabled>Hide captured</button>
+              <button id="capturedFlipBtn" type="button" disabled>Turn upright</button>
+            </div>
+          </div>
+
+          <button id="resetAppearanceBtn" class="wide-btn" type="button">Reset appearance</button>
+        </section>
+
+        <section class="controller-panel">
+          <p class="eyebrow">Controller shortcuts</p>
+          <div class="shortcut-grid">
+            <span><b>A</b>Select</span>
+            <span><b>B</b>Cancel</span>
+            <span><b>X</b>Undo</span>
+            <span><b>Y</b>Flip</span>
+            <span><b>RS</b>Orbit</span>
+            <span><b>LB/RB</b>Zoom</span>
+          </div>
+        </section>
+      </aside>
+    </section>
+  </main>
+
+  <script type="module" src="../assets/chess/app.js"></script>
+</body>
+</html>
