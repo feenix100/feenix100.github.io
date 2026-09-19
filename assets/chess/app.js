@@ -997,4 +997,186 @@ knightOrientationSelect.addEventListener('change', () => {
 });
 backgroundColorInput.addEventListener('input', () => {
   settings.backgroundColor = backgroundColorInput.value;
+  applyBackgroundColor();  saveSettings();
+});
+lightColorInput.addEventListener('input', () => { settings.lightColor = lightColorInput.value; saveSettings(); createBoard(); updateOverlays(); });
+darkColorInput.addEventListener('input', () => { settings.darkColor = darkColorInput.value; saveSettings(); createBoard(); updateOverlays(); });
+whitePieceColorInput.addEventListener('input', () => { settings.whitePieceColor = whitePieceColorInput.value; saveSettings(); renderPieces(); });
+blackPieceColorInput.addEventListener('input', () => { settings.blackPieceColor = blackPieceColorInput.value; saveSettings(); renderPieces(); });
+useStlInput.addEventListener('change', () => { settings.useStl = useStlInput.checked; saveSettings(); renderPieces(); });
+showLegalMovesInput.addEventListener('change', () => { settings.showLegalMoves = showLegalMovesInput.checked; saveSettings(); updateOverlays(); });
+capturedVisibilityBtn.addEventListener('click', () => {
+  if (!capturedPiecesFromHistory().length) return;
+  settings.showCaptured = !settings.showCaptured;
+  saveSettings();
+  renderPieces();
+});
+capturedFlipBtn.addEventListener('click', () => {
+  if (!capturedPiecesFromHistory().length) return;
+  settings.capturedUpright = !settings.capturedUpright;
+  saveSettings();
+  renderPieces();
+});
+resetAppearanceBtn.addEventListener('click', () => {
+  Object.assign(settings, defaultSettings);
+  syncSettingsUI();
   applyBackgroundColor();
+  saveSettings();
+  createBoard();
+  renderPieces();
+  updateOverlays();
+});
+
+let gamepadPrev = {};
+let gamepadRepeatAt = 0;
+let activeGamepadIndex = null;
+window.addEventListener('gamepadconnected', event => {
+  activeGamepadIndex = event.gamepad.index;
+  controllerStatus.textContent = `USB game controller connected: ${event.gamepad.id.replace(/\s*\(.*?\)\s*/g, ' ').trim()}`;
+  sceneHost.focus({ preventScroll: true });
+});
+window.addEventListener('gamepaddisconnected', event => {
+  if (activeGamepadIndex === event.gamepad.index) activeGamepadIndex = null;
+  controllerStatus.textContent = 'USB game controller: not connected';
+  gamepadPrev = {};
+});
+
+function pressed(pad, index) { return Boolean(pad.buttons[index]?.pressed); }
+function pollGamepad(now) {
+  if (!navigator.getGamepads) return;
+  const pads = navigator.getGamepads();
+  let pad = activeGamepadIndex != null ? pads[activeGamepadIndex] : null;
+  if (!pad) pad = Array.from(pads).find(Boolean);
+  if (!pad) return;
+  if (activeGamepadIndex == null) {
+    activeGamepadIndex = pad.index;
+    controllerStatus.textContent = 'USB game controller: connected';
+  }
+
+  const deadzone = 0.56;
+  const current = {
+    left: pressed(pad,14) || (pad.axes[0] ?? 0) < -deadzone,
+    right: pressed(pad,15) || (pad.axes[0] ?? 0) > deadzone,
+    up: pressed(pad,12) || (pad.axes[1] ?? 0) < -deadzone,
+    down: pressed(pad,13) || (pad.axes[1] ?? 0) > deadzone,
+    a: pressed(pad,0), b: pressed(pad,1), x: pressed(pad,2), y: pressed(pad,3),
+    lb: pressed(pad,4), rb: pressed(pad,5),
+  };
+
+  if (!checkmateOverlay.hidden) {
+    const choosePrevious = current.left && !gamepadPrev.left;
+    const chooseNext = current.right && !gamepadPrev.right;
+    if (choosePrevious || chooseNext) {
+      checkmateActionIndex = chooseNext ? 1 : 0;
+      (checkmateActionIndex === 0 ? checkmateNewGameBtn : checkmateViewBoardBtn).focus({ preventScroll: true });
+    }
+    if (current.a && !gamepadPrev.a) {
+      if (checkmateActionIndex === 0) resetGame();
+      else viewFinalBoard();
+    }
+    if (current.b && !gamepadPrev.b) viewFinalBoard();
+    gamepadPrev = current;
+    return;
+  }
+
+  if (pendingPromotion) {
+    if ((current.left && !gamepadPrev.left) || (current.right && !gamepadPrev.right)) {
+      promotionIndex = (promotionIndex + (current.right ? 1 : -1) + promotionButtons.length) % promotionButtons.length;
+      updatePromotionFocus();
+      promotionButtons[promotionIndex].focus({ preventScroll: true });
+    }
+    if (current.a && !gamepadPrev.a) choosePromotion(promotionButtons[promotionIndex].dataset.piece);
+    if (current.b && !gamepadPrev.b) hidePromotion();
+    gamepadPrev = current;
+    return;
+  }
+
+  const navPressed = current.left || current.right || current.up || current.down;
+  const navNew = ['left','right','up','down'].some(k => current[k] && !gamepadPrev[k]);
+  if (navNew || (navPressed && now >= gamepadRepeatAt)) {
+    if (current.left) moveCursor(-1, 0);
+    else if (current.right) moveCursor(1, 0);
+    else if (current.up) moveCursor(0, 1);
+    else if (current.down) moveCursor(0, -1);
+    gamepadRepeatAt = now + (navNew ? 320 : 120);
+  }
+
+  if (current.a && !gamepadPrev.a) { sceneHost.focus({ preventScroll: true }); selectSquare(cursorSquare); }
+  if (current.b && !gamepadPrev.b) cancelSelection();
+  if (current.x && !gamepadPrev.x) undoMove();
+  if (current.y && !gamepadPrev.y) flipBoard();
+
+  const rx = Math.abs(pad.axes[2] ?? 0) > 0.18 ? pad.axes[2] : 0;
+  const ry = Math.abs(pad.axes[3] ?? 0) > 0.18 ? pad.axes[3] : 0;
+  if (rx || ry) orbitCamera(rx * 0.025, ry * 0.018);
+  if (current.lb) orbitCamera(0, 0, 0.055);
+  if (current.rb) orbitCamera(0, 0, -0.055);
+
+  gamepadPrev = current;
+}
+
+function fitInitialCamera(width, height) {
+  if (!width || !height) return;
+  const aspect = width / height;
+
+  // A desktop display should feel close immediately. Narrow portrait screens
+  // need extra distance so the full 9.45-unit board remains visible.
+  const portraitScale = aspect < 0.92
+    ? THREE.MathUtils.clamp(0.92 / aspect, 1, 1.72)
+    : 1;
+  const radius = 13.75 * portraitScale;
+  const theta = Math.PI / 4;
+  const phi = 0.93;
+  const offset = new THREE.Vector3().setFromSpherical(new THREE.Spherical(radius, phi, theta));
+
+  controls.target.set(0, 0.38, 0);
+  camera.position.copy(controls.target).add(offset);
+  camera.lookAt(controls.target);
+  controls.update();
+}
+
+let lastAutoFitAspect = 0;
+function resize() {
+  const width = sceneHost.clientWidth;
+  const height = sceneHost.clientHeight;
+  if (!width || !height) return;
+  renderer.setSize(width, height, false);
+  camera.aspect = width / height;
+  camera.updateProjectionMatrix();
+
+  const aspect = width / height;
+  if (!cameraUserAdjusted && Math.abs(aspect - lastAutoFitAspect) > 0.015) {
+    fitInitialCamera(width, height);
+    lastAutoFitAspect = aspect;
+  }
+}
+const resizeObserver = new ResizeObserver(resize);
+resizeObserver.observe(sceneHost);
+
+const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+function animateCapturedPieces(now) {
+  if (reducedMotion || !settings.showCaptured) return;
+  const t = now * 0.001;
+  capturedGroup.children.forEach(item => {
+    const phase = item.userData.phase || 0;
+    item.position.y = (item.userData.baseY || 1.62) + Math.sin(t * 1.05 + phase) * 0.075;
+    item.rotation.y = (item.userData.baseYaw || 0) + Math.sin(t * 0.42 + phase) * 0.2;
+  });
+}
+
+function animate(now = 0) {
+  controls.update();
+  pollGamepad(now);
+  animateCapturedPieces(now);
+  renderer.render(scene, camera);
+  requestAnimationFrame(animate);
+}
+
+syncSettingsUI();
+applyBackgroundColor();
+createBoard();
+renderPieces();
+updateStatus();
+updateOverlays();
+resize();
+animate();
